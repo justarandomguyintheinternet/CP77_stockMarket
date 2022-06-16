@@ -17,7 +17,8 @@ stocks = {
         cetOpen = false
     },
     config = require("modules/utils/config"),
-    browser = require("modules/ui/browser")
+    browser = require("modules/ui/browser"),
+    debug = require("debug/ui/baseUI")
 }
 
 function stocks:new()
@@ -52,6 +53,7 @@ function stocks:new()
 
     registerForEvent("onDraw", function()
         if not self.runtimeData.cetOpen then return end
+        self.debug:draw(self)
     end)
 
     registerForEvent("onOverlayOpen", function()

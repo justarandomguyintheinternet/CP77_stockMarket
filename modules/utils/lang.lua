@@ -13,7 +13,9 @@ local lang = {
         ["info_value"] = "Wert",
         ["info_buy"] = "Kaufen",
         ["info_sell"] = "Verkaufen",
-        ["info_owned"] = "Im Besitz"
+        ["info_owned"] = "Im Besitz",
+        ["info_transaction"] = "Transaktionskosten",
+        ["info_post_portfolio"] = "Vermögen nach Transaktion"
     },
     ["en-us"] = {
         ["pc_stockmarket"] = "Stock Market",
@@ -30,6 +32,8 @@ local lang = {
         ["info_buy"] = "Buy",
         ["info_sell"] = "Sell",
         ["info_owned"] = "In Account",
+        ["info_transaction"] = "Cost of transaction",
+        ["info_post_portfolio"] = "Money after transaction"
     }
 }
 
@@ -47,6 +51,8 @@ lang.info_value = "info_value"
 lang.info_buy = "info_buy"
 lang.info_sell = "info_sell"
 lang.info_owned = "info_owned"
+lang.info_transaction = "info_transaction"
+lang.info_post_portfolio = "info_post_portfolio"
 
 function lang.getLang()
     local l = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value

@@ -47,7 +47,7 @@ function info:initialize(stock)
 	self:showData()
 end
 
-function info:setupInfo()
+function info:setupInfo() -- Basic info section
 	self.title = ink.canvas(2100, 260, inkEAnchor.Centered)
 	self.title:Reparent(self.canvas, -1)
 
@@ -68,13 +68,15 @@ function info:setupInfo()
 	self.portfolio = ink.text("", 0, 100, 75, color.white)
 	self.portfolio:Reparent(self.shortInfo, -1)
 
-	self.infoLine = ink.line(0, 210, 700, 210, color.gray, 3)
+	self.infoLine = ink.line(0, 210, 1000, 210, color.gray, 3)
 	self.infoLine:Reparent(self.shortInfo, -1)
 end
 
-function info:showData()
+function info:showData() -- Update data
+	-- Stock value
 	self.stockValue:SetText(tostring(lang.getText(lang.info_value) .. ": " .. self.stock:getCurrentPrice() .. " E$"))
 
+	-- Stock trend
 	local trend = self.stock:getTrend()
     local c = color.red
     if trend > 0 then
@@ -84,10 +86,31 @@ function info:showData()
     self.stockTrend:SetText(tostring(trend .. "%"))
 	self.stockTrend:SetTintColor(c)
 
+	-- Stocks in portfolio
 	self.portfolio:SetText(tostring(lang.getText(lang.info_owned) .. ": " .. self.stock:getPortfolioNum() .. " / " .. (self.stock:getPortfolioNum() * self.stock:getCurrentPrice()) .. " E$"))
+
+	-- Stock volume text
+	self.middleText:SetText(tostring(self.buySellVolume))
+	-- Account balance
+	self.accountText:SetText(tostring(lang.getText(lang.info_post_portfolio) .. ": " .. (Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) - (self.buySellVolume * self.stock:getCurrentPrice())) .. "E$"))
+	-- Transaction cost
+	local transCost = tostring(math.abs(self.buySellVolume * self.stock:getCurrentPrice()) .. "E$")
+	local locText = lang.getText(lang.info_transaction) .. ": "
+	if self.buySellVolume < 0 then
+		self.transText:SetText(tostring(locText .. "+" .. transCost))
+		self.transText:SetTintColor(color.lime)
+		self.mainButton.textWidget:SetText(lang.getText(lang.info_sell))
+	elseif self.buySellVolume > 0 then
+		self.transText:SetText(tostring(locText .. "-" .. transCost))
+		self.transText:SetTintColor(color.red)
+		self.mainButton.textWidget:SetText(lang.getText(lang.info_buy))
+	else
+		self.transText:SetText(tostring(locText .. "0E$"))
+		self.transText:SetTintColor(color.white)
+	end
 end
 
-function info:getBuySellOptions()
+function info:getBuySellOptions() -- Visual params
 	local xSize = 850
 	local ySize = 140
 	local bgColor = color.darkgray
@@ -98,7 +121,7 @@ function info:getBuySellOptions()
 	return xSize, ySize, bgColor, textSize, borderSize, textColor
 end
 
-function info:setupBuySell(x, y)
+function info:setupBuySell(x, y) -- Buy sell section
 	local xSize, ySize, bgColor, textSize, _, textColor = self:getBuySellOptions()
 
 	local canvas = ink.canvas(x, y, inkEAnchor.Centered)
@@ -108,26 +131,45 @@ function info:setupBuySell(x, y)
 	bg:SetAnchorPoint(0.5, 0.5)
 	bg:Reparent(canvas, -1)
 
-	local middleText = ink.text(tostring(self.buySellVolume), 0, 0, textSize, textColor)
-	middleText:SetAnchorPoint(0.5, 0.5)
-	middleText:Reparent(canvas, -1)
+	self.middleText = ink.text(tostring(self.buySellVolume), 0, 0, textSize, textColor)
+	self.middleText:SetAnchorPoint(0.5, 0.5)
+	self.middleText:Reparent(canvas, -1)
 
-	local plusOne = self:setupVolumeButton(xSize / 2 - ySize * 2, 0, 1, middleText)
+	local plusOne = self:setupVolumeButton(xSize / 2 - ySize * 2, 0, 1)
 	plusOne.canvas:Reparent(canvas, -1)
-	local plusFive = self:setupVolumeButton(xSize / 2 - ySize, 0, 5, middleText)
+	local plusFive = self:setupVolumeButton(xSize / 2 - ySize, 0, 5)
 	plusFive.canvas:Reparent(canvas, -1)
-	local plusTen = self:setupVolumeButton(xSize / 2, 0, 10, middleText)
+	local plusTen = self:setupVolumeButton(xSize / 2, 0, 10)
 	plusTen.canvas:Reparent(canvas, -1)
 
-	local minusOne = self:setupVolumeButton(- xSize / 2 + ySize * 2, 0, -1, middleText)
+	local minusOne = self:setupVolumeButton(- xSize / 2 + ySize * 2, 0, -1)
 	minusOne.canvas:Reparent(canvas, -1)
-	local minusFive = self:setupVolumeButton(- xSize / 2 + ySize, 0, -5, middleText)
+	local minusFive = self:setupVolumeButton(- xSize / 2 + ySize, 0, -5)
 	minusFive.canvas:Reparent(canvas, -1)
-	local minusTen = self:setupVolumeButton(- xSize / 2, 0, -10, middleText)
+	local minusTen = self:setupVolumeButton(- xSize / 2, 0, -10)
 	minusTen.canvas:Reparent(canvas, -1)
+
+	self.transText = ink.text(tostring(lang.getText(lang.info_transaction) .. ": 0E$"), -500, 100, textSize, textColor)
+	self.transText:SetAnchorPoint(0, 0)
+	self.transText:Reparent(canvas, -1)
+
+	self.accountText = ink.text(tostring(lang.getText(lang.info_post_portfolio) .. ": " .. Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) .. "E$"), -500, 190, textSize, textColor)
+	self.accountText:SetAnchorPoint(0, 0)
+	self.accountText:Reparent(canvas, -1)
+
+	self.mainButton = require("modules/ui/widgets/button"):new(0, 420, 650, 200, 5, lang.getText(lang.info_buy), 80, color.darkred, color.darkcyan, color.white)
+	self.mainButton.callback = function()
+		if self.buySellVolume == 0 then return end
+		self.stock:performTransaction(self.buySellVolume)
+		self.buySellVolume = 0
+		self:showData()
+	end
+	self.mainButton:initialize()
+	self.mainButton:registerCallbacks(self.eventCatcher)
+	self.mainButton.canvas:Reparent(canvas, -1)
 end
 
-function info:setupVolumeButton(x, y, amount, textWidget)
+function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amount
 	local _, ySize, _, textSize, borderSize, textColor = self:getBuySellOptions()
 
 	local button = require("modules/ui/widgets/button"):new()
@@ -147,7 +189,12 @@ function info:setupVolumeButton(x, y, amount, textWidget)
 	button.textColor = textColor
 	button.callback = function()
 		self.buySellVolume = self.buySellVolume + amount
-		textWidget:SetText(tostring(self.buySellVolume))
+		if -self.buySellVolume > self.stock:getPortfolioNum() then
+			self.buySellVolume = -self.stock:getPortfolioNum()
+		elseif (Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) - (self.buySellVolume * self.stock:getCurrentPrice())) < 0 then
+			self.buySellVolume = self.buySellVolume - amount
+		end
+		self:showData()
 	end
 	button:initialize()
 	button:registerCallbacks(self.eventCatcher)

@@ -25,4 +25,8 @@ function stock:getPortfolioNum()
     return 16
 end
 
+function stock:performTransaction(amount)
+    print("Transaction of stock " .. self.name .. " with amount: " .. amount)
+end
+
 return stock
