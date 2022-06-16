@@ -36,6 +36,22 @@ function home:initialize()
 	end
 	graph.data = points
 	graph:showData()
+
+	local preview = require("modules/ui/widgets/stockPreview"):new(self)
+	preview.x = 2600
+	preview.y = 500
+	preview.sizeX = 1000
+	preview.sizeY = 170
+	preview.textSize = 80
+	preview.borderSize = 8
+	preview.fillColor = color.darkred
+	preview.bgColor = color.darkcyan
+	preview.textColor = color.white
+	preview.stock = require("modules/logic/stock"):new()
+	preview:initialize()
+	preview:showData()
+	preview:registerCallbacks(self.eventCatcher)
+	preview.canvas:Reparent(self.canvas, -1)
 end
 
 function home:uninitialize()

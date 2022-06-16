@@ -4,7 +4,7 @@ local utils = require("modules/utils/utils")
 
 preview = {}
 
-function preview:new(x, y, sizeX, sizeY, borderSize, bgColor, fillColor, textSize, stock)
+function preview:new(page)
 	local o = {}
 
     o.x = x
@@ -18,11 +18,16 @@ function preview:new(x, y, sizeX, sizeY, borderSize, bgColor, fillColor, textSiz
 
     o.eventCatcher = nil
     o.cooldown = false
+    o.page = page
 
     o.bg = nil
     o.fill = nil
-    o.textWidget = nil
     o.canvas = nil
+
+    o.stock = stock
+    o.stockName = nil
+    o.stockPrice = nil
+    o.stockTrend = nil
 
 	self.__index = self
    	return setmetatable(o, self)
@@ -39,9 +44,37 @@ function preview:initialize()
     self.fill:Reparent(self.canvas, -1)
     self.fill:SetInteractive(true)
 
-    self.textWidget = ink.text(self.text, 0, 0, self.textSize, self.textColor, nil, nil, 0)
-    self.textWidget:SetAnchorPoint(Vector2.new({X = 0.5, Y = 0.5}))
-    self.textWidget:Reparent(self.canvas, -1)
+    local line = ink.line(0, - self.sizeY / 2, 0, self.sizeY / 2, self.bgColor, self.borderSize)
+    line:Reparent(self.canvas, -1)
+    local line = ink.line(self.sizeX / 4, - self.sizeY / 2, self.sizeX / 4, self.sizeY / 2, self.bgColor, self.borderSize)
+    line:Reparent(self.canvas, -1)
+
+    self.stockName = ink.text("", -self.sizeX / 4, 0, self.textSize, self.textColor)
+    self.stockName:SetAnchorPoint(Vector2.new({X = 0.5, Y = 0.5}))
+    self.stockName:Reparent(self.canvas, -1)
+
+    self.stockPrice = ink.text("", self.sizeX / 8, 0, math.floor(self.textSize * 0.9), self.textColor)
+    self.stockPrice:SetAnchorPoint(Vector2.new({X = 0.5, Y = 0.5}))
+    self.stockPrice:Reparent(self.canvas, -1)
+
+    self.stockTrend = ink.text("", self.sizeX / 4 + (self.sizeX / 8), 0, self.textSize, self.textColor)
+    self.stockTrend:SetAnchorPoint(Vector2.new({X = 0.5, Y = 0.5}))
+    self.stockTrend:Reparent(self.canvas, -1)
+end
+
+function preview:showData()
+    self.stockName:SetText(self.stock.name)
+    self.stockPrice:SetText(tostring(self.stock:getCurrentPrice() .. "E$"))
+
+    local trend = self.stock:getTrend()
+    local c = color.red
+    if trend > 0 then
+        c = color.lime
+        trend = tostring("+" .. trend)
+    end
+
+    self.stockTrend:SetText(tostring(trend .. "%"))
+    self.stockTrend:SetTintColor(c)
 end
 
 function preview:registerCallbacks(catcher)
@@ -63,13 +96,15 @@ function preview:hoverOutCallback()
 end
 
 function preview:clickCallback()
-    if not self.callback or self.cooldown then return end
+    if self.cooldown then return end
     self.cooldown = true
     Cron.NextTick(function()
         self.cooldown = false
     end)
     utils.playSound("ui_menu_onpress", 1)
-    self.callback()
+
+    self.page.controller.currentInfoStock = self.stock
+    self.page.controller:switchToPage("stockInfo")
 end
 
 return preview

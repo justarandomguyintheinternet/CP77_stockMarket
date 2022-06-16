@@ -9,7 +9,11 @@ local lang = {
         ["button_login"] = "Anmelden",
         ["button_logout"] = "Abmelden",
         ["graph_time"] = "Zeit",
-        ["graph_value"] = "Marktwert"
+        ["graph_value"] = "Marktwert",
+        ["info_value"] = "Wert",
+        ["info_buy"] = "Kaufen",
+        ["info_sell"] = "Verkaufen",
+        ["info_owned"] = "Im Besitz"
     },
     ["en-us"] = {
         ["pc_stockmarket"] = "Stock Market",
@@ -21,7 +25,11 @@ local lang = {
         ["button_login"] = "Login",
         ["button_logout"] = "Logout",
         ["graph_time"] = "Time",
-        ["graph_value"] = "Market Value"
+        ["graph_value"] = "Market Value",
+        ["info_value"] = "Value",
+        ["info_buy"] = "Buy",
+        ["info_sell"] = "Sell",
+        ["info_owned"] = "In Account",
     }
 }
 
@@ -35,6 +43,10 @@ lang.graph_time = "graph_time"
 lang.graph_value = "graph_value"
 lang.login_name = "login_name"
 lang.login_password = "login_password"
+lang.info_value = "info_value"
+lang.info_buy = "info_buy"
+lang.info_sell = "info_sell"
+lang.info_owned = "info_owned"
 
 function lang.getLang()
     local l = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
