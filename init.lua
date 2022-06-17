@@ -25,12 +25,20 @@ function stocks:new()
     registerForEvent("onInit", function()
         math.randomseed(os.clock()) -- Prevent predictable random() behavior
 
+        local triggerManager = require("modules/logic/triggerManager"):new()
+        self.market = require("modules/logic/stockMarket"):new(2, triggerManager)
+        self.market.triggerManager:onInit()
+        self.market:setupPersistency()
+        self.market:initialize()
+        self.market:checkForData()
+
         Observe('RadialWheelController', 'OnIsInMenuChanged', function(_, isInMenu) -- Setup observer and GameUI to detect inGame / inMenu
             self.runtimeData.inMenu = isInMenu
         end)
 
         GameUI.OnSessionStart(function()
             self.runtimeData.inGame = true
+            self.market:checkForData()
         end)
 
         GameUI.OnSessionEnd(function()
@@ -38,7 +46,7 @@ function stocks:new()
         end)
 
         self.runtimeData.inGame = not GameUI.IsDetached() -- Required to check if ingame after reloading all mods
-        self.browser.init()
+        self.browser.init(self)
     end)
 
     registerForEvent("onShutdown", function()
@@ -48,6 +56,7 @@ function stocks:new()
     registerForEvent("onUpdate", function(dt)
         if not self.runtimeData.inMenu and self.runtimeData.inGame then
             Cron.Update(dt)
+            self.market.triggerManager:update()
         end
     end)
 

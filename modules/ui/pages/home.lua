@@ -1,24 +1,31 @@
 local ink = require("modules/ui/inkHelper")
 local color = require("modules/ui/color")
 local lang = require("modules/utils/lang")
+local Cron = require("modules/external/Cron")
 
 home = {}
 
-function home:new(inkPage, controller, eventCatcher)
+function home:new(inkPage, controller, eventCatcher, mod)
 	local o = {}
 
+	o.mod = mod
     o.inkPage = inkPage
 	o.controller = controller
 	o.eventCatcher = eventCatcher
 	o.pageName = "home"
 
 	o.canvas = nil
+	o.refreshCron = nil
 
 	self.__index = self
    	return setmetatable(o, self)
 end
 
 function home:initialize()
+	self.refreshCron = Cron.Every(5, function ()
+		self:refresh()
+	end)
+
 	self.canvas = ink.canvas(0, 0, inkEAnchor.TopLeft)
 	self.canvas:Reparent(self.inkPage, -1)
 
@@ -47,14 +54,20 @@ function home:initialize()
 	preview.fillColor = color.darkred
 	preview.bgColor = color.darkcyan
 	preview.textColor = color.white
-	preview.stock = require("modules/logic/stock"):new()
+	preview.stock = self.mod.market.stocks[1]
 	preview:initialize()
 	preview:showData()
 	preview:registerCallbacks(self.eventCatcher)
 	preview.canvas:Reparent(self.canvas, -1)
 end
 
+function home:refresh()
+
+end
+
 function home:uninitialize()
+	Cron.Halt(self.refreshCron)
+
 	if not self.canvas then return end
 	self.eventCatcher.removeSubscriber(self.button)
 	self.inkPage:RemoveChild(self.canvas)

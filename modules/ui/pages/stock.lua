@@ -1,18 +1,21 @@
 local ink = require("modules/ui/inkHelper")
 local color = require("modules/ui/color")
 local lang = require("modules/utils/lang")
+local Cron = require("modules/external/Cron")
 
 info = {}
 
-function info:new(inkPage, controller, eventCatcher)
+function info:new(inkPage, controller, eventCatcher, mod)
 	local o = {}
 
+	o.mod = mod
     o.inkPage = inkPage
 	o.controller = controller
 	o.eventCatcher = eventCatcher
 	o.pageName = "stockInfo"
 
 	o.canvas = nil
+	o.refreshCron = nil
 
 	o.stock = nil
 	o.buySellVolume = 0
@@ -22,6 +25,10 @@ function info:new(inkPage, controller, eventCatcher)
 end
 
 function info:initialize(stock)
+	self.refreshCron = Cron.Every(2, function ()
+		self:refresh()
+	end)
+
 	self.buySellVolume = 0
 	self.stock = stock
 	self.canvas = ink.canvas(0, 0, inkEAnchor.TopLeft)
@@ -29,18 +36,10 @@ function info:initialize(stock)
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
 
-	local graph = require("modules/ui/widgets/graph"):new(55, 300, 2000, 1000, 10, 5, lang.getText(lang.graph_time), lang.getText(lang.graph_value), 5, 50, color.darkcyan, 0.3)
-	graph:initialize(self.canvas)
-
-	local currentValue = 200
-	local points = {}
-	local steps = 50
-	for i = 1, steps do
-		currentValue = currentValue + (1 - (math.random() * 2))
-		points[i] = {x = i, y = currentValue}
-	end
-	graph.data = points
-	graph:showData()
+	self.graph = require("modules/ui/widgets/graph"):new(55, 300, 2000, 1000, 10, 5, lang.getText(lang.graph_time), lang.getText(lang.graph_value), 5, 50, color.darkcyan, 0.3)
+	self.graph:initialize(self.canvas)
+	self.graph.data = self.stock.exportData.data
+	self.graph:showData()
 
 	self:setupInfo()
 	self:setupBuySell(2600, 750)
@@ -202,7 +201,15 @@ function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amoun
 	return button
 end
 
+function info:refresh()
+	print("F5")
+	self:showData()
+	self.graph.data = self.stock.exportData.data
+	self.graph:showData()
+end
+
 function info:uninitialize()
+	Cron.Halt(self.refreshCron)
 	if not self.canvas then return end
 	self.eventCatcher.removeSubscriber(self.button)
 	self.inkPage:RemoveChild(self.canvas)

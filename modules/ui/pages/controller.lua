@@ -4,11 +4,12 @@ local utils = require("modules/utils/utils")
 
 controller = {}
 
-function controller:new(browserController, catcher)
+function controller:new(browserController, catcher, mod)
 	local o = {}
 
     o.browserController = browserController
     o.catcher = catcher
+    o.mod = mod
 
     o.loginPage = nil
     o.homePage = nil
@@ -23,8 +24,8 @@ end
 
 function controller:initialize()
     self.loginPage = require("modules/ui/pages/login"):new(self.browserController.currentPage, self, self.catcher)
-    self.homePage = require("modules/ui/pages/home"):new(self.browserController.currentPage, self, self.catcher)
-    self.stockInfo = require("modules/ui/pages/stock"):new(self.browserController.currentPage, self, self.catcher)
+    self.homePage = require("modules/ui/pages/home"):new(self.browserController.currentPage, self, self.catcher, self.mod)
+    self.stockInfo = require("modules/ui/pages/stock"):new(self.browserController.currentPage, self, self.catcher, self.mod)
     self:switchToPage("login")
 end
 

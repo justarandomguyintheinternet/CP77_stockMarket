@@ -31,8 +31,6 @@ function graph:new(x, y, sizeX, sizeY, stepsX, stepsY, labelX, labelY, gridThicc
     o.graphLines = {}
     o.labels = {}
 
-    o.data = {}
-
 	self.__index = self
    	return setmetatable(o, self)
 end

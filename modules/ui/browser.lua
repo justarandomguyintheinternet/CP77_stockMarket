@@ -6,7 +6,7 @@ browser = {
     controllers = {}
 }
 
-function browser.init()
+function browser.init(mod)
     catcher.init()
 
     Override("ComputerControllerPS", "GetMenuButtonWidgets", function (this, wrapped)
@@ -49,7 +49,7 @@ function browser.init()
             this.currentPage:RemoveAllChildren()
 
             browser.controllers = {}
-            local controller = require("modules/ui/pages/controller"):new(this, catcher)
+            local controller = require("modules/ui/pages/controller"):new(this, catcher, mod)
             controller:initialize()
             table.insert(browser.controllers, controller)
         end
