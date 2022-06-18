@@ -73,4 +73,9 @@ function miscUtils.playSound(name, mult)
     end
 end
 
+function miscUtils.spendMoney(amount)
+    local moneyId = gameItemID.FromTDBID(TweakDBID.new("Items.money"))
+    Game.GetTransactionSystem():RemoveItem(Game.GetPlayer(), moneyId, amount)
+end
+
 return miscUtils

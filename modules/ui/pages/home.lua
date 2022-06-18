@@ -16,6 +16,7 @@ function home:new(inkPage, controller, eventCatcher, mod)
 
 	o.canvas = nil
 	o.refreshCron = nil
+	o.previews = {}
 
 	self.__index = self
    	return setmetatable(o, self)
@@ -54,15 +55,19 @@ function home:initialize()
 	preview.fillColor = color.darkred
 	preview.bgColor = color.darkcyan
 	preview.textColor = color.white
-	preview.stock = self.mod.market.stocks[1]
+	preview.stock = self.mod.market.stocks[2]
 	preview:initialize()
 	preview:showData()
 	preview:registerCallbacks(self.eventCatcher)
 	preview.canvas:Reparent(self.canvas, -1)
+
+	table.insert(self.previews, preview)
 end
 
 function home:refresh()
-
+	for _, p in pairs(self.previews) do
+		p:showData()
+	end
 end
 
 function home:uninitialize()

@@ -26,7 +26,7 @@ function stocks:new()
         math.randomseed(os.clock()) -- Prevent predictable random() behavior
 
         local triggerManager = require("modules/logic/triggerManager"):new()
-        self.market = require("modules/logic/stockMarket"):new(2, triggerManager)
+        self.market = require("modules/logic/stockMarket"):new(30, triggerManager)
         self.market.triggerManager:onInit()
         self.market:setupPersistency()
         self.market:initialize()

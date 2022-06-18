@@ -15,7 +15,8 @@ local lang = {
         ["info_sell"] = "Verkaufen",
         ["info_owned"] = "Im Besitz",
         ["info_transaction"] = "Transaktionskosten",
-        ["info_post_portfolio"] = "Vermögen nach Transaktion"
+        ["info_post_portfolio"] = "Vermögen nach Transaktion",
+        ["info_margin"] = "Gewinn"
     },
     ["en-us"] = {
         ["pc_stockmarket"] = "Stock Market",
@@ -33,7 +34,8 @@ local lang = {
         ["info_sell"] = "Sell",
         ["info_owned"] = "In Account",
         ["info_transaction"] = "Cost of transaction",
-        ["info_post_portfolio"] = "Money after transaction"
+        ["info_post_portfolio"] = "Money after transaction",
+        ["info_margin"] = "Profit"
     }
 }
 
@@ -53,6 +55,7 @@ lang.info_sell = "info_sell"
 lang.info_owned = "info_owned"
 lang.info_transaction = "info_transaction"
 lang.info_post_portfolio = "info_post_portfolio"
+lang.info_margin = "info_margin"
 
 function lang.getLang()
     local l = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value

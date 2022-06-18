@@ -61,11 +61,13 @@ function info:setupInfo() -- Basic info section
 
 	self.stockValue = ink.text("", 0, 0, 75, color.white)
 	self.stockValue:Reparent(self.shortInfo, -1)
-	self.stockTrend = ink.text("", 600, 0, 75, color.white)
+	self.stockTrend = ink.text("", 800, 0, 75, color.white)
 	self.stockTrend:Reparent(self.shortInfo, -1)
 
 	self.portfolio = ink.text("", 0, 100, 75, color.white)
 	self.portfolio:Reparent(self.shortInfo, -1)
+	self.portfolioTrend = ink.text("", 800, 100, 75, color.white)
+	self.portfolioTrend:Reparent(self.shortInfo, -1)
 
 	self.infoLine = ink.line(0, 210, 1000, 210, color.gray, 3)
 	self.infoLine:Reparent(self.shortInfo, -1)
@@ -87,11 +89,27 @@ function info:showData() -- Update data
 
 	-- Stocks in portfolio
 	self.portfolio:SetText(tostring(lang.getText(lang.info_owned) .. ": " .. self.stock:getPortfolioNum() .. " / " .. (self.stock:getPortfolioNum() * self.stock:getCurrentPrice()) .. " E$"))
+	-- Portfolio trend
+	local trend = self.stock:getProfit(-self.stock:getPortfolioNum()) / self.stock.exportData.spent
+	if self.stock.exportData.spent == 0 then trend = 0 end
 
-	-- Stock volume text
+	trend = tonumber(string.format("%.1f", trend * 100))
+    local c = color.red
+    if trend >= 0 then
+        c = color.lime
+        trend = tostring("+" .. trend)
+    end
+    self.portfolioTrend:SetText(tostring(trend .. "%"))
+	self.portfolioTrend:SetTintColor(c)
+
+	-- Stock volume buttons text
 	self.middleText:SetText(tostring(self.buySellVolume))
-	-- Account balance
-	self.accountText:SetText(tostring(lang.getText(lang.info_post_portfolio) .. ": " .. (Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) - (self.buySellVolume * self.stock:getCurrentPrice())) .. "E$"))
+	-- Account balance / Margin
+	local text = tostring(lang.getText(lang.info_post_portfolio) .. ": " .. (Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) - (self.buySellVolume * self.stock:getCurrentPrice())) .. "E$")
+	if self.buySellVolume <= 0 then
+		text = lang.getText(lang.info_margin) .. ": " .. self.stock:getProfit(self.buySellVolume) .. "E$"
+	end
+	self.accountText:SetText(text)
 	-- Transaction cost
 	local transCost = tostring(math.abs(self.buySellVolume * self.stock:getCurrentPrice()) .. "E$")
 	local locText = lang.getText(lang.info_transaction) .. ": "
@@ -152,7 +170,7 @@ function info:setupBuySell(x, y) -- Buy sell section
 	self.transText:SetAnchorPoint(0, 0)
 	self.transText:Reparent(canvas, -1)
 
-	self.accountText = ink.text(tostring(lang.getText(lang.info_post_portfolio) .. ": " .. Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) .. "E$"), -500, 190, textSize, textColor)
+	self.accountText = ink.text("", -500, 190, textSize, textColor)
 	self.accountText:SetAnchorPoint(0, 0)
 	self.accountText:Reparent(canvas, -1)
 
@@ -190,6 +208,7 @@ function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amoun
 		self.buySellVolume = self.buySellVolume + amount
 		if -self.buySellVolume > self.stock:getPortfolioNum() then
 			self.buySellVolume = -self.stock:getPortfolioNum()
+			if self.buySellVolume == -0 then self.buySellVolume = 0 end
 		elseif (Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) - (self.buySellVolume * self.stock:getCurrentPrice())) < 0 then
 			self.buySellVolume = self.buySellVolume - amount
 		end
@@ -202,7 +221,7 @@ function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amoun
 end
 
 function info:refresh()
-	print("F5")
+	print("Info refresh")
 	self:showData()
 	self.graph.data = self.stock.exportData.data
 	self.graph:showData()
