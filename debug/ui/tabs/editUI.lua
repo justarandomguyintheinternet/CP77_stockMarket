@@ -16,6 +16,7 @@ function editUI.draw(debug, mod)
         end
 
         stock.startPrice = ImGui.InputInt("Start Price", stock.startPrice)
+        stock.sharesAmount = ImGui.InputInt("Shares Amount", stock.sharesAmount)
         stock.priceSpread = ImGui.InputFloat("Price Spread", stock.priceSpread)
 
         ImGui.Separator()

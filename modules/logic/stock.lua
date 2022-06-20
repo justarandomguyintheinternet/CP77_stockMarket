@@ -3,11 +3,14 @@ local utils = require("modules/utils/utils")
 
 stock = {}
 
-function stock:new()
+function stock:new(steps)
 	local o = {}
+
+    o.steps = steps
 
     o.name = ""
     o.startPrice = 0
+    o.sharesAmount = 0
     o.exportData = {}
     o.default = {
         name = "",
@@ -54,8 +57,9 @@ end
 
 function stock:loadFromDefinition(data) -- Load from json file
     self.name = data.name
-    self.exportData.name = name
+    self.sharesAmount = data.sharesAmount
     self.startPrice = data.startPrice
+    self.exportData.name = name
 end
 
 function stock:checkForData(data)
@@ -77,23 +81,23 @@ function stock:checkForData(data)
     self.exportData.data = points
 end
 
-function stock:getStep()
-    return (4 - (math.random() * 8))
-end
-
 function stock:loadDefault()
     self.exportData = self.default
 
     -- Generate some initial data
     local currentValue = self.startPrice
 	local points = {}
-	local steps = 90
+	local steps = self.steps
 	for i = 1, steps do
 		currentValue = currentValue + self:getStep()
 		points[i] = {x = i, y = currentValue}
 	end
 
     self.exportData.data = points
+end
+
+function stock:getStep()
+    return (4 - (math.random() * 8))
 end
 
 function stock:update() -- Runs every intervall

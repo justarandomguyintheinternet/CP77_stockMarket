@@ -12,7 +12,8 @@ function createUI.draw()
             name = createUI.name,
             triggers = {},
             startPrice = 200,
-            priceSpread = 0.5
+            priceSpread = 0.5,
+            sharesAmount = 50000
         }
         config.saveFile("data/static/stocks/" .. stock.name .. ".json", stock)
         createUI.name = ""

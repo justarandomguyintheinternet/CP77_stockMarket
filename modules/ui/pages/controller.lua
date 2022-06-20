@@ -23,10 +23,17 @@ function controller:new(browserController, catcher, mod)
 end
 
 function controller:initialize()
+    if self.loginPage or self.homePage or self.stockInfo then self:uninitialize() end
     self.loginPage = require("modules/ui/pages/login"):new(self.browserController.currentPage, self, self.catcher)
     self.homePage = require("modules/ui/pages/home"):new(self.browserController.currentPage, self, self.catcher, self.mod)
     self.stockInfo = require("modules/ui/pages/stock"):new(self.browserController.currentPage, self, self.catcher, self.mod)
     self:switchToPage("login")
+end
+
+function controller:uninitialize()
+    self.loginPage:uninitialize()
+    self.homePage:uninitialize()
+    self.stockInfo:uninitialize()
 end
 
 function controller:switchToPage(page)

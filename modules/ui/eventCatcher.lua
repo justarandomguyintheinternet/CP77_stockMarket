@@ -20,6 +20,7 @@ function catcher.init()
 	end)
 
 	Observe('sampleStyleManagerGameController', 'OnState1', function(self, evt) -- Click event
+		if not evt:IsAction("click") then return end
 		local obj = catcher.getSubscriberByEventCatcher(self)
 		if not obj then return end
 

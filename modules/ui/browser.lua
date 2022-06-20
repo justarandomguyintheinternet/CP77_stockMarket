@@ -1,5 +1,6 @@
 local catcher = require("modules/ui/eventCatcher")
 local lang = require("modules/utils/lang")
+local utils = require("modules/utils/utils")
 
 browser = {
     openedCustom = false,
@@ -32,7 +33,22 @@ function browser.init(mod)
             this:ShowInternet()
             this:GetMainLayoutController():MarkManuButtonAsSelected("stock")
         else
+            for key, c in pairs(browser.controllers) do -- Different menu
+                if utils.isSameInstance(this:GetOwner(), c.pc) then
+                    browser.controllers[key].controller:uninitialize()
+                    browser.controllers[key] = nil
+                end
+            end
             wrapped(adress)
+        end
+    end)
+
+    Observe("BrowserGameController", "OnUninitialize", function (this) -- PC despawn
+        for key, c in pairs(browser.controllers) do
+            if utils.isSameInstance(this:GetOwnerEntity(), c.pc) then
+                browser.controllers[key].controller:uninitialize()
+                browser.controllers[key] = nil
+            end
         end
     end)
 
@@ -48,10 +64,16 @@ function browser.init(mod)
         if this.addressText:GetText() == "custom" then
             this.currentPage:RemoveAllChildren()
 
-            browser.controllers = {}
+            for key, c in pairs(browser.controllers) do
+                if utils.isSameInstance(this:GetOwnerGameObject(), c.pc) then
+                    browser.controllers[key].controller:uninitialize()
+                    browser.controllers[key] = nil
+                end
+            end
+
             local controller = require("modules/ui/pages/controller"):new(this, catcher, mod)
             controller:initialize()
-            table.insert(browser.controllers, controller)
+            table.insert(browser.controllers, {controller = controller, pc = this:GetOwnerGameObject()})
         end
     end)
 

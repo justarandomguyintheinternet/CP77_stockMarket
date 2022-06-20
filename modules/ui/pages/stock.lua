@@ -221,7 +221,6 @@ function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amoun
 end
 
 function info:refresh()
-	print("Info refresh")
 	self:showData()
 	self.graph.data = self.stock.exportData.data
 	self.graph:showData()
