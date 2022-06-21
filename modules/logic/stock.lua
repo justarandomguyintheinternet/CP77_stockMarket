@@ -10,6 +10,7 @@ function stock:new(steps)
 
     o.name = ""
     o.startPrice = 0
+    o.info = ""
     o.sharesAmount = 0
     o.exportData = {}
     o.default = {
@@ -40,7 +41,7 @@ end
 function stock:getProfit(amount)
     local v = (amount * (self.exportData.spent / (self.exportData.owned))) - (self:getCurrentPrice() * amount)
     if amount == 0 then v = 0 end
-    return v
+    return utils.round(v, 1)
 end
 
 function stock:performTransaction(amount)
@@ -57,6 +58,8 @@ end
 
 function stock:loadFromDefinition(data) -- Load from json file
     self.name = data.name
+    self.info = lang.getText("stockInfo_" .. data.name)
+    if not self.info then self.info = "Insert lore by @matsif" end
     self.sharesAmount = data.sharesAmount
     self.startPrice = data.startPrice
     self.exportData.name = name

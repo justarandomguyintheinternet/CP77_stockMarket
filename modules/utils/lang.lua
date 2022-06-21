@@ -18,8 +18,8 @@ local lang = {
         ["info_post_portfolio"] = "Vermögen nach Transaktion",
         ["info_margin"] = "Gewinn",
         ["stocks_ascending"] = "Aufsteigend",
-        ["stocks_descending"] = "Absteigend"
-
+        ["stocks_descending"] = "Absteigend",
+        ["stockInfo_Arasaka"] = ""
     },
     ["en-us"] = {
         ["pc_stockmarket"] = "Stock Market",
@@ -40,7 +40,8 @@ local lang = {
         ["info_post_portfolio"] = "Money after transaction",
         ["info_margin"] = "Profit",
         ["stocks_ascending"] = "Ascending",
-        ["stocks_descending"] = "Descending"
+        ["stocks_descending"] = "Descending",
+        ["stockInfo_Arasaka"] = "The Arasaka Corporation, is a world-wide megacorporation dealing in corporate security, banking, and manufacturing. It is one of the most influential megacorporations in the world"
     }
 }
 

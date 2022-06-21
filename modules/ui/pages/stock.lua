@@ -157,14 +157,14 @@ function info:setupBuySell(x, y) -- Buy sell section
 	plusOne.canvas:Reparent(canvas, -1)
 	local plusFive = self:setupVolumeButton(xSize / 2 - ySize, 0, 5)
 	plusFive.canvas:Reparent(canvas, -1)
-	local plusTen = self:setupVolumeButton(xSize / 2, 0, 10)
+	local plusTen = self:setupVolumeButton(xSize / 2, 0, 25)
 	plusTen.canvas:Reparent(canvas, -1)
 
 	local minusOne = self:setupVolumeButton(- xSize / 2 + ySize * 2, 0, -1)
 	minusOne.canvas:Reparent(canvas, -1)
 	local minusFive = self:setupVolumeButton(- xSize / 2 + ySize, 0, -5)
 	minusFive.canvas:Reparent(canvas, -1)
-	local minusTen = self:setupVolumeButton(- xSize / 2, 0, -10)
+	local minusTen = self:setupVolumeButton(- xSize / 2, 0, -25)
 	minusTen.canvas:Reparent(canvas, -1)
 
 	self.transText = ink.text(tostring(lang.getText(lang.info_transaction) .. ": 0E$"), -500, 100, textSize, textColor)

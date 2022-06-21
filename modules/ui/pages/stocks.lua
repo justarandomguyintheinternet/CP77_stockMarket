@@ -43,9 +43,25 @@ function stocks:initialize()
 	local line = ink.line(2120, 650, 3080, 650, color.white, 3)
 	line:Reparent(self.canvas, -1)
 
+	self:setupInfo()
 	self:setupScrollArea()
 	self:setupSortButtons()
 	self:setStocks()
+end
+
+function stocks:setupInfo()
+	self.info = ink.canvas(100, 300, inkEAnchor.Centered)
+	self.info:SetVisible(false)
+	self.info:Reparent(self.canvas, -1)
+
+	self.infoName = ink.text("", 0, 0, 120, color.white)
+	self.infoName:Reparent(self.info, -1)
+
+	local line = ink.line(0, 130, 500, 130, color.white, 5)
+	line:Reparent(self.info, -1)
+
+	self.infoText = ink.text("", 0, 150, 50, color.white)
+	self.infoText:Reparent(self.info, -1)
 end
 
 function stocks:setStocks()
@@ -170,10 +186,15 @@ function stocks:createPreviewButton(x, y, stock)
 		self.graph.canvas:SetVisible(true)
 		self.graph.data = bt.stock.exportData.data
 		self.graph:showData()
+
+		self.infoName:SetText(bt.stock.name)
+		self.infoText:SetText(utils.wrap(bt.stock.info, 30))
+		self.info:SetVisible(true)
 	end
 	button.hoverOutCallback = function (bt)
 		bt.fill:SetOpacity(1)
 		self.graph.canvas:SetVisible(false)
+		self.info:SetVisible(false)
 	end
 
 	return button
@@ -184,9 +205,6 @@ function stocks:refresh()
 	for _, p in pairs(self.previews) do
 		p:showData()
 	end
-
-	-- self.graph.data = self.mod.market.stocks["market"].exportData.data
-	-- self.graph:showData()
 end
 
 function stocks:uninitialize()

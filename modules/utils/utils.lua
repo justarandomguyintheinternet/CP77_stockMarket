@@ -83,4 +83,25 @@ function miscUtils.round(num, precision)
     return tonumber(string.format(tostring("%." .. precision .. "f"), num))
 end
 
+function miscUtils.wrap(text, chars)
+    local str = ""
+    local shouldBreak = false
+    local n = 1
+    for i = 1, #text do
+        local c = text:sub(i,i)
+        if n > chars then
+            shouldBreak = true
+        end
+        if shouldBreak and i ~= 0 and text:sub(i - 1,i - 1) == " " then
+            n = 0
+            shouldBreak = false
+            str = tostring(str .. "\n")
+        end
+        str = tostring(str .. c)
+        n = n + 1
+    end
+
+    return str
+end
+
 return miscUtils
