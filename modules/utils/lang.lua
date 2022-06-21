@@ -41,7 +41,12 @@ local lang = {
         ["info_margin"] = "Profit",
         ["stocks_ascending"] = "Ascending",
         ["stocks_descending"] = "Descending",
-        ["stockInfo_Arasaka"] = "The Arasaka Corporation, is a world-wide megacorporation dealing in corporate security, banking, and manufacturing. It is one of the most influential megacorporations in the world"
+
+        ["stockInfo_Arasaka"] = "The Arasaka Corporation, is a world-wide megacorporation dealing in corporate security, banking, and manufacturing. It is one of the most influential megacorporations in the world",
+        ["stockInfo_Biotechnica"] = "Biotechnica specializes in genetically modifying crops, more specifically grains. It has developed a patent on a new species of GMO wheat known as V. Megasuavis, the key ingredient in the production of CHOOH2 the supposed \"fuel of the future\".",
+        ["stockInfo_Kang Tao"] = "Kang Tao went from a small failing company, to a massive corporation within 20 years, partly due to constant funding by the Chineese government. By 2077, Kang Tao is now competing with the top dog industry giants, such as Arasaka and Tsunami.",
+        ["stockInfo_Militech"] = "Militech, formerly Armatech-Luccessi, is a military-industrial arms giant. Commonly known as the largest weapons manufacturer in the world.",
+        ["stockInfo_WNS"] = "WNS is a London-based news service that operates worldwide. WNS keeps tabs on the world, by any means possible. Newspapers and news stations around the world pay large amounts of money to receive WNS stories via the WorldSat Network."
     }
 }
 

@@ -62,12 +62,12 @@ function info:setupInfo() -- Basic info section
 
 	self.stockValue = ink.text("", 0, 0, 75, color.white)
 	self.stockValue:Reparent(self.shortInfo, -1)
-	self.stockTrend = ink.text("", 800, 0, 75, color.white)
+	self.stockTrend = ink.text("", 825, 0, 75, color.white)
 	self.stockTrend:Reparent(self.shortInfo, -1)
 
 	self.portfolio = ink.text("", 0, 100, 75, color.white)
 	self.portfolio:Reparent(self.shortInfo, -1)
-	self.portfolioTrend = ink.text("", 800, 100, 75, color.white)
+	self.portfolioTrend = ink.text("", 825, 100, 75, color.white)
 	self.portfolioTrend:Reparent(self.shortInfo, -1)
 
 	self.infoLine = ink.line(0, 210, 1000, 210, color.gray, 3)
