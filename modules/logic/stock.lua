@@ -24,13 +24,13 @@ function stock:new(steps)
 end
 
 function stock:getCurrentPrice()
-    return math.floor(self.exportData.data[#self.exportData.data].y)
+    return utils.round(self.exportData.data[#self.exportData.data].y, 1)
 end
 
 function stock:getTrend()
     -- TODO: Change to avg of last 1/2 of data
     local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 5].y) / self.exportData.data[#self.exportData.data  - 5].y
-    return tonumber(string.format("%.1f", percent))
+    return utils.round(percent, 1)
 end
 
 function stock:getPortfolioNum()

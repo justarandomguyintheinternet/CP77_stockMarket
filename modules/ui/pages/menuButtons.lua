@@ -21,9 +21,9 @@ function buttons.createMenu(page)
 
     -- Stocks button
 	local stocks = buttons.createMenuButton(lang.getText(lang.button_stocks), -150, 170, page.eventCatcher)
-    if page.pageName ~= "stock" then
+    if page.pageName ~= "stocks" then
         stocks.callback = function()
-            page.controller:switchToPage("login")
+            page.controller:switchToPage("stocks")
         end
     else
         stocks.bg:SetTintColor(color.cyan)

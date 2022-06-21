@@ -130,14 +130,14 @@ function graph:showLegends()
     local x_X = leftPosition + xSize / 2
     local x_Y = topPosition / 2
 
-    local xLegend = ink.text(self.labelX, x_X, x_Y, self.labelSize / 2, color.white)
+    local xLegend = ink.text(self.labelX, x_X, x_Y, math.floor(self.labelSize / 2), color.white)
     xLegend:SetAnchorPoint(0.5, 0.5)
     xLegend:Reparent(self.grid, -1)
 
     local y_X = leftPosition + xSize + topPosition / 2
     local y_Y = topPosition + ySize / 2
 
-    local yLegend = ink.text(self.labelY, y_X, y_Y, self.labelSize / 2, color.white, nil, nil, 90)
+    local yLegend = ink.text(self.labelY, y_X, y_Y, math.floor(self.labelSize / 2), color.white, nil, nil, 90)
     yLegend:SetAnchorPoint(0.5, 0.5)
     yLegend:Reparent(self.grid, -1)
 end

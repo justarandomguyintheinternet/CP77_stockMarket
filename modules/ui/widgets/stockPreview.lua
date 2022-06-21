@@ -64,7 +64,7 @@ end
 
 function preview:showData()
     self.stockName:SetText(self.stock.name)
-    self.stockPrice:SetText(tostring(self.stock:getCurrentPrice() .. "E$"))
+    self.stockPrice:SetText(tostring(math.floor(self.stock:getCurrentPrice()) .. "E$"))
 
     local trend = self.stock:getTrend()
     local c = color.red

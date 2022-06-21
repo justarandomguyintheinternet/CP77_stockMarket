@@ -35,8 +35,7 @@ function browser.init(mod)
         else
             for key, c in pairs(browser.controllers) do -- Different menu
                 if utils.isSameInstance(this:GetOwner(), c.pc) then
-                    browser.controllers[key].controller:uninitialize()
-                    browser.controllers[key] = nil
+                    browser.tryUninitController(key)
                 end
             end
             wrapped(adress)
@@ -46,8 +45,7 @@ function browser.init(mod)
     Observe("BrowserGameController", "OnUninitialize", function (this) -- PC despawn
         for key, c in pairs(browser.controllers) do
             if utils.isSameInstance(this:GetOwnerEntity(), c.pc) then
-                browser.controllers[key].controller:uninitialize()
-                browser.controllers[key] = nil
+                browser.tryUninitController(key)
             end
         end
     end)
@@ -66,8 +64,7 @@ function browser.init(mod)
 
             for key, c in pairs(browser.controllers) do
                 if utils.isSameInstance(this:GetOwnerGameObject(), c.pc) then
-                    browser.controllers[key].controller:uninitialize()
-                    browser.controllers[key] = nil
+                    browser.tryUninitController(key)
                 end
             end
 
@@ -82,6 +79,18 @@ function browser.init(mod)
             inkTextRef.SetText(this.addressText, "custom")
         end
     end)
+end
+
+function browser.tryUninitController(key)
+    local success = false
+    pcall(function ()
+        browser.controllers[key].controller:uninitialize()
+        browser.controllers[key] = nil
+        success = true
+    end)
+    if not success then
+        browser.controllers[key] = nil
+    end
 end
 
 return browser

@@ -75,7 +75,12 @@ end
 
 function miscUtils.spendMoney(amount)
     local moneyId = gameItemID.FromTDBID(TweakDBID.new("Items.money"))
-    Game.GetTransactionSystem():RemoveItem(Game.GetPlayer(), moneyId, amount)
+    Game.GetTransactionSystem():RemoveItem(Game.GetPlayer(), moneyId, math.floor(amount + 0.5))
+end
+
+function miscUtils.round(num, precision)
+    precision = precision or 1
+    return tonumber(string.format(tostring("%." .. precision .. "f"), num))
 end
 
 return miscUtils

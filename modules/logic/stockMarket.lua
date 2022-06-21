@@ -56,14 +56,19 @@ function market:initialize() -- Generate stock instances from json files
     self:setupMarketStock()
 end
 
+function market:getNumberStocks() -- Get number of stocks, stock market excluded
+    local nStocks = -1
+    for _, _ in pairs(self.stocks) do nStocks = nStocks + 1 end
+    return nStocks
+end
+
 function market:setupMarketStock()
     local mStock = require("modules/logic/stock"):new(self.range)
     mStock:loadFromDefinition({
         name = lang.getText(lang.pc_stockmarket)
     })
     mStock.loadDefault = function(st)
-        local nStocks = -1
-        for _, _ in pairs(self.stocks) do nStocks = nStocks + 1 end
+        local nStocks = self:getNumberStocks()
 
         local points = {}
         for i = 1, self.range do
@@ -86,8 +91,7 @@ function market:setupMarketStock()
             shift[i - 1] = v
         end
 
-        local nStocks = -1
-        for _, _ in pairs(self.stocks) do nStocks = nStocks + 1 end
+        local nStocks = self:getNumberStocks()
 
         local y = 0
         for k, stock in pairs(self.stocks) do

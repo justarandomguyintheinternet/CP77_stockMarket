@@ -2,6 +2,7 @@ local ink = require("modules/ui/inkHelper")
 local color = require("modules/ui/color")
 local lang = require("modules/utils/lang")
 local Cron = require("modules/external/Cron")
+local utils = require("modules/utils/utils")
 
 info = {}
 
@@ -93,7 +94,7 @@ function info:showData() -- Update data
 	local trend = self.stock:getProfit(-self.stock:getPortfolioNum()) / self.stock.exportData.spent
 	if self.stock.exportData.spent == 0 then trend = 0 end
 
-	trend = tonumber(string.format("%.1f", trend * 100))
+	trend = utils.round(trend * 100, 1)
     local c = color.red
     if trend >= 0 then
         c = color.lime
