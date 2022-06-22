@@ -29,6 +29,7 @@ function controller:initialize()
     self.homePage = require("modules/ui/pages/home"):new(self.browserController.currentPage, self, self.catcher, self.mod)
     self.stockInfo = require("modules/ui/pages/stock"):new(self.browserController.currentPage, self, self.catcher, self.mod)
     self.stocksPage = require("modules/ui/pages/stocks"):new(self.browserController.currentPage, self, self.catcher, self.mod)
+    self.portfolioPage = require("modules/ui/pages/portfolio"):new(self.browserController.currentPage, self, self.catcher, self.mod)
     self:switchToPage("login")
 end
 
@@ -37,6 +38,7 @@ function controller:uninitialize()
     self.homePage:uninitialize()
     self.stockInfo:uninitialize()
     self.stocksPage:uninitialize()
+    self.portfolioPage:uninitialize()
 end
 
 function controller:switchToPage(page)
@@ -45,22 +47,32 @@ function controller:switchToPage(page)
         self.homePage:uninitialize()
         self.stockInfo:uninitialize()
         self.stocksPage:uninitialize()
+        self.portfolioPage:uninitialize()
         self.loginPage:initialize()
     elseif page == "home" then
         self.loginPage:uninitialize()
         self.stockInfo:uninitialize()
         self.stocksPage:uninitialize()
+        self.portfolioPage:uninitialize()
         self.homePage:initialize()
     elseif page == "stockInfo" then
         self.loginPage:uninitialize()
         self.homePage:uninitialize()
         self.stocksPage:uninitialize()
+        self.portfolioPage:uninitialize()
         self.stockInfo:initialize(self.currentInfoStock)
     elseif page == "stocks" then
         self.loginPage:uninitialize()
         self.homePage:uninitialize()
+        self.portfolioPage:uninitialize()
         self.stockInfo:uninitialize()
         self.stocksPage:initialize()
+    elseif page == "portfolio" then
+        self.loginPage:uninitialize()
+        self.homePage:uninitialize()
+        self.stocksPage:uninitialize()
+        self.stockInfo:uninitialize()
+        self.portfolioPage:initialize()
     end
     inkTextRef.SetText(self.browserController.addressText, self:getPageAdress())
 end
@@ -72,6 +84,8 @@ function controller:getPageAdress()
         return "NETdir://nusa.stockXC.corp/home"
     elseif self.activePage == "stocks" then
         return "NETdir://nusa.stockXC.corp/stocks"
+    elseif self.activePage == "portfolio" then
+        return "NETdir://nusa.stockXC.corp/portfolio"
     elseif self.activePage == "stockInfo" then
         return "NETdir://nusa.stockXC.corp/stocks/" .. self.currentInfoStock.name
     end

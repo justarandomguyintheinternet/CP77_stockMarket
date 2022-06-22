@@ -58,8 +58,7 @@ end
 
 function stock:loadFromDefinition(data) -- Load from json file
     self.name = data.name
-    self.info = lang.getText("stockInfo_" .. data.name)
-    if not self.info then self.info = "Insert lore by @matsif" end
+    self.info = "stockInfo_" .. data.name
     self.sharesAmount = data.sharesAmount
     self.startPrice = data.startPrice
     self.exportData.name = name

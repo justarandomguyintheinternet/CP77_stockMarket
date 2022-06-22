@@ -35,7 +35,7 @@ function home:initialize()
 
 	self.graph = require("modules/ui/widgets/graph"):new(55, 300, 2000, 1000, 10, 5, lang.getText(lang.graph_time), lang.getText(lang.graph_value), 5, 50, color.darkcyan, 0.3)
 	self.graph:initialize(self.canvas)
-	self.graph.data = self.mod.market.stocks["market"].exportData.data
+	self.graph.data = self.mod.market.marketStock.exportData.data
 	self.graph:showData()
 
 	local market = require("modules/ui/widgets/stockPreview"):new(self)
@@ -48,10 +48,11 @@ function home:initialize()
 	market.fillColor = color.darkred
 	market.bgColor = color.yellowgreen
 	market.textColor = color.white
-	market.stock = self.mod.market.stocks["market"]
+	market.stock = self.mod.market.marketStock
 	market:initialize()
 	market:showData()
 	market.canvas:Reparent(self.canvas, -1)
+	table.insert(self.previews, market)
 
 	local line = ink.line(2080, 510, 3120, 510, color.white, 3)
 	line:Reparent(self.canvas, -1)
@@ -94,9 +95,7 @@ end
 function home:setStocks()
 	local keys = {}
 	for k, _ in pairs(self.mod.market.stocks) do
-		if k ~= "market" then
-			table.insert(keys, k)
-		end
+		table.insert(keys, k)
 	end
 
 	local top1 = {k = "", n = -100}
@@ -151,7 +150,7 @@ function home:refresh()
 		p:showData()
 	end
 
-	self.graph.data = self.mod.market.stocks["market"].exportData.data
+	self.graph.data = self.mod.market.marketStock.exportData.data
 	self.graph:showData()
 end
 

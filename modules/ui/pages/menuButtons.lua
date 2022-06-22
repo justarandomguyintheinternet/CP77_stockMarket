@@ -34,7 +34,7 @@ function buttons.createMenu(page)
 	local portfolio = buttons.createMenuButton(lang.getText(lang.button_portfolio), 150, 170, page.eventCatcher)
     if page.pageName ~= "portfolio" then
         portfolio.callback = function()
-            page.controller:switchToPage("login")
+            page.controller:switchToPage("portfolio")
         end
     else
         portfolio.bg:SetTintColor(color.cyan)

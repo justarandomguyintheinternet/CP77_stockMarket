@@ -66,10 +66,8 @@ end
 
 function stocks:setStocks()
 	local stocks = {}
-	for key, stock in pairs(self.mod.market.stocks) do
-		if key ~= "market" then
-			table.insert(stocks, stock)
-		end
+	for _, stock in pairs(self.mod.market.stocks) do
+		table.insert(stocks, stock)
 	end
 
 	local sortFunc = nil
@@ -188,7 +186,7 @@ function stocks:createPreviewButton(x, y, stock)
 		self.graph:showData()
 
 		self.infoName:SetText(bt.stock.name)
-		self.infoText:SetText(utils.wrap(bt.stock.info, 30))
+		self.infoText:SetText(utils.wrap(lang.getText(bt.stock.info), 30))
 		self.info:SetVisible(true)
 	end
 	button.hoverOutCallback = function (bt)

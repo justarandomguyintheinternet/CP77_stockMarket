@@ -14,7 +14,7 @@ function portfolio:new(inkPage, controller, eventCatcher, mod)
     o.inkPage = inkPage
 	o.controller = controller
 	o.eventCatcher = eventCatcher
-	o.pageName = "stocks"
+	o.pageName = "portfolio"
 
 	o.canvas = nil
 	o.refreshCron = nil
@@ -36,38 +36,72 @@ function portfolio:initialize()
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
 
-	self.graph = require("modules/ui/widgets/graph"):new(2110, 720, 1000, 550, 5, 3, "", "", 4, 25, color.darkcyan, 0.3)
+	self.graph = require("modules/ui/widgets/graph"):new(30, 350, 1200, 900, 8, 6, lang.getText(lang.graph_time), lang.getText(lang.portfolio_accountValue), 4, 30, color.darkcyan, 0.3)
+	self.graph.data = self.mod.market.portfolioStock.exportData.data
 	self.graph:initialize(self.canvas)
-	self.graph.canvas:SetVisible(false)
+	self.graph:showData()
 
-	local line = ink.line(2120, 650, 3080, 650, color.white, 3)
+	local line = ink.line(2300, 650, 3120, 650, color.white, 3) -- Divider below sort buttons
 	line:Reparent(self.canvas, -1)
 
+	self:setupLabels()
 	self:setupInfo()
 	self:setupScrollArea()
 	self:setupSortButtons()
 	self:setStocks()
 end
 
+function portfolio:setupLabels()
+	local gText = ink.text(lang.getText(lang.portfolio_accountValue), 640, 315, 50, color.white)
+	gText:SetAnchorPoint(0.5, 0.5)
+	gText:Reparent(self.canvas, -1)
+
+	local sText = ink.text(lang.getText(lang.portfolio_ownedStocks), 1750, 315, 50, color.white)
+	sText:SetAnchorPoint(0.5, 0.5)
+	sText:Reparent(self.canvas, -1)
+end
+
 function portfolio:setupInfo()
-	self.info = ink.canvas(100, 300, inkEAnchor.Centered)
-	self.info:SetVisible(false)
+	self.info = ink.canvas(2320, 775, inkEAnchor.Centered)
 	self.info:Reparent(self.canvas, -1)
 
-	self.infoName = ink.text("", 0, 0, 120, color.white)
-	self.infoName:Reparent(self.info, -1)
+	self.infoTotal = ink.text("", 0, 0, 80, color.white)
+	self.infoTotal:Reparent(self.info, -1)
 
 	local line = ink.line(0, 130, 500, 130, color.white, 5)
 	line:Reparent(self.info, -1)
 
-	self.infoText = ink.text("", 0, 150, 50, color.white)
-	self.infoText:Reparent(self.info, -1)
+	self.infoStocksV = ink.text("", 0, 155, 80, color.white)
+	self.infoStocksV:Reparent(self.info, -1)
+
+	local line = ink.line(0, 275, 500, 275, color.white, 5)
+	line:Reparent(self.info, -1)
+
+	self.infoShares = ink.text("", 0, 310, 80, color.white)
+	self.infoShares:Reparent(self.info, -1)
+
+	self:refreshInfo()
+end
+
+function portfolio:refreshInfo()
+	local total = Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money())
+	local shares = 0
+	local sharesV = 0
+	for _, stock in pairs(self.mod.market.stocks) do
+		total = total + stock:getPortfolioNum() * stock:getCurrentPrice()
+		shares = shares + stock:getPortfolioNum()
+		sharesV = sharesV + stock:getPortfolioNum() * stock:getCurrentPrice()
+	end
+
+	self.infoTotal:SetText(tostring(lang.getText(lang.portfolio_totalMoney) .. ": " .. total .. "E$"))
+	self.infoStocksV:SetText(tostring(lang.getText(lang.portfolio_moneyInStocks) .. ": " .. sharesV .. "E$"))
+	self.infoShares:SetText(tostring(lang.getText(lang.portfolio_ownedStocks) .. ": " .. shares))
 end
 
 function portfolio:setStocks()
 	local stocks = {}
-	for key, stock in pairs(self.mod.market.stocks) do
-		if key ~= "market" then
+	for _, stock in pairs(self.mod.market.stocks) do
+		if stock:getPortfolioNum() > 0 then
 			table.insert(stocks, stock)
 		end
 	end
@@ -78,20 +112,32 @@ function portfolio:setStocks()
 	elseif self.sort == "desAlpha" then
 		sortFunc = function(a, b) return a.name > b.name end
 	elseif self.sort == "ascPercent" then
-		sortFunc = function(a, b) return a:getTrend() < b:getTrend() end
+		sortFunc = function(a, b) return utils.round(a:getProfit(-a:getPortfolioNum()) / a.exportData.spent * 100, 1) < utils.round(b:getProfit(-b:getPortfolioNum()) / b.exportData.spent * 100, 1) end
 	elseif self.sort == "desPercent" then
-		sortFunc = function(a, b) return a:getTrend() > b:getTrend() end
+		sortFunc = function(a, b) return utils.round(a:getProfit(-a:getPortfolioNum()) / a.exportData.spent * 100, 1) > utils.round(b:getProfit(-b:getPortfolioNum()) / b.exportData.spent * 100, 1) end
 	elseif self.sort == "ascValue" then
-		sortFunc = function(a, b) return a:getCurrentPrice() < b:getCurrentPrice() end
+		sortFunc = function(a, b) return (a:getCurrentPrice() * a:getPortfolioNum()) < (b:getCurrentPrice() * b:getPortfolioNum()) end
 	elseif self.sort == "desValue" then
-		sortFunc = function(a, b) return a:getCurrentPrice() > b:getCurrentPrice() end
+		sortFunc = function(a, b) return (a:getCurrentPrice() * a:getPortfolioNum()) > (b:getCurrentPrice() * b:getPortfolioNum()) end
 	end
 
 	table.sort(stocks, sortFunc)
 
+	if #stocks > 5 then
+		self:toggleSlider(true)
+	else
+		self:toggleSlider(false)
+	end
+
 	for k, button in pairs(self.previews) do
-		button.stock = stocks[k]
-		button:showData()
+		if #stocks ~= 0 then
+			button.stock = stocks[1]
+			button:showData()
+			utils.removeItem(stocks, stocks[1])
+			button.canvas:SetVisible(true)
+		else
+			button.canvas:SetVisible(false)
+		end
 	end
 
 	for key, button in pairs(self.sortButtons) do
@@ -104,7 +150,7 @@ function portfolio:setStocks()
 end
 
 function portfolio:setupSortButtons()
-	local canvas = ink.canvas(2400, 350, inkEAnchor.Centered)
+	local canvas = ink.canvas(2500, 350, inkEAnchor.Centered)
 	canvas:Reparent(self.canvas, -1)
 
 	self:setupSortButton(canvas, 0, 0, lang.getText(lang.stocks_ascending) .. " ABC", "ascAlpha")
@@ -136,33 +182,38 @@ function portfolio:setupSortButton(canvas, x, y, name, sort)
 end
 
 function portfolio:setupScrollArea()
-	local scrollComponent = UIScroller.Create()
+	self.scrollComponent = UIScroller.Create()
 
-	local scrollPanel = scrollComponent:GetRootWidget()
+	local scrollPanel = self.scrollComponent:GetRootWidget()
 	scrollPanel:SetAnchor(inkEAnchor.TopLeft)
-	scrollPanel:SetMargin(inkMargin.new({ left = 1020.0, top = 300 }))
-	scrollPanel:SetSize(Vector2.new({ X = 1050.0, Y = 1000.0 }))
+	scrollPanel:SetMargin(inkMargin.new({ left = 1233.0, top = 350 }))
+	scrollPanel:SetSize(Vector2.new({ X = 1040.0, Y = 1000.0 }))
 	scrollPanel:Reparent(self.canvas, -1)
 
-	local scrollContent = scrollComponent:GetContentWidget()
+	local scrollContent = self.scrollComponent:GetContentWidget()
 
-	local buttonList = inkVerticalPanel.new()
-	buttonList:SetName('list')
-	buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
-	buttonList:SetChildMargin(inkMargin.new({ top = 66.0, bottom = 66.0 }))
-	buttonList:SetFitToContent(true)
-	buttonList:Reparent(scrollContent, -1)
+	self.buttonList = inkVerticalPanel.new()
+	self.buttonList:SetName('list')
+	self.buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
+	self.buttonList:SetChildMargin(inkMargin.new({ top = 66.0, bottom = 66.0 }))
+	self.buttonList:SetFitToContent(true)
+	self.buttonList:Reparent(scrollContent, -1)
 
 	Cron.NextTick(function()
-		scrollComponent:UpdateContent(true)
+		self.scrollComponent:UpdateContent(true)
 	end)
 
-	local basePos = {x = 500, y = 50}
+	local basePos = {x = 482, y = 50}
 
 	for i = 0, self.mod.market:getNumberStocks() - 1 do
 		local preview = self:createPreviewButton(basePos.x, basePos.y)
-		preview.canvas:Reparent(buttonList, -1)
+		preview.canvas:SetAffectsLayoutWhenHidden(false)
+		preview.canvas:Reparent(self.buttonList, -1)
 	end
+end
+
+function portfolio:toggleSlider(state)
+	self.scrollComponent:GetRootWidget():GetWidgetByPathName(StringToName('sliderArea')):SetVisible(state)
 end
 
 function portfolio:createPreviewButton(x, y, stock)
@@ -171,40 +222,47 @@ function portfolio:createPreviewButton(x, y, stock)
 	button.y = y
 	button.sizeX = 1000
 	button.sizeY = 170
-	button.textSize = 80
+	button.textSize = 72
 	button.borderSize = 8
 	button.fillColor = color.darkred
 	button.bgColor = color.darkcyan
 	button.textColor = color.white
 	button.stock = stock
+
+	button.showData = function (bt)
+		bt.stockName:SetText(bt.stock.name)
+		bt.stockPrice:SetText(tostring(math.floor(bt.stock:getCurrentPrice() * bt.stock:getPortfolioNum()) .. "E$"))
+
+		local trend = bt.stock:getProfit(-bt.stock:getPortfolioNum()) / bt.stock.exportData.spent
+		trend = utils.round(trend * 100, 1)
+
+		local c = color.red
+		if trend >= 0 then
+			c = color.lime
+			trend = tostring("+" .. trend)
+		end
+		bt.stockTrend:SetText(tostring(trend .. "%"))
+		bt.stockTrend:SetTintColor(c)
+	end
+
 	button:initialize()
 	button:registerCallbacks(self.eventCatcher)
 	table.insert(self.previews, button)
-
-	button.hoverInCallback = function (bt)
-		bt.fill:SetOpacity(0.6)
-		self.graph.canvas:SetVisible(true)
-		self.graph.data = bt.stock.exportData.data
-		self.graph:showData()
-
-		self.infoName:SetText(bt.stock.name)
-		self.infoText:SetText(utils.wrap(bt.stock.info, 30))
-		self.info:SetVisible(true)
-	end
-	button.hoverOutCallback = function (bt)
-		bt.fill:SetOpacity(1)
-		self.graph.canvas:SetVisible(false)
-		self.info:SetVisible(false)
-	end
 
 	return button
 end
 
 function portfolio:refresh()
 	self:setStocks()
+	self:refreshInfo()
 	for _, p in pairs(self.previews) do
-		p:showData()
+		if p.canvas:IsVisible() then
+			p:showData()
+		end
 	end
+
+	self.graph.data = self.mod.market.portfolioStock.exportData.data
+	self.graph:showData()
 end
 
 function portfolio:uninitialize()
@@ -219,4 +277,4 @@ function portfolio:uninitialize()
 	self.canvas = nil
 end
 
-return stocks
+return portfolio

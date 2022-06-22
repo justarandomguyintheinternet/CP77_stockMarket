@@ -9,6 +9,9 @@ function market:new(intervall, triggerManager)
 	local o = {}
 
     o.stocks = {}
+    o.marketStock = nil
+    o.portfolioStock = nil
+
     o.triggerManager = triggerManager
     o.persistentData = {
         stocks = {},
@@ -29,13 +32,11 @@ function market:setupPersistency() -- Setup persistency once onInit
 end
 
 function market:checkForData()
-    for k, stock in pairs(self.stocks) do
-        if k ~= "market" then
-            stock:checkForData(self.persistentData)
-        end
+    for _, stock in pairs(self.stocks) do
+        stock:checkForData(self.persistentData)
     end
-    self.stocks["market"]:checkForData(self.persistentData)
-
+    self.marketStock:checkForData(self.persistentData)
+    self.portfolioStock:checkForData(self.persistentData)
     -- Do same thing for triggers
 end
 
@@ -54,35 +55,67 @@ function market:initialize() -- Generate stock instances from json files
     end
 
     self:setupMarketStock()
+    self:setupPortfolioStock()
 end
 
 function market:getNumberStocks() -- Get number of stocks, stock market excluded
-    local nStocks = -1
+    local nStocks = 0
     for _, _ in pairs(self.stocks) do nStocks = nStocks + 1 end
     return nStocks
 end
 
+function market:setupPortfolioStock()
+    local pStock = require("modules/logic/stock"):new(self.range)
+
+    pStock:loadFromDefinition({name = "portfolio"})
+
+    pStock.loadDefault = function(st)
+        local points = {}
+        for i = 1, self.range do
+            points[i] = {y = 0, x = i}
+        end
+        st.exportData.data = points
+    end
+
+    pStock.update = function(st)
+        local shift = {}
+        for i = 2, #st.exportData.data do -- Shift table, to remove first element
+            local v = st.exportData.data[i]
+            v.x = v.x - 1
+            shift[i - 1] = v
+        end
+
+        local y = 0
+        for _, stock in pairs(self.stocks) do
+            y = y + stock:getPortfolioNum() * stock:getCurrentPrice()
+        end
+
+        shift[#shift + 1] = {x = #shift + 1, y = y}
+        st.exportData.data = shift
+    end
+
+    self.portfolioStock = pStock
+end
+
 function market:setupMarketStock()
     local mStock = require("modules/logic/stock"):new(self.range)
-    mStock:loadFromDefinition({
-        name = lang.getText(lang.pc_stockmarket)
-    })
+    mStock:loadFromDefinition({name = lang.getText(lang.pc_stockmarket)})
+
     mStock.loadDefault = function(st)
         local nStocks = self:getNumberStocks()
 
         local points = {}
         for i = 1, self.range do
             local y = 0
-            for k, stock in pairs(self.stocks) do
-                if k ~= "market" then
-                    y = y + stock.exportData.data[i].y * stock.sharesAmount * 0.0001
-                end
+            for _, stock in pairs(self.stocks) do
+                y = y + stock.exportData.data[i].y * stock.sharesAmount * 0.0001
             end
             points[i] = {y = y / nStocks, x = i}
         end
 
         st.exportData.data = points
     end
+
     mStock.update = function(st)
         local shift = {}
         for i = 2, #st.exportData.data do -- Shift table, to remove first element
@@ -94,23 +127,24 @@ function market:setupMarketStock()
         local nStocks = self:getNumberStocks()
 
         local y = 0
-        for k, stock in pairs(self.stocks) do
-            if k ~= "market" then
-                y = y + stock.exportData.data[self.range].y * stock.sharesAmount * 0.0001
-            end
+        for _, stock in pairs(self.stocks) do
+            y = y + stock.exportData.data[self.range].y * stock.sharesAmount * 0.0001
         end
 
         local value = y / nStocks
         shift[#shift + 1] = {x = #shift + 1, y = value}
         st.exportData.data = shift
     end
-    self.stocks["market"] = mStock
+
+    self.marketStock = mStock
 end
 
 function market:update() -- Update loop for Cron intervall
     for _, stock in pairs(self.stocks) do
         stock:update()
     end
+    self.marketStock:update()
+    self.portfolioStock:update()
 end
 
 return market
