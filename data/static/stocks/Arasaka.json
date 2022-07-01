@@ -1,1 +1,1 @@
-{"sharesAmount":100000,"triggers":[],"priceSpread":0.5,"name":"Arasaka","startPrice":400}
+{"max":600,"startPrice":350,"smoothOff":1,"triggers":[],"min":100,"sharesAmount":50000,"name":"Arasaka","maxStepSize":2}

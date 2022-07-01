@@ -3,15 +3,23 @@ local utils = require("modules/utils/utils")
 
 stock = {}
 
-function stock:new(steps)
+function stock:new(steps, market)
 	local o = {}
 
-    o.steps = steps
+    o.market = market
 
+    o.steps = steps
     o.name = ""
-    o.startPrice = 0
     o.info = ""
+
+    o.startPrice = 0
     o.sharesAmount = 0
+    o.max = 0
+    o.min = 0
+    o.maxStep = 0
+    o.deltaPower = 0
+    o.triggers = {}
+
     o.exportData = {}
     o.default = {
         name = "",
@@ -25,6 +33,7 @@ function stock:new(steps)
 end
 
 function stock:getCurrentPrice()
+    if #self.exportData.data == 0 then return self.startPrice end
     return utils.round(self.exportData.data[#self.exportData.data].y, 1)
 end
 
@@ -46,6 +55,8 @@ end
 
 function stock:performTransaction(amount)
     self.exportData.owned = self.exportData.owned + amount
+    self.market.triggerManager.triggers[self.name]:onTransaction(self, amount)
+
     if amount > 0 then
         utils.spendMoney(amount * self:getCurrentPrice())
         self.exportData.spent = self.exportData.spent + amount * self:getCurrentPrice()
@@ -57,11 +68,22 @@ function stock:performTransaction(amount)
 end
 
 function stock:loadFromDefinition(data) -- Load from json file
+    self.exportData.name = name
     self.name = data.name
     self.info = "stockInfo_" .. data.name
     self.sharesAmount = data.sharesAmount
     self.startPrice = data.startPrice
-    self.exportData.name = name
+    self.min = data.min
+    self.max = data.max
+    self.maxStep = data.maxStepSize
+
+    self.deltaPower = data.smoothOff
+    if self.deltaPower and self.deltaPower % 2 == 0 then
+        self.deltaPower = self.deltaPower + 1
+    end
+
+    self.triggers = data.triggers or {}
+    table.insert(self.triggers, self.name)
 end
 
 function stock:checkForData(data)
@@ -88,18 +110,25 @@ function stock:loadDefault()
 
     -- Generate some initial data
     local currentValue = self.startPrice
-	local points = {}
 	local steps = self.steps
 	for i = 1, steps do
 		currentValue = currentValue + self:getStep()
-		points[i] = {x = i, y = currentValue}
+		self.exportData.data[i] = {x = i, y = currentValue}
 	end
-
-    self.exportData.data = points
 end
 
-function stock:getStep()
-    return (4 - (math.random() * 8))
+function stock:getMinMaxAdjustment() -- Trying to keep the price in min/max range
+    local remaped = utils.remap(self:getCurrentPrice(), self.min, self.max, -1, 1)
+    remaped = math.min(math.max(remaped, -1), 1)
+    return remaped ^ self.deltaPower
+end
+
+function stock:getStep() -- Size of random step
+    local rand = (math.random() * 2) - 1
+    rand = rand - self:getMinMaxAdjustment()
+    rand = rand + self.market.triggerManager:getStockDelta(self)
+    rand = rand * self.maxStep
+    return rand
 end
 
 function stock:update() -- Runs every intervall

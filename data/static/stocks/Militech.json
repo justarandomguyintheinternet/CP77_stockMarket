@@ -1,1 +1,1 @@
-{"sharesAmount":90000,"triggers":[],"priceSpread":0.5,"name":"Militech","startPrice":375}
+{"max":100,"startPrice":60,"smoothOff":7,"triggers":[],"min":15,"sharesAmount":50000,"name":"Militech","maxStepSize":2}

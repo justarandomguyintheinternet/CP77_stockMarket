@@ -4,10 +4,11 @@ local Cron = require("modules/external/Cron")
 
 triggerManager = {}
 
-function triggerManager:new(mod)
+function triggerManager:new(mod, intervall)
 	local o = {}
 
     o.mod = mod
+    o.intervall = intervall
     o.triggers = {}
 
 	self.__index = self
@@ -21,15 +22,39 @@ function triggerManager:onInit()
             print("Loading trigger: " .. file.name)
             local trigger = require("modules/logic/triggers/" .. name):new(self.mod)
             trigger:registerObservers()
-            table.insert(self.triggers, trigger)
+            self.triggers[trigger.name] = trigger
         end
+    end
+
+    Cron.Every(self.intervall, function ()
+        for _, trigger in pairs(self.triggers) do
+            trigger:decreaseValue()
+        end
+    end)
+end
+
+function triggerManager:createBuySellTriggers(stocks)
+    for _, stock in pairs(stocks) do
+        local trigger = require("modules/logic/buySellTrigger.lua"):new(self.mod)
+        trigger.name = stock.name
+        trigger:registerObservers()
+        self.triggers[stock.name] = trigger
     end
 end
 
-function triggerManager:initialize()
+function triggerManager:getStockDelta(stock)
+    local delta = 0
+
     for _, trigger in pairs(self.triggers) do
-        trigger:initialize()
+        for _, t in pairs(stock.triggers) do
+            if t.name == trigger.name then
+                delta = delta + trigger.exportData.value * t.mult
+            end
+        end
     end
+
+    delta = delta + self.triggers[stock.name].exportData.value
+    return delta
 end
 
 function triggerManager:update()

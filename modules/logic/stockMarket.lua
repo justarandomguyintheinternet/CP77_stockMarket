@@ -20,7 +20,8 @@ function market:new(intervall, triggerManager)
 
     o.updateCron = nil
     o.intervall = intervall
-    o.range = 50
+    o.time = 0
+    o.range = 90
 
 	self.__index = self
    	return setmetatable(o, self)
@@ -37,6 +38,10 @@ function market:checkForData()
     end
     self.marketStock:checkForData(self.persistentData)
     self.portfolioStock:checkForData(self.persistentData)
+
+    for _, trigger in pairs(self.triggerManager.triggers) do
+        trigger:checkForData(self.persistentData)
+    end
     -- Do same thing for triggers
 end
 
@@ -48,11 +53,13 @@ function market:initialize() -- Generate stock instances from json files
     for _, file in pairs(dir("data/static/stocks/")) do
         if file.name:match("^.+(%..+)$") == ".json" then
             local data = config.loadFile("data/static/stocks/" .. file.name)
-            local stock = require("modules/logic/stock"):new(self.range)
+            local stock = require("modules/logic/stock"):new(self.range, self)
             stock:loadFromDefinition(data)
             self.stocks[stock.name] = stock
         end
     end
+
+    self.triggerManager:createBuySellTriggers(self.stocks)
 
     self:setupMarketStock()
     self:setupPortfolioStock()
@@ -65,7 +72,7 @@ function market:getNumberStocks() -- Get number of stocks, stock market excluded
 end
 
 function market:setupPortfolioStock()
-    local pStock = require("modules/logic/stock"):new(self.range)
+    local pStock = require("modules/logic/stock"):new(self.range, self)
 
     pStock:loadFromDefinition({name = "portfolio"})
 
@@ -98,7 +105,7 @@ function market:setupPortfolioStock()
 end
 
 function market:setupMarketStock()
-    local mStock = require("modules/logic/stock"):new(self.range)
+    local mStock = require("modules/logic/stock"):new(self.range, self)
     mStock:loadFromDefinition({name = lang.getText(lang.pc_stockmarket)})
 
     mStock.loadDefault = function(st)
@@ -145,6 +152,17 @@ function market:update() -- Update loop for Cron intervall
     end
     self.marketStock:update()
     self.portfolioStock:update()
+end
+
+function market:checkForTimeSkip(deltaTime)
+    if Game.GetTimeSystem():GetGameTime():Hours() - self.time > 0 and Game.GetTimeSystem():GetGameTime():Minutes() ~= 0 then
+        local diff = Game.GetTimeSystem():GetGameTime():Hours() - self.time
+        for i = 0, diff * (7 * (60/self.intervall)) do
+            self:update()
+            Cron.Update(deltaTime * 500)
+        end
+    end
+    self.time = Game.GetTimeSystem():GetGameTime():Hours()
 end
 
 return market

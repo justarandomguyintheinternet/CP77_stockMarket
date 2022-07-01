@@ -17,7 +17,10 @@ function editUI.draw(debug, mod)
 
         stock.startPrice = ImGui.InputInt("Start Price", stock.startPrice)
         stock.sharesAmount = ImGui.InputInt("Shares Amount", stock.sharesAmount)
-        stock.priceSpread = ImGui.InputFloat("Price Spread", stock.priceSpread)
+        stock.min = ImGui.InputInt("Share Min Price", stock.min)
+        stock.max = ImGui.InputInt("Share Max Price", stock.max)
+        stock.smoothOff = ImGui.InputInt("Share MinMax Delta Power", stock.smoothOff)
+        stock.maxStepSize = ImGui.InputFloat("Share Max Step", stock.maxStepSize)
 
         ImGui.Separator()
     end

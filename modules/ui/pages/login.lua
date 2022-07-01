@@ -50,9 +50,10 @@ function login:initialize()
 	self.button.bgColor = color.new(0.5, 0.5, 0.5)
 	self.button.textColor = color.white
 	self.button.callback = function()
-		if self.pwFilled and self.nameFilled then
-			self:startFluffSeq()
-		end
+		-- if self.pwFilled and self.nameFilled then
+		-- 	self:startFluffSeq()
+		-- end
+		self.controller:switchToPage("home")
 	end
 	self.button:initialize()
 	self.button:registerCallbacks(self.eventCatcher)
