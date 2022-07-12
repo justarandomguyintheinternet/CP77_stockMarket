@@ -3,6 +3,7 @@ baseUI = {
     fileUI = require("debug/ui/tabs/fileUI"),
     loadedUI = require("debug/ui/tabs/loadedUI"),
     editUI = require("debug/ui/tabs/editUI"),
+    triggerUI = require("debug/ui/tabs/triggerUI"),
     switchToEdit = false,
     switchToLoaded = false
 }
@@ -42,6 +43,12 @@ function baseUI.draw(mod)
             baseUI.fileUI.draw(baseUI)
             ImGui.EndTabItem()
         end
+
+        if ImGui.BeginTabItem("Triggers") then
+            baseUI.triggerUI.draw(mod)
+            ImGui.EndTabItem()
+        end
+
         ImGui.EndTabBar()
     end
 

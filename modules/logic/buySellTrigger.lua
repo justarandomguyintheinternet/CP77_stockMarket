@@ -40,4 +40,7 @@ function trigger:decreaseValue()
     end
 end
 
+function trigger:registerObservers() end
+function trigger:update() end
+
 return trigger

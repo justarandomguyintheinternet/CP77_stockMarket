@@ -42,7 +42,6 @@ function market:checkForData()
     for _, trigger in pairs(self.triggerManager.triggers) do
         trigger:checkForData(self.persistentData)
     end
-    -- Do same thing for triggers
 end
 
 function market:initialize() -- Generate stock instances from json files
@@ -158,6 +157,7 @@ function market:checkForTimeSkip(deltaTime)
     if Game.GetTimeSystem():GetGameTime():Hours() - self.time > 0 and Game.GetTimeSystem():GetGameTime():Minutes() ~= 0 then
         local diff = Game.GetTimeSystem():GetGameTime():Hours() - self.time
         for i = 0, diff * (7 * (60/self.intervall)) do
+            self.triggerManager:step()
             self:update()
             Cron.Update(deltaTime * 500)
         end

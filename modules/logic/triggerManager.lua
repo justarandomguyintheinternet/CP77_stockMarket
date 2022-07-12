@@ -25,12 +25,12 @@ function triggerManager:onInit()
             self.triggers[trigger.name] = trigger
         end
     end
+end
 
-    Cron.Every(self.intervall, function ()
-        for _, trigger in pairs(self.triggers) do
-            trigger:decreaseValue()
-        end
-    end)
+function triggerManager:step() -- Runs every intervall
+    for _, trigger in pairs(self.triggers) do
+        trigger:decreaseValue()
+    end
 end
 
 function triggerManager:createBuySellTriggers(stocks)
@@ -42,18 +42,18 @@ function triggerManager:createBuySellTriggers(stocks)
     end
 end
 
-function triggerManager:getStockDelta(stock)
+function triggerManager:getStockDelta(stock) -- Apply triggers
     local delta = 0
 
-    for _, trigger in pairs(self.triggers) do
+    for _, trigger in pairs(self.triggers) do -- Dynamic triggers
         for _, t in pairs(stock.triggers) do
             if t.name == trigger.name then
-                delta = delta + trigger.exportData.value * t.mult
+                delta = delta + trigger.exportData.value * t.amount
             end
         end
     end
 
-    delta = delta + self.triggers[stock.name].exportData.value
+    delta = delta + self.triggers[stock.name].exportData.value -- Buy sell trigger
     return delta
 end
 

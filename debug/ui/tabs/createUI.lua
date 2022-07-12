@@ -16,7 +16,8 @@ function createUI.draw()
             min = 100,
             smoothOff = 5,
             startPrice = 200,
-            sharesAmount = 50000
+            sharesAmount = 50000,
+            shareInfluence = {}
         }
         config.saveFile("data/static/stocks/" .. stock.name .. ".json", stock)
         createUI.name = ""

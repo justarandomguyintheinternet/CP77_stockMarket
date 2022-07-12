@@ -33,12 +33,13 @@ function stock:new(steps, market)
 end
 
 function stock:getCurrentPrice()
-    if #self.exportData.data == 0 then return self.startPrice end
+    if self.exportData.data == nil or #self.exportData.data == 0 then return self.startPrice end
     return utils.round(self.exportData.data[#self.exportData.data].y, 1)
 end
 
 function stock:getTrend()
     -- TODO: Change to avg of last 1/2 of data
+    if not self.exportData.data then return 0 end
     local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 5].y) / self.exportData.data[#self.exportData.data  - 5].y
     return utils.round(percent, 1)
 end
@@ -76,6 +77,7 @@ function stock:loadFromDefinition(data) -- Load from json file
     self.min = data.min
     self.max = data.max
     self.maxStep = data.maxStepSize
+    self.shareInfluence = data.shareInfluence
 
     self.deltaPower = data.smoothOff
     if self.deltaPower and self.deltaPower % 2 == 0 then
@@ -83,7 +85,6 @@ function stock:loadFromDefinition(data) -- Load from json file
     end
 
     self.triggers = data.triggers or {}
-    table.insert(self.triggers, self.name)
 end
 
 function stock:checkForData(data)
@@ -110,8 +111,7 @@ function stock:loadDefault()
 
     -- Generate some initial data
     local currentValue = self.startPrice
-	local steps = self.steps
-	for i = 1, steps do
+	for i = 1, self.steps do
 		currentValue = currentValue + self:getStep()
 		self.exportData.data[i] = {x = i, y = currentValue}
 	end
@@ -123,11 +123,28 @@ function stock:getMinMaxAdjustment() -- Trying to keep the price in min/max rang
     return remaped ^ self.deltaPower
 end
 
+function stock:getInfluence() -- Get amount of direct influence
+    if #self.exportData.data ~= self.steps then return 0 end -- Ignore influence on initial data fill
+
+    local totalInfluence = 0
+    for _, st in pairs(self.market.stocks) do
+        for _, inf in pairs(st.shareInfluence) do
+            if inf.name == self.name then
+                totalInfluence = totalInfluence + st:getTrend() * inf.amount
+            end
+        end
+    end
+    return totalInfluence
+end
+
 function stock:getStep() -- Size of random step
-    local rand = (math.random() * 2) - 1
-    rand = rand - self:getMinMaxAdjustment()
-    rand = rand + self.market.triggerManager:getStockDelta(self)
-    rand = rand * self.maxStep
+    local rand = (math.random() * 2) - 1 -- Base random -1 -> 1
+
+    rand = rand - self:getMinMaxAdjustment() -- Keep in bounds
+    rand = rand + self.market.triggerManager:getStockDelta(self) -- Get triggers
+    rand = rand + self:getInfluence() -- Direct influence
+
+    rand = rand * self.maxStep -- Scale to range
     return rand
 end
 

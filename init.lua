@@ -68,7 +68,7 @@ function stocks:new()
 
     registerForEvent("onDraw", function()
         if not self.runtimeData.cetOpen then return end
-        self.debug:draw(self)
+        self.debug.draw(self)
     end)
 
     registerForEvent("onOverlayOpen", function()
