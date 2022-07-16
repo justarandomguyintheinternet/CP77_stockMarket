@@ -9,6 +9,8 @@ function loadedUI.draw(debug)
 end
 
 function loadedUI.drawStock(stock, debug, key)
+    debug.questUI.stocks = {}
+
     local name = stock.name
 
     ImGui.BeginChild("stock_" .. key, 300, 65, true)

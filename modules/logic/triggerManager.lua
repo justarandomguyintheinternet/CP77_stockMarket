@@ -45,12 +45,8 @@ end
 function triggerManager:getStockDelta(stock) -- Apply triggers
     local delta = 0
 
-    for _, trigger in pairs(self.triggers) do -- Dynamic triggers
-        for _, t in pairs(stock.triggers) do
-            if t.name == trigger.name then
-                delta = delta + trigger.exportData.value * t.amount
-            end
-        end
+    for _, trigger in pairs(stock.triggers) do
+        delta = delta + self.triggers[trigger.name].exportData.value * trigger.amount
     end
 
     delta = delta + self.triggers[stock.name].exportData.value -- Buy sell trigger

@@ -1,10 +1,14 @@
+local utils = require("modules/utils/utils")
+local Cron = require("modules/external/Cron")
+
 trigger = {}
 
 function trigger:new()
 	local o = {}
 
-    o.name = ""
-    o.fadeSpeed = 0.01
+    -- Default data
+    o.name = "NCPD_Hustler"
+    o.fadeSpeed = 0.004
     o.exportData = {
         value = 0
     }
@@ -21,18 +25,7 @@ function trigger:checkForData(data)
     end
 end
 
-function trigger:onTransaction(stock, amount)
-    local price = stock:getCurrentPrice()
-    local totalValue = price * stock.sharesAmount
-    local percent = 8 * ((math.abs(amount) * price) / totalValue)
-    if amount > 0 then
-        self.exportData.value = self.exportData.value + percent
-    else
-        self.exportData.value = self.exportData.value - percent
-    end
-end
-
-function trigger:decreaseValue()
+function trigger:decreaseValue() -- Runs every intervall
     if self.exportData.value == 0 then return end
     if self.exportData.value > 0 then
         self.exportData.value = self.exportData.value - self.fadeSpeed

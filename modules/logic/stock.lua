@@ -127,10 +127,10 @@ function stock:getInfluence() -- Get amount of direct influence
     if #self.exportData.data ~= self.steps then return 0 end -- Ignore influence on initial data fill
 
     local totalInfluence = 0
-    for _, st in pairs(self.market.stocks) do
+    for _, st in pairs(self.market.stocks) do -- Buffer all influences on load
         for _, inf in pairs(st.shareInfluence) do
             if inf.name == self.name then
-                totalInfluence = totalInfluence + st:getTrend() * inf.amount
+                totalInfluence = totalInfluence + st:getTrend() * inf.amount -- Could buffer getTrend
             end
         end
     end

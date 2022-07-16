@@ -1,1 +1,1 @@
-{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":5,"triggers":[],"shareInfluence":[],"name":"Biotechnica","startPrice":200}
+{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":5,"triggers":[{"name":"quest_LocKey#9971","amount":0.30000001192093}],"shareInfluence":[],"name":"Biotechnica","startPrice":200}

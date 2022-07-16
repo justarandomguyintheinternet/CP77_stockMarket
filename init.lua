@@ -16,7 +16,7 @@ stocks = {
         inGame = false,
         cetOpen = false
     },
-    intervall = 30,
+    intervall = 5,
     config = require("modules/utils/config"),
     browser = require("modules/ui/browser"),
     debug = require("debug/ui/baseUI")
@@ -27,8 +27,10 @@ function stocks:new()
         math.randomseed(os.clock()) -- Prevent predictable random() behavior
 
         local triggerManager = require("modules/logic/triggerManager"):new(self, self.intervall)
-        self.market = require("modules/logic/stockMarket"):new(self.intervall, triggerManager)
+        local questManager = require("modules/logic/questManager"):new(self)
+        self.market = require("modules/logic/stockMarket"):new(self.intervall, triggerManager, questManager)
         self.market.triggerManager:onInit()
+        self.market.questManger:onInit()
         self.market:setupPersistency()
         self.market:initialize()
         self.market:checkForData()

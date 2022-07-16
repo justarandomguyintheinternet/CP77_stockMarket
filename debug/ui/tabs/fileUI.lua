@@ -28,7 +28,7 @@ function fileUI.drawStock(file, debug)
 end
 
 function fileUI.draw(debug)
-    fileUI.filter = ImGui.InputTextWithHint('##Filter', 'Search for stock...', fileUI.filter, 10)
+    fileUI.filter = ImGui.InputTextWithHint('##Filter', 'Search for stock...', fileUI.filter, 25)
 
     if fileUI.filter ~= '' then
         ImGui.SameLine()

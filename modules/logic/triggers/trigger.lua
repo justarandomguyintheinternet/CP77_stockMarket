@@ -26,6 +26,7 @@ function trigger:checkForData(data)
 end
 
 function trigger:decreaseValue() -- Runs every intervall
+    if self.exportData.value == 0 then return end
     if self.exportData.value > 0 then
         self.exportData.value = self.exportData.value - self.fadeSpeed
     elseif self.exportData.value < 0 then

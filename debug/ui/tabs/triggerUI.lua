@@ -1,13 +1,30 @@
 triggerUI = {
-    hideStocks = true
+    hideStocks = true,
+    hideQuests = true,
+    filter = ""
 }
 
 function triggerUI.draw(mod)
+    triggerUI.hideQuests = ImGui.Checkbox("Hide quest triggers", triggerUI.hideQuests)
+    ImGui.SameLine()
     triggerUI.hideStocks = ImGui.Checkbox("Hide stock triggers", triggerUI.hideStocks)
     ImGui.Separator()
 
+    triggerUI.filter = ImGui.InputTextWithHint('##Filter', 'Search for trigger...', triggerUI.filter, 25)
+
+    if triggerUI.filter ~= '' then
+        ImGui.SameLine()
+        if ImGui.Button('X') then
+            triggerUI.filter = ''
+        end
+    end
+
+    ImGui.Separator()
+
     for key, trigger in pairs(mod.market.triggerManager.triggers) do
-        if not (triggerUI.hideStocks and mod.market.stocks[key]) then
+        local locKey = string.gsub(trigger.name, "quest_", "")
+        if not (triggerUI.hideStocks and mod.market.stocks[key]) and trigger.name:lower():match(triggerUI.filter:lower()) ~= nil and not string.match(trigger.name, "quest_") then
+            ImGui.PushID(trigger.name)
             ImGui.Text(trigger.name .. ": " .. trigger.exportData.value)
             ImGui.SameLine()
             if ImGui.Button("Reset") then
@@ -17,6 +34,19 @@ function triggerUI.draw(mod)
             if ImGui.Button("Add .1") then
                 trigger.exportData.value = trigger.exportData.value + 0.1
             end
+            ImGui.PopID()
+        elseif (locKey and not triggerUI.hideQuests) and GetLocalizedText(locKey):lower():match(triggerUI.filter:lower()) then
+            ImGui.PushID(trigger.name)
+            ImGui.Text(GetLocalizedText(locKey) .. ": " .. trigger.exportData.value)
+            ImGui.SameLine()
+            if ImGui.Button("Reset") then
+                trigger.exportData.value = 0
+            end
+            ImGui.SameLine()
+            if ImGui.Button("Add .1") then
+                trigger.exportData.value = trigger.exportData.value + 0.1
+            end
+            ImGui.PopID()
         end
     end
 end

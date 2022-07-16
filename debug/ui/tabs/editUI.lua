@@ -8,6 +8,8 @@ editUI = {
 }
 
 function editUI.draw(debug, mod)
+    debug.questUI.stocks = {}
+
     if editUI.currentStock ~= nil then
         local stock = editUI.currentStock
         local name = stock.name

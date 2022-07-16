@@ -5,7 +5,7 @@ local lang = require("modules/utils/lang")
 
 market = {}
 
-function market:new(intervall, triggerManager)
+function market:new(intervall, triggerManager, questManager)
 	local o = {}
 
     o.stocks = {}
@@ -13,6 +13,7 @@ function market:new(intervall, triggerManager)
     o.portfolioStock = nil
 
     o.triggerManager = triggerManager
+    o.questManger = questManager
     o.persistentData = {
         stocks = {},
         triggers = {}
@@ -146,6 +147,7 @@ function market:setupMarketStock()
 end
 
 function market:update() -- Update loop for Cron intervall
+    self.triggerManager:step()
     for _, stock in pairs(self.stocks) do
         stock:update()
     end
@@ -156,10 +158,10 @@ end
 function market:checkForTimeSkip(deltaTime)
     if Game.GetTimeSystem():GetGameTime():Hours() - self.time > 0 and Game.GetTimeSystem():GetGameTime():Minutes() ~= 0 then
         local diff = Game.GetTimeSystem():GetGameTime():Hours() - self.time
+        print("Diff detected" .. diff)
         for i = 0, diff * (7 * (60/self.intervall)) do
-            self.triggerManager:step()
             self:update()
-            Cron.Update(deltaTime * 500)
+            Cron.Update(deltaTime * 500) -- Fix double update()
         end
     end
     self.time = Game.GetTimeSystem():GetGameTime():Hours()

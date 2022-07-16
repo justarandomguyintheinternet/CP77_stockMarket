@@ -1,8 +1,9 @@
 trigger = {}
 
-function trigger:new()
+function trigger:new(market)
 	local o = {}
 
+    o.market = market
     o.name = ""
     o.fadeSpeed = 0.01
     o.exportData = {
@@ -21,15 +22,9 @@ function trigger:checkForData(data)
     end
 end
 
-function trigger:onTransaction(stock, amount)
-    local price = stock:getCurrentPrice()
-    local totalValue = price * stock.sharesAmount
-    local percent = 8 * ((math.abs(amount) * price) / totalValue)
-    if amount > 0 then
-        self.exportData.value = self.exportData.value + percent
-    else
-        self.exportData.value = self.exportData.value - percent
-    end
+function trigger:initialize(data)
+    self.name = "quest_" .. data.name
+    self.fadeSpeed = data.fade
 end
 
 function trigger:decreaseValue()
@@ -37,7 +32,7 @@ function trigger:decreaseValue()
     if self.exportData.value > 0 then
         self.exportData.value = self.exportData.value - self.fadeSpeed
     elseif self.exportData.value < 0 then
-        self.exportData.value = self.exportData.value + self.fadeSpeed
+        self.exportData.value = 0
     end
 end
 

@@ -4,6 +4,7 @@ baseUI = {
     loadedUI = require("debug/ui/tabs/loadedUI"),
     editUI = require("debug/ui/tabs/editUI"),
     triggerUI = require("debug/ui/tabs/triggerUI"),
+    questUI = require("debug/ui/tabs/questUI"),
     switchToEdit = false,
     switchToLoaded = false
 }
@@ -46,6 +47,11 @@ function baseUI.draw(mod)
 
         if ImGui.BeginTabItem("Triggers") then
             baseUI.triggerUI.draw(mod)
+            ImGui.EndTabItem()
+        end
+
+        if ImGui.BeginTabItem("Quests") then
+            baseUI.questUI.draw(baseUI, mod)
             ImGui.EndTabItem()
         end
 
