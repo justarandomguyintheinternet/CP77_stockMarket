@@ -99,7 +99,11 @@ end
 function lang.getText(key)
     local text = lang[lang.getLang()][key]
     if text == nil then
-        return lang["en-us"][key]
+        text = lang["en-us"][key]
+        if text == nil then
+            return "Not Localized"
+        end
+        return text
     else
         return lang[lang.getLang()][key]
     end

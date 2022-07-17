@@ -84,6 +84,25 @@ function market:setupPortfolioStock()
         st.exportData.data = points
     end
 
+    pStock.checkForData = function(st, data)
+        if data["stocks"]["portfolio"] == nil then
+            st:loadDefault()
+            data["stocks"]["portfolio"] = st.exportData
+        else
+            st.exportData = data["stocks"]["portfolio"]
+        end
+
+        -- Fix wrong order
+        local points = {}
+        for _, v in pairs(st.exportData.data) do
+            points[#points + 1] = v
+        end
+        table.sort(points, function(a, b)
+            return a.x < b.x
+        end)
+        st.exportData.data = points
+    end
+
     pStock.update = function(st)
         local shift = {}
         for i = 2, #st.exportData.data do -- Shift table, to remove first element
@@ -123,6 +142,25 @@ function market:setupMarketStock()
         st.exportData.data = points
     end
 
+    mStock.checkForData = function(st, data)
+        if data["stocks"]["stock_market"] == nil then
+            st:loadDefault()
+            data["stocks"]["stock_market"] = st.exportData
+        else
+            st.exportData = data["stocks"]["stock_market"]
+        end
+
+        -- Fix wrong order
+        local points = {}
+        for _, v in pairs(st.exportData.data) do
+            points[#points + 1] = v
+        end
+        table.sort(points, function(a, b)
+            return a.x < b.x
+        end)
+        st.exportData.data = points
+    end
+
     mStock.update = function(st)
         local shift = {}
         for i = 2, #st.exportData.data do -- Shift table, to remove first element
@@ -155,13 +193,15 @@ function market:update() -- Update loop for Cron intervall
     self.portfolioStock:update()
 end
 
-function market:checkForTimeSkip(deltaTime)
-    if Game.GetTimeSystem():GetGameTime():Hours() - self.time > 0 and Game.GetTimeSystem():GetGameTime():Minutes() ~= 0 then
-        local diff = Game.GetTimeSystem():GetGameTime():Hours() - self.time
-        print("Diff detected" .. diff)
-        for i = 0, diff * (7 * (60/self.intervall)) do
+function market:checkForTimeSkip()
+    local diff = Game.GetTimeSystem():GetGameTime():Hours() - self.time
+    if Game.GetTimeSystem():GetGameTime():Hours() < self.time then
+        diff = (24 - self.time) + Game.GetTimeSystem():GetGameTime():Hours()
+    end
+
+    if diff > 0 and Game.GetTimeSystem():GetGameTime():Minutes() ~= 0 then
+        for _ = 0, diff * (7 * (60 / self.intervall)) do
             self:update()
-            Cron.Update(deltaTime * 500) -- Fix double update()
         end
     end
     self.time = Game.GetTimeSystem():GetGameTime():Hours()

@@ -107,7 +107,7 @@ local function onWheelScroll(_, evt)
 		local scrollArea = evt:GetCurrentTarget()
 		local scrollPosition = getScrollPosition(scrollArea)
 
-		scrollPosition = scrollPosition - 0.2 * evt:GetAxisData()
+		scrollPosition = scrollPosition - 0.06 * evt:GetAxisData()
 		scrollPosition = math.max(scrollPosition, 0)
 		scrollPosition = math.min(scrollPosition, 1)
 
