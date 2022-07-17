@@ -79,7 +79,7 @@ function market:setupPortfolioStock()
     pStock.loadDefault = function(st)
         local points = {}
         for i = 1, self.range do
-            points[i] = {y = 0, x = i}
+            points[i] = 0
         end
         st.exportData.data = points
     end
@@ -94,21 +94,16 @@ function market:setupPortfolioStock()
 
         -- Fix wrong order
         local points = {}
-        for _, v in pairs(st.exportData.data) do
-            points[#points + 1] = v
+        for k, v in pairs(st.exportData.data) do
+            points[k] = v
         end
-        table.sort(points, function(a, b)
-            return a.x < b.x
-        end)
         st.exportData.data = points
     end
 
     pStock.update = function(st)
         local shift = {}
         for i = 2, #st.exportData.data do -- Shift table, to remove first element
-            local v = st.exportData.data[i]
-            v.x = v.x - 1
-            shift[i - 1] = v
+            shift[i - 1] = st.exportData.data[i]
         end
 
         local y = 0
@@ -116,7 +111,7 @@ function market:setupPortfolioStock()
             y = y + stock:getPortfolioNum() * stock:getCurrentPrice()
         end
 
-        shift[#shift + 1] = {x = #shift + 1, y = y}
+        shift[#shift + 1] = y
         st.exportData.data = shift
     end
 
@@ -134,9 +129,9 @@ function market:setupMarketStock()
         for i = 1, self.range do
             local y = 0
             for _, stock in pairs(self.stocks) do
-                y = y + stock.exportData.data[i].y * stock.sharesAmount * 0.0001
+                y = y + stock.exportData.data[i] * stock.sharesAmount * 0.0001
             end
-            points[i] = {y = y / nStocks, x = i}
+            points[i] = y / nStocks
         end
 
         st.exportData.data = points
@@ -152,32 +147,27 @@ function market:setupMarketStock()
 
         -- Fix wrong order
         local points = {}
-        for _, v in pairs(st.exportData.data) do
-            points[#points + 1] = v
+        for k, v in pairs(st.exportData.data) do
+            points[k] = v
         end
-        table.sort(points, function(a, b)
-            return a.x < b.x
-        end)
         st.exportData.data = points
     end
 
     mStock.update = function(st)
         local shift = {}
         for i = 2, #st.exportData.data do -- Shift table, to remove first element
-            local v = st.exportData.data[i]
-            v.x = v.x - 1
-            shift[i - 1] = v
+            shift[i - 1] = st.exportData.data[i]
         end
 
         local nStocks = self:getNumberStocks()
 
         local y = 0
         for _, stock in pairs(self.stocks) do
-            y = y + stock.exportData.data[self.range].y * stock.sharesAmount * 0.0001
+            y = y + stock.exportData.data[self.range] * stock.sharesAmount * 0.0001
         end
 
         local value = y / nStocks
-        shift[#shift + 1] = {x = #shift + 1, y = value}
+        shift[#shift + 1] = value
         st.exportData.data = shift
     end
 

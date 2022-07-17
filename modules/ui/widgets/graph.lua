@@ -49,10 +49,8 @@ function graph:initialize(screen)
 end
 
 function graph:getMinMaxY()
-    local yData = {}
-    for _, v in pairs(self.data) do table.insert(yData, v.y) end
-    local maxY = math.max(unpack(yData))
-    local minY = math.min(unpack(yData))
+    local maxY = math.max(unpack(self.data))
+    local minY = math.min(unpack(self.data))
 
     return minY, maxY
 end
@@ -97,9 +95,9 @@ function graph:showData()
     local minY, maxY = self:getMinMaxY()
     local points = {}
 
-    for _, point in pairs(self.data) do -- Generate list of remaped positions
-        local x = utils.remap(point.x, self.data[1].x, self.data[#self.data].x, leftPosition, leftPosition + xSize)
-        local y = utils.remap(point.y, minY, maxY, 0, ySize)
+    for x, y in pairs(self.data) do -- Generate list of remaped positions
+        local x = utils.remap(x, 1, #self.data, leftPosition, leftPosition + xSize)
+        local y = utils.remap(y, minY, maxY, 0, ySize)
         table.insert(points, {x = x, y = (topPosition + ySize) - y})
     end
 
@@ -162,7 +160,7 @@ function graph:setLabels()
     end
 
     for i = 0, self.stepsX do
-        local label = self.data[1].x + (i * (self.data[#self.data].x - self.data[1].x) / self.stepsX)
+        local label = 1 + (i * (#self.data - 1) / self.stepsX)
 
         local x = self.gridLines["x"][i]:GetMargin().left
         local y = self.gridLines["x"][i]:GetMargin().top + self.gridLines["x"][i]:GetSize().Y

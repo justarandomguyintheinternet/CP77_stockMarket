@@ -34,13 +34,13 @@ end
 
 function stock:getCurrentPrice()
     if self.exportData.data == nil or #self.exportData.data == 0 then return self.startPrice end
-    return utils.round(self.exportData.data[#self.exportData.data].y, 1)
+    return utils.round(self.exportData.data[#self.exportData.data], 1)
 end
 
 function stock:getTrend()
     -- TODO: Change to avg of last 1/2 of data
     if not self.exportData.data then return 0 end
-    local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 5].y) / self.exportData.data[#self.exportData.data  - 5].y
+    local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 5]) / self.exportData.data[#self.exportData.data  - 5]
     return utils.round(percent, 1)
 end
 
@@ -97,12 +97,9 @@ function stock:checkForData(data)
 
     -- Fix wrong order
     local points = {}
-    for _, v in pairs(self.exportData.data) do
-        points[#points + 1] = v
+    for k, v in pairs(self.exportData.data) do
+        points[k] = v
     end
-    table.sort(points, function(a, b)
-        return a.x < b.x
-    end)
     self.exportData.data = points
 end
 
@@ -113,7 +110,7 @@ function stock:loadDefault()
     local currentValue = self.startPrice
 	for i = 1, self.steps do
 		currentValue = currentValue + self:getStep()
-		self.exportData.data[i] = {x = i, y = currentValue}
+		self.exportData.data[i] = currentValue
 	end
 end
 
@@ -151,13 +148,11 @@ end
 function stock:update() -- Runs every intervall
     local shift = {}
     for i = 2, #self.exportData.data do -- Shift table, to remove first element
-        local v = self.exportData.data[i]
-        v.x = v.x - 1
-        shift[i - 1] = v
+        shift[i - 1] = self.exportData.data[i]
     end
 
-    local value = shift[#shift].y + self:getStep() -- Calc new value
-    shift[#shift + 1] = {x = #shift + 1, y = value}
+    local value = shift[#shift] + self:getStep() -- Calc new value
+    shift[#shift + 1] = value
     self.exportData.data = shift
 end
 
