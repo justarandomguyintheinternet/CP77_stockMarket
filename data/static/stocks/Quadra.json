@@ -1,10 +1,10 @@
 {
-    "max": 80,
-    "sharesAmount": 12000,
-    "min": 20,
+    "max": 180,
+    "sharesAmount": 8000,
+    "min": 90,
     "maxStepSize": 2,
     "smoothOff": 5,
     "triggers": [],
     "shareInfluence": [],
-    "name": "Delamain Inc"
+    "name": "Quadra"
 }

@@ -1,10 +1,10 @@
 {
-    "max": 350,
-    "sharesAmount": 35000,
-    "min": 150,
+    "max": 500,
+    "sharesAmount": 70000,
+    "min": 200,
     "maxStepSize": 3,
     "smoothOff": 5,
     "triggers": [],
     "shareInfluence": [],
-    "name": "Kiroshi"
+    "name": "DTR"
 }

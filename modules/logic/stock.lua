@@ -22,7 +22,6 @@ function stock:new(steps, market)
 
     o.exportData = {}
     o.default = {
-        name = "",
         owned = 0,
         spent = 0,
         data = {}
@@ -69,13 +68,12 @@ function stock:performTransaction(amount)
 end
 
 function stock:loadFromDefinition(data) -- Load from json file
-    self.exportData.name = name
     self.name = data.name
     self.info = "stockInfo_" .. data.name
     self.sharesAmount = data.sharesAmount
-    self.startPrice = data.startPrice
     self.min = data.min
     self.max = data.max
+    self.startPrice = self.min + (self.max - self.min) / 2
     self.maxStep = data.maxStepSize
     self.shareInfluence = data.shareInfluence
 
@@ -142,7 +140,7 @@ function stock:getStep() -- Size of random step
     rand = rand + self:getInfluence() -- Direct influence
 
     rand = rand * self.maxStep -- Scale to range
-    return rand
+    return utils.round(rand, 2)
 end
 
 function stock:update() -- Runs every intervall

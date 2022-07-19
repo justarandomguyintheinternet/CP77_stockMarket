@@ -1,1 +1,10 @@
-{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":5,"triggers":[],"shareInfluence":[],"name":"WNS","startPrice":200}
+{
+    "max": 450,
+    "sharesAmount": 60000,
+    "min": 260,
+    "maxStepSize": 2.5,
+    "smoothOff": 5,
+    "triggers": [],
+    "shareInfluence": [],
+    "name": "WNS"
+}

@@ -24,7 +24,7 @@ end
 function trigger:onTransaction(stock, amount)
     local price = stock:getCurrentPrice()
     local totalValue = price * stock.sharesAmount
-    local percent = 8 * ((math.abs(amount) * price) / totalValue)
+    local percent = (math.abs(amount) * price) / totalValue
     if amount > 0 then
         self.exportData.value = self.exportData.value + percent
     else

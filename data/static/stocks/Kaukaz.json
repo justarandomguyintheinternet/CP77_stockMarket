@@ -1,10 +1,10 @@
 {
-    "max": 80,
-    "sharesAmount": 12000,
-    "min": 20,
+    "max": 90,
+    "sharesAmount": 15000,
+    "min": 30,
     "maxStepSize": 2,
     "smoothOff": 5,
     "triggers": [],
     "shareInfluence": [],
-    "name": "Delamain Inc"
+    "name": "Kaukaz"
 }

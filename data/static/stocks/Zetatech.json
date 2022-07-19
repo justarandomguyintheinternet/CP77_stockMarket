@@ -1,1 +1,10 @@
-{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":5,"triggers":[],"shareInfluence":[],"name":"Zetatech","startPrice":200}
+{
+    "max": 240,
+    "sharesAmount": 40000,
+    "min": 120,
+    "maxStepSize": 2,
+    "smoothOff": 5,
+    "triggers": [],
+    "shareInfluence": [],
+    "name": "Zetatech"
+}

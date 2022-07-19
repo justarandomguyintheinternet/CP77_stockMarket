@@ -19,7 +19,6 @@ function editUI.draw(debug, mod)
             os.rename("data/static/stocks/" .. name .. ".json", "data/static/stocks/" .. stock.name .. ".json")
         end
 
-        stock.startPrice = ImGui.InputInt("Start Price", stock.startPrice)
         stock.sharesAmount = ImGui.InputInt("Shares Amount", stock.sharesAmount)
         stock.min = ImGui.InputInt("Share Min Price", stock.min)
         stock.max = ImGui.InputInt("Share Max Price", stock.max)

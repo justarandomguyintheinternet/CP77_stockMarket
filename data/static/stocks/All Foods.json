@@ -1,10 +1,10 @@
 {
-    "max": 300,
-    "sharesAmount": 25000,
-    "min": 100,
+    "max": 150,
+    "sharesAmount": 20000,
+    "min": 75,
     "maxStepSize": 2.5,
     "smoothOff": 5,
     "triggers": [],
     "shareInfluence": [],
-    "name": "NCorp"
+    "name": "All Foods"
 }

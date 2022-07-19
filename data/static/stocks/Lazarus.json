@@ -1,10 +1,10 @@
 {
     "max": 300,
-    "sharesAmount": 25000,
-    "min": 100,
+    "sharesAmount": 70000,
+    "min": 175,
     "maxStepSize": 2.5,
     "smoothOff": 5,
     "triggers": [],
     "shareInfluence": [],
-    "name": "NCorp"
+    "name": "Lazarus"
 }

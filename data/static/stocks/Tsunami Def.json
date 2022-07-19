@@ -1,1 +1,10 @@
-{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":5,"triggers":[],"shareInfluence":[],"name":"Tsunami Def","startPrice":200}
+{
+    "max": 500,
+    "sharesAmount": 60000,
+    "min": 240,
+    "maxStepSize": 3,
+    "smoothOff": 5,
+    "triggers": [],
+    "shareInfluence": [],
+    "name": "Tsunami Def"
+}

@@ -1,1 +1,10 @@
-{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":5,"triggers":[],"shareInfluence":[],"name":"DMS","startPrice":200}
+{
+    "max": 400,
+    "sharesAmount": 45000,
+    "min": 150,
+    "maxStepSize": 2.5,
+    "smoothOff": 5,
+    "triggers": [],
+    "shareInfluence": [],
+    "name": "DMS"
+}

@@ -1,1 +1,10 @@
-{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":5,"triggers":[],"shareInfluence":[],"name":"NN54","startPrice":200}
+{
+    "max": 500,
+    "sharesAmount": 65000,
+    "min": 180,
+    "maxStepSize": 3.5,
+    "smoothOff": 5,
+    "triggers": [],
+    "shareInfluence": [],
+    "name": "NN54"
+}

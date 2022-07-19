@@ -15,7 +15,6 @@ function createUI.draw()
             max = 400,
             min = 100,
             smoothOff = 5,
-            startPrice = 200,
             sharesAmount = 50000,
             shareInfluence = {}
         }

@@ -1,1 +1,15 @@
-{"max":400,"sharesAmount":50000,"min":100,"maxStepSize":1,"smoothOff":9,"triggers":[{"name":"quest_LocKey#9470","amount":-0.80000001192093}],"shareInfluence":[],"name":"Arasaka","startPrice":200}
+{
+    "max": 550,
+    "sharesAmount": 100000,
+    "min": 200,
+    "maxStepSize": 4,
+    "smoothOff": 5,
+    "triggers": [
+        {
+            "name": "quest_LocKey#9470",
+            "amount": -0.80000001192093
+        }
+    ],
+    "shareInfluence": [],
+    "name": "Arasaka"
+}

@@ -1,10 +1,10 @@
 {
-    "max": 300,
-    "sharesAmount": 25000,
-    "min": 100,
+    "max": 310,
+    "sharesAmount": 30000,
+    "min": 160,
     "maxStepSize": 2.5,
     "smoothOff": 5,
     "triggers": [],
     "shareInfluence": [],
-    "name": "NCorp"
+    "name": "Raven"
 }

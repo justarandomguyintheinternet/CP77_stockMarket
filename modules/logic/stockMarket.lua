@@ -74,7 +74,7 @@ end
 function market:setupPortfolioStock()
     local pStock = require("modules/logic/stock"):new(self.range, self)
 
-    pStock:loadFromDefinition({name = "portfolio"})
+    pStock:loadFromDefinition({name = "portfolio", min = 0, max = 0})
 
     pStock.loadDefault = function(st)
         local points = {}
@@ -120,7 +120,7 @@ end
 
 function market:setupMarketStock()
     local mStock = require("modules/logic/stock"):new(self.range, self)
-    mStock:loadFromDefinition({name = lang.getText(lang.pc_stockmarket)})
+    mStock:loadFromDefinition({name = lang.getText(lang.pc_stockmarket), min = 0, max = 0})
 
     mStock.loadDefault = function(st)
         local nStocks = self:getNumberStocks()
@@ -167,7 +167,7 @@ function market:setupMarketStock()
         end
 
         local value = y / nStocks
-        shift[#shift + 1] = value
+        shift[#shift + 1] = utils.round(value, 2)
         st.exportData.data = shift
     end
 
