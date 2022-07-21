@@ -1,10 +1,15 @@
 {
     "max": 380,
+    "name": "Petrochem",
     "sharesAmount": 65000,
-    "min": 220,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Petrochem"
+    "stockInfluence": [
+        {
+            "name": "Biotechnica",
+            "amount": 0.375
+        }
+    ],
+    "smoothOff": 5,
+    "min": 220,
+    "maxStepSize": 2.5
 }

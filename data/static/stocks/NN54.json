@@ -1,10 +1,19 @@
 {
     "max": 500,
+    "stockInfluence": [
+        {
+            "name": "Arasaka",
+            "amount": 0.25
+        },
+        {
+            "name": "DMS",
+            "amount": -0.27500000596046
+        }
+    ],
     "sharesAmount": 65000,
-    "min": 180,
-    "maxStepSize": 3.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "NN54"
+    "min": 180,
+    "smoothOff": 5,
+    "name": "NN54",
+    "maxStepSize": 3.5
 }

@@ -35,7 +35,7 @@ function editUI.draw(debug, mod)
             end
 
             if ImGui.Button("Add") and editUI.currentStockSelect ~= 0 then
-                table.insert(stock.shareInfluence, {
+                table.insert(stock.stockInfluence, {
                     name = stockList[editUI.currentStockSelect + 1],
                     amount = 0.5
                 })
@@ -44,14 +44,16 @@ function editUI.draw(debug, mod)
             ImGui.SameLine()
             editUI.currentStockSelect = ImGui.Combo("Stock to influence", editUI.currentStockSelect, stockList, #stockList)
 
-            for _, inf in pairs(stock.shareInfluence) do
+            for _, inf in pairs(stock.stockInfluence) do
+                ImGui.PushID(inf.name)
                 ImGui.Separator()
                 ImGui.Text("Influence to stock: " .. inf.name)
                 inf.amount = ImGui.InputFloat("Influence amount", inf.amount)
                 if ImGui.Button("Remove") then
-                    utils.removeItem(stock.shareInfluence, inf)
+                    utils.removeItem(stock.stockInfluence, inf)
                 end
                 ImGui.Separator()
+                ImGui.PopID()
             end
 
             ImGui.Separator()

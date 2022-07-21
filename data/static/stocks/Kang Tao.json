@@ -1,10 +1,23 @@
 {
     "max": 550,
+    "name": "Kang Tao",
     "sharesAmount": 70000,
-    "min": 250,
-    "maxStepSize": 3,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Kang Tao"
+    "stockInfluence": [
+        {
+            "name": "QianT",
+            "amount": 0.40000000596046
+        },
+        {
+            "name": "Tsunami Def",
+            "amount": -0.33300000429153
+        },
+        {
+            "name": "Darra Poly",
+            "amount": -0.33300000429153
+        }
+    ],
+    "smoothOff": 5,
+    "min": 250,
+    "maxStepSize": 3
 }

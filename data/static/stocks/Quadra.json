@@ -1,10 +1,15 @@
 {
     "max": 180,
+    "stockInfluence": [
+        {
+            "name": "Petrochem",
+            "amount": 0.25
+        }
+    ],
     "sharesAmount": 8000,
-    "min": 90,
-    "maxStepSize": 2,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Quadra"
+    "min": 90,
+    "smoothOff": 5,
+    "name": "Quadra",
+    "maxStepSize": 2
 }

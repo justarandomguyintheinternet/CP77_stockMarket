@@ -1,10 +1,27 @@
 {
     "max": 500,
+    "name": "DTR",
     "sharesAmount": 70000,
-    "min": 200,
-    "maxStepSize": 3,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "DTR"
+    "stockInfluence": [
+        {
+            "name": "Arasaka",
+            "amount": 0.20000000298023
+        },
+        {
+            "name": "Kang Tao",
+            "amount": 0.30000001192093
+        },
+        {
+            "name": "Orbital Air",
+            "amount": -0.30000001192093
+        },
+        {
+            "name": "Kaukaz",
+            "amount": -0.25
+        }
+    ],
+    "smoothOff": 5,
+    "min": 200,
+    "maxStepSize": 3
 }

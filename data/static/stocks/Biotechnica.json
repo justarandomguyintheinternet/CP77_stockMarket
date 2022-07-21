@@ -1,15 +1,20 @@
 {
     "max": 140,
+    "name": "Biotechnica",
     "sharesAmount": 15000,
-    "min": 50,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [
         {
             "name": "quest_LocKey#9971",
             "amount": 0.30000001192093
         }
     ],
-    "shareInfluence": [],
-    "name": "Biotechnica"
+    "stockInfluence": [
+        {
+            "name": "All Foods",
+            "amount": 0.34999999403954
+        }
+    ],
+    "smoothOff": 5,
+    "min": 50,
+    "maxStepSize": 2.5
 }

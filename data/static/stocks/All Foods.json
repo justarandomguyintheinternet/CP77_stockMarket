@@ -1,10 +1,15 @@
 {
     "max": 150,
+    "stockInfluence": [
+        {
+            "name": "DTR",
+            "amount": 0.33300000429153
+        }
+    ],
     "sharesAmount": 20000,
-    "min": 75,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "All Foods"
+    "name": "All Foods",
+    "smoothOff": 5,
+    "min": 75,
+    "maxStepSize": 2.5
 }

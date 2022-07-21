@@ -1,10 +1,15 @@
 {
     "max": 400,
+    "stockInfluence": [
+        {
+            "name": "Kiroshi",
+            "amount": 0.25
+        }
+    ],
     "sharesAmount": 45000,
-    "min": 150,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "DMS"
+    "min": 150,
+    "smoothOff": 5,
+    "name": "DMS",
+    "maxStepSize": 2.5
 }

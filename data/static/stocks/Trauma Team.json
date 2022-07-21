@@ -1,10 +1,19 @@
 {
     "max": 340,
+    "name": "Trauma Team",
     "sharesAmount": 45000,
-    "min": 160,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Trauma Team"
+    "stockInfluence": [
+        {
+            "name": "Arasaka",
+            "amount": 0.20000000298023
+        },
+        {
+            "name": "Militech",
+            "amount": 0.25
+        }
+    ],
+    "smoothOff": 5,
+    "min": 160,
+    "maxStepSize": 2.5
 }

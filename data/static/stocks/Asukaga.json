@@ -1,10 +1,15 @@
 {
     "max": 350,
+    "name": "Asukaga",
     "sharesAmount": 60000,
-    "min": 150,
-    "maxStepSize": 3,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Asukaga"
+    "stockInfluence": [
+        {
+            "name": "Rayfield",
+            "amount": 0.30000001192093
+        }
+    ],
+    "smoothOff": 5,
+    "min": 150,
+    "maxStepSize": 3
 }

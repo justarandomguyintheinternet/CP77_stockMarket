@@ -1,10 +1,19 @@
 {
     "max": 350,
+    "name": "Kiroshi",
     "sharesAmount": 35000,
-    "min": 150,
-    "maxStepSize": 3,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Kiroshi"
+    "stockInfluence": [
+        {
+            "name": "Lazarus",
+            "amount": 0.25
+        },
+        {
+            "name": "Trauma Team",
+            "amount": 0.25
+        }
+    ],
+    "smoothOff": 5,
+    "min": 150,
+    "maxStepSize": 3
 }

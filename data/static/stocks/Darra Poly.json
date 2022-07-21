@@ -5,6 +5,6 @@
     "maxStepSize": 2.5,
     "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
+    "stockInfluence": [],
     "name": "Darra Poly"
 }

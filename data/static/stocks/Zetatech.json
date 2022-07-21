@@ -1,10 +1,23 @@
 {
     "max": 240,
+    "name": "Zetatech",
     "sharesAmount": 40000,
-    "min": 120,
-    "maxStepSize": 2,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Zetatech"
+    "stockInfluence": [
+        {
+            "name": "Orbital Air",
+            "amount": 0.30000001192093
+        },
+        {
+            "name": "Arasaka",
+            "amount": 0.22499999403954
+        },
+        {
+            "name": "Militech",
+            "amount": 0.22499999403954
+        }
+    ],
+    "smoothOff": 5,
+    "min": 120,
+    "maxStepSize": 2
 }

@@ -1,10 +1,15 @@
 {
     "max": 310,
+    "name": "Raven",
     "sharesAmount": 30000,
-    "min": 160,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Raven"
+    "stockInfluence": [
+        {
+            "name": "Cytech",
+            "amount": -0.33300000429153
+        }
+    ],
+    "smoothOff": 5,
+    "min": 160,
+    "maxStepSize": 2.5
 }

@@ -1,10 +1,19 @@
 {
     "max": 200,
+    "name": "MoorE",
     "sharesAmount": 20000,
-    "min": 70,
-    "maxStepSize": 2,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "MoorE"
+    "stockInfluence": [
+        {
+            "name": "Dynalar",
+            "amount": -0.27500000596046
+        },
+        {
+            "name": "Zetatech",
+            "amount": -0.30000001192093
+        }
+    ],
+    "smoothOff": 5,
+    "min": 70,
+    "maxStepSize": 2
 }

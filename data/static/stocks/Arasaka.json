@@ -1,15 +1,32 @@
 {
     "max": 550,
+    "stockInfluence": [
+        {
+            "name": "Militech",
+            "amount": -0.40000000596046
+        },
+        {
+            "name": "Kang Tao",
+            "amount": -0.33300000429153
+        },
+        {
+            "name": "Asukaga",
+            "amount": 0.30000001192093
+        },
+        {
+            "name": "Tsunami Def",
+            "amount": -0.33300000429153
+        }
+    ],
     "sharesAmount": 100000,
-    "min": 200,
-    "maxStepSize": 4,
-    "smoothOff": 5,
     "triggers": [
         {
             "name": "quest_LocKey#9470",
             "amount": -0.80000001192093
         }
     ],
-    "shareInfluence": [],
-    "name": "Arasaka"
+    "name": "Arasaka",
+    "smoothOff": 17,
+    "min": 200,
+    "maxStepSize": 3
 }

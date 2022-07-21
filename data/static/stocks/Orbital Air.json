@@ -5,7 +5,16 @@
     "maxStepSize": 2.5,
     "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
+    "stockInfluence": [
+        {
+            "name": "Lazarus",
+            "amount": 0.30000001192093
+        },
+        {
+            "name": "Raven",
+            "amount": 0.27500000596046
+        }
+    ],
     "name": "Orbital Air",
     "startPrice": 200
 }

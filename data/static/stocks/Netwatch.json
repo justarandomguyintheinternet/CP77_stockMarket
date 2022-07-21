@@ -1,10 +1,23 @@
 {
     "max": 200,
+    "name": "Netwatch",
     "sharesAmount": 20000,
-    "min": 80,
-    "maxStepSize": 2,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Netwatch"
+    "stockInfluence": [
+        {
+            "name": "Delamain Inc",
+            "amount": 0.27500000596046
+        },
+        {
+            "name": "Cytech",
+            "amount": -0.30000001192093
+        },
+        {
+            "name": "Trauma Team",
+            "amount": -0.25
+        }
+    ],
+    "smoothOff": 5,
+    "min": 80,
+    "maxStepSize": 2
 }

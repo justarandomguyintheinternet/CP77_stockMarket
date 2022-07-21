@@ -37,7 +37,6 @@ function stock:getCurrentPrice()
 end
 
 function stock:getTrend()
-    -- TODO: Change to avg of last 1/2 of data
     if not self.exportData.data then return 0 end
     local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 5]) / self.exportData.data[#self.exportData.data  - 5]
     return utils.round(percent, 1)
@@ -75,7 +74,7 @@ function stock:loadFromDefinition(data) -- Load from json file
     self.max = data.max
     self.startPrice = self.min + (self.max - self.min) / 2
     self.maxStep = data.maxStepSize
-    self.shareInfluence = data.shareInfluence
+    self.stockInfluence = data.stockInfluence
 
     self.deltaPower = data.smoothOff
     if self.deltaPower and self.deltaPower % 2 == 0 then
@@ -122,10 +121,10 @@ function stock:getInfluence() -- Get amount of direct influence
     if #self.exportData.data ~= self.steps then return 0 end -- Ignore influence on initial data fill
 
     local totalInfluence = 0
-    for _, st in pairs(self.market.stocks) do -- Buffer all influences on load
-        for _, inf in pairs(st.shareInfluence) do
+    for _, st in pairs(self.market.stocks) do -- TODO: Buffer all influences on load
+        for _, inf in pairs(st.stockInfluence) do
             if inf.name == self.name then
-                totalInfluence = totalInfluence + st:getTrend() * inf.amount -- Could buffer getTrend
+                totalInfluence = totalInfluence + (st:getTrend() / 10) * inf.amount -- TODO: Could buffer getTrend
             end
         end
     end

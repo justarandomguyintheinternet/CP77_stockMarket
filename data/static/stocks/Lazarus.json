@@ -1,10 +1,15 @@
 {
     "max": 300,
+    "name": "Lazarus",
     "sharesAmount": 70000,
-    "min": 175,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Lazarus"
+    "stockInfluence": [
+        {
+            "name": "Militech",
+            "amount": 0.34999999403954
+        }
+    ],
+    "smoothOff": 5,
+    "min": 175,
+    "maxStepSize": 2.5
 }

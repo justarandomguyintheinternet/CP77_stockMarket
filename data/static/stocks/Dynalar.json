@@ -1,10 +1,15 @@
 {
     "max": 400,
+    "name": "Dynalar",
     "sharesAmount": 25000,
-    "min": 180,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Dynalar"
+    "stockInfluence": [
+        {
+            "name": "Raven",
+            "amount": -0.30000001192093
+        }
+    ],
+    "smoothOff": 5,
+    "min": 180,
+    "maxStepSize": 2.5
 }

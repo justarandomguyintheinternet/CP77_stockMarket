@@ -1,10 +1,27 @@
 {
     "max": 500,
+    "name": "Rayfield",
     "sharesAmount": 55000,
-    "min": 320,
-    "maxStepSize": 3,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Rayfield"
+    "stockInfluence": [
+        {
+            "name": "Asukaga",
+            "amount": 0.27500000596046
+        },
+        {
+            "name": "MoorE",
+            "amount": 0.27500000596046
+        },
+        {
+            "name": "Orbital Air",
+            "amount": -0.30000001192093
+        },
+        {
+            "name": "Petrochem",
+            "amount": 0.25
+        }
+    ],
+    "smoothOff": 5,
+    "min": 320,
+    "maxStepSize": 3
 }

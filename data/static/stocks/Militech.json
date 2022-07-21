@@ -1,10 +1,27 @@
 {
     "max": 600,
+    "name": "Militech",
     "sharesAmount": 90000,
-    "min": 250,
-    "maxStepSize": 4,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Militech"
+    "stockInfluence": [
+        {
+            "name": "Asukaga",
+            "amount": 0.30000001192093
+        },
+        {
+            "name": "NCorp",
+            "amount": 0.33300000429153
+        },
+        {
+            "name": "Raven",
+            "amount": -0.30000001192093
+        },
+        {
+            "name": "Tsunami Def",
+            "amount": 0.27500000596046
+        }
+    ],
+    "smoothOff": 5,
+    "min": 250,
+    "maxStepSize": 3
 }

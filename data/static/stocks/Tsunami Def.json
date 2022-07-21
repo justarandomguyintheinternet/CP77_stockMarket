@@ -1,10 +1,15 @@
 {
     "max": 500,
+    "name": "Tsunami Def",
     "sharesAmount": 60000,
-    "min": 240,
-    "maxStepSize": 3,
-    "smoothOff": 5,
     "triggers": [],
-    "shareInfluence": [],
-    "name": "Tsunami Def"
+    "stockInfluence": [
+        {
+            "name": "Raven",
+            "amount": 0.27500000596046
+        }
+    ],
+    "smoothOff": 5,
+    "min": 240,
+    "maxStepSize": 3
 }
