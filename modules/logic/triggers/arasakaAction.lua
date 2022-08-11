@@ -41,6 +41,13 @@ function trigger:registerObservers() -- Gets called once onInit
 
         if faction == gamedataAffiliation.Arasaka then -- Arasaka death
             self.exportData.value = self.exportData.value - 0.02
+        else
+            local weapon = this:GetActiveWeapon()
+            if weapon then
+                if string.match(weapon:GetWeaponRecord():FriendlyName(), "arasaka") then
+                    self.exportData.value = self.exportData.value - 0.01
+                end
+            end
         end
         if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "arasaka") then -- Kill with arasaka weapon
             self.exportData.value = self.exportData.value + 0.015

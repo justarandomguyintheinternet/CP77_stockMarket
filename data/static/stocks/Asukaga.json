@@ -1,15 +1,1 @@
-{
-    "max": 350,
-    "name": "Asukaga",
-    "sharesAmount": 60000,
-    "triggers": [],
-    "stockInfluence": [
-        {
-            "name": "Rayfield",
-            "amount": 0.30000001192093
-        }
-    ],
-    "smoothOff": 5,
-    "min": 150,
-    "maxStepSize": 3
-}
+{"max":350,"stockInfluence":[{"name":"Rayfield","amount":0.30000001192093}],"sharesAmount":60000,"triggers":[{"name":"richDistrictCrime","amount":-1},{"name":"stockInvest","amount":1}],"name":"Asukaga","smoothOff":5,"min":150,"maxStepSize":3}

@@ -1,15 +1,1 @@
-{
-    "max": 400,
-    "name": "Dynalar",
-    "sharesAmount": 25000,
-    "triggers": [],
-    "stockInfluence": [
-        {
-            "name": "Raven",
-            "amount": -0.30000001192093
-        }
-    ],
-    "smoothOff": 5,
-    "min": 180,
-    "maxStepSize": 2.5
-}
+{"max":400,"stockInfluence":[{"name":"Raven","amount":-0.30000001192093}],"sharesAmount":25000,"triggers":[{"name":"cwKills","amount":1},{"name":"moneySpent","amount":1}],"min":180,"smoothOff":5,"name":"Dynalar","maxStepSize":2.5}

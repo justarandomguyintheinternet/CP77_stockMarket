@@ -1,15 +1,1 @@
-{
-    "max": 500,
-    "name": "Tsunami Def",
-    "sharesAmount": 60000,
-    "triggers": [],
-    "stockInfluence": [
-        {
-            "name": "Raven",
-            "amount": 0.27500000596046
-        }
-    ],
-    "smoothOff": 5,
-    "min": 240,
-    "maxStepSize": 3
-}
+{"max":500,"stockInfluence":[{"name":"Raven","amount":0.27500000596046}],"sharesAmount":60000,"triggers":[{"name":"tsunamiAction","amount":1}],"min":240,"smoothOff":5,"name":"Tsunami Def","maxStepSize":3}

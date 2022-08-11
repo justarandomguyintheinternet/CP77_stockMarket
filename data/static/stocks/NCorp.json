@@ -1,10 +1,1 @@
-{
-    "max": 300,
-    "sharesAmount": 25000,
-    "min": 100,
-    "maxStepSize": 2.5,
-    "smoothOff": 5,
-    "triggers": [],
-    "stockInfluence": [],
-    "name": "NCorp"
-}
+{"max":300,"name":"NCorp","sharesAmount":25000,"triggers":[{"name":"moneySpent","amount":1}],"stockInfluence":[],"smoothOff":5,"min":100,"maxStepSize":2.5}

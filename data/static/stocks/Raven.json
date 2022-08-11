@@ -1,15 +1,1 @@
-{
-    "max": 310,
-    "name": "Raven",
-    "sharesAmount": 30000,
-    "triggers": [],
-    "stockInfluence": [
-        {
-            "name": "Cytech",
-            "amount": -0.33300000429153
-        }
-    ],
-    "smoothOff": 5,
-    "min": 160,
-    "maxStepSize": 2.5
-}
+{"max":310,"stockInfluence":[{"name":"Cytech","amount":-0.33300000429153}],"sharesAmount":30000,"triggers":[{"name":"cwKills","amount":1},{"name":"qhUsage","amount":1},{"name":"ncpdHustler","amount":-1}],"min":160,"smoothOff":5,"name":"Raven","maxStepSize":2.5}

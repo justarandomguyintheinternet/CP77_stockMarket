@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "tsunamiAction"
-    o.fadeSpeed = 0.0075
+    o.name = "anyItemSold"
+    o.fadeSpeed = 0.005
     o.exportData = {
         value = 0
     }
@@ -27,26 +27,15 @@ function trigger:decreaseValue() -- Runs every intervall
     if self.exportData.value > 0 then
         self.exportData.value = self.exportData.value - self.fadeSpeed
     elseif self.exportData.value < 0 then
-        self.exportData.value = self.exportData.value + self.fadeSpeed
+        self.exportData.value = 0
     end
 end
 
 function trigger:registerObservers() -- Gets called once onInit
-    ---@param evt gamePotentialDeathEvent
-    Observe("NPCPuppet", "OnPotentialDeath", function (this, evt)
-        ---@type GameObject
-        local killer = evt.instigator
-
-        if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "tsunami") then
-            self.exportData.value = self.exportData.value + 0.015
-        end
-
-        local weapon = this:GetActiveWeapon()
-        if weapon then
-            if string.match(weapon:GetWeaponRecord():FriendlyName(), "tsunami") then
-                self.exportData.value = self.exportData.value - 0.01
-            end
-        end
+    Observe("FullscreenVendorGameController", "SellItem", function(_, item, quantity)
+        local weight = RPGManager.GetItemWeight(item)
+        if weight == 0 then weight = 1 end
+        self.exportData.value = self.exportData.value - weight * quantity * 0.0075
     end)
 end
 

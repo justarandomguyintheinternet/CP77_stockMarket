@@ -16,7 +16,7 @@ stocks = {
         inGame = false,
         cetOpen = false
     },
-    intervall = 5,
+    intervall = 30,
     config = require("modules/utils/config"),
     browser = require("modules/ui/browser"),
     debug = require("debug/ui/baseUI")

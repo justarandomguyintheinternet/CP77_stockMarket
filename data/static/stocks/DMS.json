@@ -1,15 +1,1 @@
-{
-    "max": 400,
-    "stockInfluence": [
-        {
-            "name": "Kiroshi",
-            "amount": 0.25
-        }
-    ],
-    "sharesAmount": 45000,
-    "triggers": [],
-    "min": 150,
-    "smoothOff": 5,
-    "name": "DMS",
-    "maxStepSize": 2.5
-}
+{"max":400,"stockInfluence":[{"name":"Kiroshi","amount":0.25}],"sharesAmount":45000,"triggers":[{"name":"roadRage","amount":1},{"name":"civilianKill","amount":1},{"name":"wantedLevel","amount":1},{"name":"ncpdHustler","amount":-1}],"name":"DMS","smoothOff":5,"min":150,"maxStepSize":2.5}

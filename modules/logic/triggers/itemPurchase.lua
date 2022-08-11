@@ -35,7 +35,7 @@ function trigger:registerObservers() -- Gets called once onInit
     Observe("FullscreenVendorGameController", "BuyItem", function(_, item, quantity)
         local weight = RPGManager.GetItemWeight(item)
         if weight == 0 then weight = 1 end
-        self.exportData.value = self.exportData.value + weight * quantity * 0.005
+        self.exportData.value = self.exportData.value + weight * quantity * 0.0075
     end)
 
     Observe("VendingMachine", "OnDispenceItemFromVendor", function(_, _)

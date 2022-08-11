@@ -1,15 +1,1 @@
-{
-    "max": 180,
-    "stockInfluence": [
-        {
-            "name": "Petrochem",
-            "amount": 0.33000001311302
-        }
-    ],
-    "sharesAmount": 25000,
-    "triggers": [],
-    "min": 70,
-    "smoothOff": 5,
-    "name": "Thorton",
-    "maxStepSize": 2
-}
+{"max":180,"stockInfluence":[{"name":"Petrochem","amount":0.33000001311302}],"sharesAmount":25000,"triggers":[{"name":"thortonAction","amount":1}],"name":"Thorton","smoothOff":5,"min":70,"maxStepSize":2}

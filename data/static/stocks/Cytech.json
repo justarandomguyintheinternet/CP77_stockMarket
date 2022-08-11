@@ -1,10 +1,1 @@
-{
-    "max": 120,
-    "sharesAmount": 20000,
-    "min": 40,
-    "maxStepSize": 2,
-    "smoothOff": 5,
-    "triggers": [],
-    "stockInfluence": [],
-    "name": "Cytech"
-}
+{"max":120,"name":"Cytech","sharesAmount":20000,"triggers":[{"name":"cwKills","amount":1}],"stockInfluence":[],"smoothOff":5,"min":40,"maxStepSize":2}

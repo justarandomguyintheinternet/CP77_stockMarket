@@ -39,10 +39,10 @@ function trigger:registerObservers() -- Gets called once onInit
     Observe("VehicleComponent", "OnGridDestruction", function()
         if self.cooldown then return end
         self.cooldown = true
-        Cron.After(2, function ()
+        Cron.After(4, function ()
             self.cooldown = false
         end)
-        self.exportData.value = self.exportData.value + 0.015
+        self.exportData.value = self.exportData.value + 0.01
     end)
 end
 

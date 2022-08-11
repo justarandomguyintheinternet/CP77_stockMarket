@@ -27,18 +27,25 @@ function trigger:decreaseValue() -- Runs every intervall
     if self.exportData.value > 0 then
         self.exportData.value = self.exportData.value - self.fadeSpeed
     elseif self.exportData.value < 0 then
-        self.exportData.value = 0
+        self.exportData.value = self.exportData.value + self.fadeSpeed
     end
 end
 
 function trigger:registerObservers() -- Gets called once onInit
     ---@param evt gamePotentialDeathEvent
-    Observe("NPCPuppet", "OnPotentialDeath", function (_, evt)
+    Observe("NPCPuppet", "OnPotentialDeath", function (this, evt)
         ---@type GameObject
         local killer = evt.instigator
 
         if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "budget") then
             self.exportData.value = self.exportData.value + 0.02
+        end
+
+        local weapon = this:GetActiveWeapon()
+        if weapon then
+            if string.match(weapon:GetWeaponRecord():FriendlyName(), "budget") then
+                self.exportData.value = self.exportData.value - 0.01
+            end
         end
     end)
 end

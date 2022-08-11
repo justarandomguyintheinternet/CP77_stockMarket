@@ -1,15 +1,1 @@
-{
-    "max": 380,
-    "name": "Petrochem",
-    "sharesAmount": 65000,
-    "triggers": [],
-    "stockInfluence": [
-        {
-            "name": "Biotechnica",
-            "amount": 0.375
-        }
-    ],
-    "smoothOff": 5,
-    "min": 220,
-    "maxStepSize": 2.5
-}
+{"max":380,"stockInfluence":[{"name":"Biotechnica","amount":0.375}],"sharesAmount":65000,"triggers":[{"name":"vehicleUsage","amount":1}],"min":220,"smoothOff":5,"name":"Petrochem","maxStepSize":2.5}

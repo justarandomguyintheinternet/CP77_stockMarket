@@ -63,19 +63,23 @@ function editUI.draw(debug, mod)
         if state then
             local triggerList = {"--Select trigger--"}
             for _, trigger in pairs(mod.market.triggerManager.triggers) do
-                if mod.market.stocks[trigger.name] == nil then
+                if mod.market.stocks[trigger.name] == nil and not string.match(trigger.name, "quest") then
                     table.insert(triggerList, trigger.name)
                 end
             end
+            table.sort(triggerList, function (a, b)
+                return a < b
+            end)
 
             if ImGui.Button("Add") and editUI.currentTriggerSelect ~= 0 then
-                table.insert(stock.triggers, {name = triggerList[editUI.currentTriggerSelect + 1], amount = 0.1})
+                table.insert(stock.triggers, {name = triggerList[editUI.currentTriggerSelect + 1], amount = 1})
             end
 
             ImGui.SameLine()
             editUI.currentTriggerSelect = ImGui.Combo("Trigger", editUI.currentTriggerSelect, triggerList, #triggerList)
 
             for _, trigger in pairs(stock.triggers) do
+                ImGui.PushID(trigger.name)
                 ImGui.Separator()
                 ImGui.Text("Trigger name: " .. trigger.name)
                 trigger.amount = ImGui.InputFloat("Amount", trigger.amount)
@@ -83,6 +87,7 @@ function editUI.draw(debug, mod)
                     utils.removeItem(stock.triggers, trigger)
                 end
                 ImGui.Separator()
+                ImGui.PopID()
             end
         end
     end

@@ -1,15 +1,1 @@
-{
-    "max": 180,
-    "stockInfluence": [
-        {
-            "name": "Petrochem",
-            "amount": 0.25
-        }
-    ],
-    "sharesAmount": 8000,
-    "triggers": [],
-    "min": 90,
-    "smoothOff": 5,
-    "name": "Quadra",
-    "maxStepSize": 2
-}
+{"max":180,"stockInfluence":[{"name":"Petrochem","amount":0.25}],"sharesAmount":8000,"triggers":[{"name":"quadraAction","amount":1}],"name":"Quadra","smoothOff":5,"min":90,"maxStepSize":2}

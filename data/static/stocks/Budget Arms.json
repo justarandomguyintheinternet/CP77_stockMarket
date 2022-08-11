@@ -1,15 +1,1 @@
-{
-    "max": 70,
-    "name": "Budget Arms",
-    "sharesAmount": 10000,
-    "triggers": [],
-    "stockInfluence": [
-        {
-            "name": "Darra Poly",
-            "amount": -0.34999999403954
-        }
-    ],
-    "smoothOff": 5,
-    "min": 20,
-    "maxStepSize": 2
-}
+{"max":70,"stockInfluence":[{"name":"Darra Poly","amount":-0.34999999403954}],"sharesAmount":10000,"triggers":[{"name":"budgetArmsKills","amount":1},{"name":"civilianKill","amount":1},{"name":"wantedLevel","amount":1}],"min":20,"smoothOff":5,"name":"Budget Arms","maxStepSize":2}
