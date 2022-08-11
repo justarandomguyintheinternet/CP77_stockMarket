@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "stockInvest"
+    o.fadeSpeed = 0.02
     o.exportData = {
         value = 0
     }
@@ -31,7 +31,11 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:transaction(stock, amount)
+    self.exportData.value = self.exportData.value + (stock:getCurrentPrice() * amount) / 250000
+end
+
+function trigger:registerObservers()end
+function trigger:update()end
 
 return trigger

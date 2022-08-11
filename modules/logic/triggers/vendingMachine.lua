@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "vendingMachine"
+    o.fadeSpeed = 0.01
     o.exportData = {
         value = 0
     }
@@ -31,7 +31,18 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:registerObservers() -- Gets called once onInit
+    Observe("VendingMachine", "OnDispenceItemFromVendor", function(this, evt)
+        local price = MarketSystem.GetBuyPrice(this, evt:GetItemID())
+        local pMoney = Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money())
+        if pMoney < price then return end
+
+        self.exportData.value = self.exportData.value + price * 0.0009
+    end)
+end
+
+function trigger:update() -- Gets called onUpdate
+
+end
 
 return trigger

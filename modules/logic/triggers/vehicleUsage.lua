@@ -1,10 +1,12 @@
+local Cron = require("modules/external/Cron")
+
 trigger = {}
 
 function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
+    o.name = "vehicleUsage"
     o.fadeSpeed = 0.004
     o.exportData = {
         value = 0
@@ -31,7 +33,16 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:registerObservers() -- Gets called once onInit
+    Cron.Every(5, function ()
+        if GetMountedVehicle(GetPlayer()) ~= nil then
+            self.exportData.value = math.min(1, self.exportData.value + 0.005)
+        end
+    end)
+end
+
+function trigger:update() -- Gets called onUpdate
+
+end
 
 return trigger

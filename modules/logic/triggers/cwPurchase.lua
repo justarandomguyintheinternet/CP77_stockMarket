@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "cwPurchase"
+    o.fadeSpeed = 0.005
     o.exportData = {
         value = 0
     }
@@ -31,7 +31,16 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:registerObservers() -- Gets called once onInit
+    ---@param this RipperDocGameController
+    ---@param id ItemID
+    Observe("RipperDocGameController", "OnItemBought", function(this, id)
+        self.exportData.value = self.exportData.value + MarketSystem.GetBuyPrice(this.VendorDataManager:GetVendorInstance(), id) / 50000
+    end)
+end
+
+function trigger:update() -- Gets called onUpdate
+
+end
 
 return trigger

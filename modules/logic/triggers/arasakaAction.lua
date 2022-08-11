@@ -1,14 +1,11 @@
-local utils = require("modules/utils/utils")
-local Cron = require("modules/external/Cron")
-
 trigger = {}
 
 function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "testTrigger"
-    o.fadeSpeed = 0.004
+    o.name = "arasakaAction"
+    o.fadeSpeed = 0.01
     o.exportData = {
         value = 0
     }
@@ -35,9 +32,18 @@ function trigger:decreaseValue() -- Runs every intervall
 end
 
 function trigger:registerObservers() -- Gets called once onInit
-    Cron.Every(5, function ()
-        if GetMountedVehicle(GetPlayer()) ~= nil then
-            self.exportData.value = math.min(1, self.exportData.value + 0.05)
+    ---@param this NPCPuppet
+    ---@param evt gamePotentialDeathEvent
+    Observe("NPCPuppet", "OnPotentialDeath", function (this, evt) -- Track Arasaka Forces Deaths / Deaths by Arasaka Weapons
+        ---@type GameObject
+        local killer = evt.instigator
+        local faction = this:GetRecord():Affiliation():Type()
+
+        if faction == gamedataAffiliation.Arasaka then -- Arasaka death
+            self.exportData.value = self.exportData.value - 0.02
+        end
+        if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "arasaka") then -- Kill with arasaka weapon
+            self.exportData.value = self.exportData.value + 0.015
         end
     end)
 end

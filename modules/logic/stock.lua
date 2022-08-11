@@ -54,7 +54,7 @@ end
 
 function stock:performTransaction(amount)
     self.exportData.owned = self.exportData.owned + amount
-    self.market.triggerManager.triggers[self.name]:onTransaction(self, amount)
+    self.market.triggerManager:onTransaction(self, amount)
 
     if amount > 0 then
         utils.spendMoney(amount * self:getCurrentPrice())

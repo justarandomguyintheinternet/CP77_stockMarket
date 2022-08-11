@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "bioGrenadeUsage"
+    o.fadeSpeed = 0.005
     o.exportData = {
         value = 0
     }
@@ -31,7 +31,17 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
+function trigger:registerObservers() -- Gets called once onInit
+    ---@param this BaseGrenade
+    Observe("BaseGrenade", "OnShoot", function (this)
+        local gType = this:GetGrenadeType()
+
+        if gType == EGrenadeType.Biohazard then
+            self.exportData.value = self.exportData.value + 0.075
+        end
+    end)
+end
+
 function trigger:update() end
 
 return trigger

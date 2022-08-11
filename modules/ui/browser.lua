@@ -10,6 +10,15 @@ browser = {
 function browser.init(mod)
     catcher.init()
 
+    ObserveAfter("ComputerMenuButtonController", "Initialize", function(this, _, data)
+        if data.widgetName == "stock" then
+            ---@type inkImageWidget
+            local icon = this.iconWidget
+            icon:SetAtlasResource(ResRef.FromName("base\\icon\\stock_browser_icon.inkatlas")) -- https://freeicons.io/graph-icon-set/graph-stock-analytic-infographic-growth-statistic-circle-data-icon-554960
+            icon:SetTexturePart("stock")
+        end
+    end)
+
     Override("ComputerControllerPS", "GetMenuButtonWidgets", function (this, wrapped)
         local buttons = wrapped()
 

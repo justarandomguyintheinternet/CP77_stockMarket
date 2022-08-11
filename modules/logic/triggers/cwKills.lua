@@ -4,7 +4,7 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
+    o.name = "cwKills"
     o.fadeSpeed = 0.004
     o.exportData = {
         value = 0
@@ -31,7 +31,21 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
+function trigger:registerObservers() -- Gets called once onInit
+    ---@param evt gamePotentialDeathEvent
+    Observe("NPCPuppet", "OnPotentialDeath", function (_, evt)
+        ---@type GameObject
+        local killer = evt.instigator
+
+        local wType = TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):ItemType():Type()
+        local isCW = wType == gamedataItemType.Cyb_Launcher or wType == gamedataItemType.Cyb_MantisBlades or wType == gamedataItemType.Cyb_NanoWires or wType == gamedataItemType.Cyb_StrongArms
+
+        if killer:IsPuppet() and isCW then
+            self.exportData.value = self.exportData.value + 0.02
+        end
+    end)
+end
+
 function trigger:update() end
 
 return trigger

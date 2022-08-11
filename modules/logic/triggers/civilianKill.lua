@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "civilianKill"
+    o.fadeSpeed = 0.005
     o.exportData = {
         value = 0
     }
@@ -31,7 +31,23 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:registerObservers() -- Gets called once onInit
+    ---@param this NPCPuppet
+    ---@param evt gamePotentialDeathEvent
+    Observe("NPCPuppet", "OnPotentialDeath", function (this, evt)
+        ---@type GameObject
+        local killer = evt.instigator
+        local faction = this:GetRecord():Affiliation():Type()
+        if faction ~= gamedataAffiliation.Civilian then return end
+
+        if killer:IsPlayer() then
+            self.exportData.value = self.exportData.value + 0.03
+        end
+    end)
+end
+
+function trigger:update() -- Gets called onUpdate
+
+end
 
 return trigger

@@ -1,11 +1,13 @@
+local Cron = require("modules/external/Cron")
+
 trigger = {}
 
 function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "wantedLevel"
+    o.fadeSpeed = 0.006
     o.exportData = {
         value = 0
     }
@@ -31,7 +33,15 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:registerObservers() -- Gets called once onInit
+    Cron.Every(5, function ()
+        local stars = tonumber(EnumInt(Game.GetScriptableSystemsContainer():Get("PreventionSystem"):GetHeatStage()))
+        self.exportData.value = self.exportData.value + 0.0035 * stars
+    end)
+end
+
+function trigger:update() -- Gets called onUpdate
+
+end
 
 return trigger

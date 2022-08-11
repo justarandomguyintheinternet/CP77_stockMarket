@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "smartWeaponKills"
+    o.fadeSpeed = 0.005
     o.exportData = {
         value = 0
     }
@@ -31,7 +31,17 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
+function trigger:registerObservers() -- Gets called once onInit
+    Observe("NPCPuppet", "OnPotentialDeath", function (_, evt)
+        ---@type GameObject
+        local killer = evt.instigator
+
+        if killer:IsPuppet() and TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):Evolution():Type() == gamedataWeaponEvolution.Smart then
+            self.exportData.value = self.exportData.value + 0.02
+        end
+    end)
+end
+
 function trigger:update() end
 
 return trigger

@@ -53,6 +53,13 @@ function triggerManager:getStockDelta(stock) -- Apply triggers
     return delta
 end
 
+function triggerManager:onTransaction(stock, amount)
+    self.triggers[stock.name]:onTransaction(stock, amount)
+    if amount > 0 then
+        self.triggers["stockInvest"]:transaction(stock, amount)
+    end
+end
+
 function triggerManager:update()
     for _, trigger in pairs(self.triggers) do
         trigger:update()

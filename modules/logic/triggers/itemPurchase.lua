@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "anyItemPurchase"
+    o.fadeSpeed = 0.005
     o.exportData = {
         value = 0
     }
@@ -31,7 +31,20 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:registerObservers() -- Gets called once onInit
+    Observe("FullscreenVendorGameController", "BuyItem", function(_, item, quantity)
+        local weight = RPGManager.GetItemWeight(item)
+        if weight == 0 then weight = 1 end
+        self.exportData.value = self.exportData.value + weight * quantity * 0.005
+    end)
+
+    Observe("VendingMachine", "OnDispenceItemFromVendor", function(_, _)
+        self.exportData.value = self.exportData.value + 0.004
+    end)
+end
+
+function trigger:update() -- Gets called onUpdate
+
+end
 
 return trigger

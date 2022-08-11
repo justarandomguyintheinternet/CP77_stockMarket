@@ -4,11 +4,14 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "moneySpent"
+    o.fadeSpeed = 0.0025
     o.exportData = {
         value = 0
     }
+
+    o.money = 0
+    o.time = 0
 
 	self.__index = self
    	return setmetatable(o, self)
@@ -31,7 +34,14 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
+function trigger:registerObservers()
+    Observe("CurrencyNotification", "UpdateData", function(this)
+        if this.currencyData.diff < 0 then
+            self.exportData.value = self.exportData.value + (-this.currencyData.diff / 1000000)
+        end
+    end)
+end
+
 function trigger:update() end
 
 return trigger

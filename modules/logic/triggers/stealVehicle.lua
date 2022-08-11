@@ -1,14 +1,18 @@
+local Cron = require("modules/external/Cron")
+
 trigger = {}
 
 function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "stealCarAny"
+    o.fadeSpeed = 0.005
     o.exportData = {
         value = 0
     }
+
+    o.cooldown = false
 
 	self.__index = self
    	return setmetatable(o, self)
@@ -31,7 +35,17 @@ function trigger:decreaseValue() -- Runs every intervall
     end
 end
 
-function trigger:registerObservers() end
+function trigger:registerObservers() -- Gets called once onInit
+    Observe("VehicleComponent", "StealVehicle", function()
+        if self.cooldown then return end
+        self.cooldown = true
+        Cron.After(1, function ()
+            self.cooldown = false
+        end)
+        self.exportData.value = self.exportData.value + 0.12
+    end)
+end
+
 function trigger:update() end
 
 return trigger

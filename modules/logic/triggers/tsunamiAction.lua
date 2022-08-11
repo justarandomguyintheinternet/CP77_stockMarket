@@ -4,8 +4,8 @@ function trigger:new()
 	local o = {}
 
     -- Default data
-    o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.name = "tsunamiAction"
+    o.fadeSpeed = 0.0075
     o.exportData = {
         value = 0
     }
@@ -27,11 +27,24 @@ function trigger:decreaseValue() -- Runs every intervall
     if self.exportData.value > 0 then
         self.exportData.value = self.exportData.value - self.fadeSpeed
     elseif self.exportData.value < 0 then
-        self.exportData.value = 0
+        self.exportData.value = self.exportData.value + self.fadeSpeed
     end
 end
 
-function trigger:registerObservers() end
-function trigger:update() end
+function trigger:registerObservers() -- Gets called once onInit
+    ---@param evt gamePotentialDeathEvent
+    Observe("NPCPuppet", "OnPotentialDeath", function (_, evt)
+        ---@type GameObject
+        local killer = evt.instigator
+
+        if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "tsunami") then
+            self.exportData.value = self.exportData.value + 0.015
+        end
+    end)
+end
+
+function trigger:update() -- Gets called onUpdate
+
+end
 
 return trigger
