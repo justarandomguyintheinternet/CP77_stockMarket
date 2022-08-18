@@ -27,7 +27,7 @@ function trigger:decreaseValue() -- Runs every intervall
     if self.exportData.value > 0 then
         self.exportData.value = self.exportData.value - self.fadeSpeed
     elseif self.exportData.value < 0 then
-        self.exportData.value = 0
+        self.exportData.value = self.exportData.value + self.fadeSpeed
     end
 end
 
@@ -38,14 +38,13 @@ function trigger:registerObservers() -- Gets called once onInit
         ---@type GameObject
         local killer = evt.instigator
         local faction = this:GetRecord():Affiliation():Type()
-
         if faction == gamedataAffiliation.NCPD then
-            self.exportData.value = self.exportData.value - 0.02
+            self.exportData.value = self.exportData.value - 0.025
         end
         pcall(function()
             local type = killer:GetRecord():Affiliation():Type()
             if type == gamedataAffiliation.NCPD then
-                self.exportData.value = self.exportData.value + 0.075
+            self.exportData.value = self.exportData.value + 0.075
             end
         end)
     end)

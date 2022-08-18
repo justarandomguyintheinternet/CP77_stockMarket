@@ -8,6 +8,16 @@ questUI = {
     stocks = {}
 }
 
+function questUI.sortedKeys(query, sortFunction) -- https://stackoverflow.com/questions/19260423/how-to-keep-the-order-of-a-lua-table-with-string-keys
+    local keys, len = {}, 0
+    for k,_ in pairs(query) do
+        len = len + 1
+        keys[len] = k
+    end
+    table.sort(keys, sortFunction)
+    return keys
+end
+
 function questUI.load()
     if questUI.quests == nil then
         config.tryCreateConfig("data/static/quests/quests.json", {})
@@ -33,10 +43,6 @@ function questUI.load()
             end
         end
 
-        table.sort(questUI.quests, function (a, b)
-            return GetLocalizedText(a.name) < GetLocalizedText(b.name)
-        end)
-
         config.saveFile("data/static/quests/quests.json", questUI.quests)
     end
 
@@ -55,6 +61,9 @@ function questUI.drawStocks(quest, mod)
     for _, stock in pairs(mod.market.stocks) do
         table.insert(stockList, stock.name)
     end
+    table.sort(stockList, function(a, b)
+        return a < b
+    end)
 
     if ImGui.Button("Add") and questUI.currentStockSelect ~= 0 then
         table.insert(questUI.stocks[stockList[questUI.currentStockSelect + 1]].triggers, {
@@ -117,13 +126,19 @@ function questUI.draw(debug, mod)
 
     ImGui.Separator()
 
-    for _, quest in pairs(questUI.quests) do
+    for _, k in pairs(questUI.sortedKeys(questUI.quests, function(a, b) return GetLocalizedText(a) < GetLocalizedText(b) end)) do
+        local quest = questUI.quests[k]
         if (GetLocalizedText(quest.name):lower():match(questUI.filter:lower())) ~= nil then
             local state = ImGui.CollapsingHeader(GetLocalizedText(quest.name))
             if state then
                 ImGui.PushID(quest.name)
 
                 ImGui.Indent(25)
+
+                if ImGui.Button("Copy Name") then
+                    ImGui.SetClipboardText(GetLocalizedText(quest.name))
+                end
+
                 quest.amount, changed = ImGui.InputFloat("Amount", quest.amount)
                 if changed then config.saveFile("data/static/quests/quests.json", questUI.quests) end
                 quest.fade, changed = ImGui.InputFloat("Fade speed", quest.fade, 0, 5,  "%.5f")

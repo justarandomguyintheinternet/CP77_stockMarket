@@ -1,1 +1,1 @@
-{"max":350,"stockInfluence":[{"name":"Rayfield","amount":0.30000001192093}],"sharesAmount":60000,"triggers":[{"name":"richDistrictCrime","amount":-1},{"name":"stockInvest","amount":1}],"name":"Asukaga","smoothOff":5,"min":150,"maxStepSize":3}
+{"max":350,"stockInfluence":[{"name":"Rayfield","amount":0.30000001192093}],"sharesAmount":60000,"triggers":[{"name":"richDistrictCrime","amount":-1},{"name":"stockInvest","amount":1},{"name":"quest_LocKey#14540","amount":0.1}],"min":150,"smoothOff":5,"name":"Asukaga","maxStepSize":3}
