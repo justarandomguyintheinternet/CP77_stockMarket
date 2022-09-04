@@ -16,6 +16,10 @@ function createUI.draw()
             min = 100,
             smoothOff = 5,
             sharesAmount = 50000,
+            atlasPath = "base\\gameplay\\gui\\common\\icons\\weapon_manufacturers.inkatlas",
+            atlasPart = "budgetarms",
+            iconX = 150,
+            iconY = 100,
             stockInfluence = {}
         }
         config.saveFile("data/static/stocks/" .. stock.name .. ".json", stock)

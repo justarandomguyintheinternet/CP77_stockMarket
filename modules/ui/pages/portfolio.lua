@@ -27,7 +27,7 @@ function portfolio:new(inkPage, controller, eventCatcher, mod)
 end
 
 function portfolio:initialize()
-	self.refreshCron = Cron.Every(5, function ()
+	self.refreshCron = Cron.Every(2, function ()
 		self:refresh()
 	end)
 
@@ -36,7 +36,8 @@ function portfolio:initialize()
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
 
-	self.graph = require("modules/ui/widgets/graph"):new(30, 350, 1200, 900, 8, 6, lang.getText(lang.graph_time), lang.getText(lang.portfolio_accountValue), 4, 30, color.darkcyan, 0.3)
+	self.graph = require("modules/ui/widgets/graph"):new(68, 395, 1162, 900, 6, 4, lang.getText(lang.graph_time), lang.getText(lang.portfolio_accountValue), 4, 50, color.darkcyan, 0.1)
+	self.graph.intervall = self.mod.intervall
 	self.graph.data = self.mod.market.portfolioStock.exportData.data
 	self.graph:initialize(self.canvas)
 	self.graph:showData()
@@ -142,9 +143,9 @@ function portfolio:setStocks()
 
 	for key, button in pairs(self.sortButtons) do
 		if key ~= self.sort then
-			button.bg:SetTintColor(color.darkcyan)
+			button.fg.image:SetTintColor(color.white)
 		else
-			button.bg:SetTintColor(color.cyan)
+			button.fg.image:SetTintColor(HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 }))
 		end
 	end
 end
@@ -153,29 +154,51 @@ function portfolio:setupSortButtons()
 	local canvas = ink.canvas(2500, 350, inkEAnchor.Centered)
 	canvas:Reparent(self.canvas, -1)
 
-	self:setupSortButton(canvas, 0, 0, lang.getText(lang.stocks_ascending) .. " ABC", "ascAlpha")
-	self:setupSortButton(canvas, 420, 0, lang.getText(lang.stocks_descending) .. " ABC", "desAlpha")
-	self:setupSortButton(canvas, 0, 110, lang.getText(lang.stocks_ascending) .. " %", "ascPercent")
-	self:setupSortButton(canvas, 420, 110, lang.getText(lang.stocks_descending) .. " %", "desPercent")
-	self:setupSortButton(canvas, 0, 220, lang.getText(lang.stocks_ascending) .. " E$", "ascValue")
-	self:setupSortButton(canvas, 420, 220, lang.getText(lang.stocks_descending) .. " E$", "desValue")
+	self:setupSortButton(canvas, 0, 0, "ABC", "ascAlpha")
+	self:setupSortButton(canvas, 420, 0, "ABC", "desAlpha")
+	self:setupSortButton(canvas, 0, 110, "%", "ascPercent")
+	self:setupSortButton(canvas, 420, 110, "%", "desPercent")
+	self:setupSortButton(canvas, 0, 220, "E$", "ascValue")
+	self:setupSortButton(canvas, 420, 220, "E$", "desValue")
 end
 
 function portfolio:setupSortButton(canvas, x, y, name, sort)
 	local xSize = 400
 	local ySize = 100
-	local border = 3
 
-	local sButton = require("modules/ui/widgets/button"):new(x, y, xSize, ySize, border, name, 45, color.darkcyan, color.darkred, color.white, function ()
+	local sButton = require("modules/ui/widgets/button_texture"):new()
+	sButton.x = x
+	sButton.y = y
+	sButton.sizeX = xSize
+	sButton.sizeY = ySize
+	sButton.textSize = 45
+	sButton.text = name
+	sButton.bgPart = "status_cell_bg"
+	sButton.fgPart = "status_cell_fg"
+    sButton.bgColor = color.white
+    sButton.fgColor = color.white
+	sButton.textColor = color.white
+    sButton.useNineSlice = true
+
+	sButton.callback = function ()
 		self.sort = sort
 		self:setStocks()
-	end)
+	end
 	sButton:initialize()
 	sButton:registerCallbacks(self.eventCatcher)
 	sButton.canvas:Reparent(canvas, -1)
 
 	if self.sort == sort then
-		sButton.bg:SetTintColor(color.cyan)
+		sButton.fg.image:SetTintColor(HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 }))
+	end
+
+	local arrowSize = 50
+	if string.match(sort, "asc") then
+		local icon = ink.image((- xSize / 2) + arrowSize, 0, arrowSize, arrowSize, "base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas", "arrow_rect_fg")
+		icon.pos:Reparent(sButton.canvas, -1)
+	else
+		local icon = ink.image((- xSize / 2) + arrowSize, 0, arrowSize, arrowSize, "base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas", "arrow_down_fg")
+		icon.pos:Reparent(sButton.canvas, -1)
 	end
 
 	self.sortButtons[sort] = sButton
@@ -230,7 +253,10 @@ function portfolio:createPreviewButton(x, y, stock)
 	button.stock = stock
 
 	button.showData = function (bt)
-		bt.stockName:SetText(bt.stock.name)
+		bt.stockIcon.image:SetAtlasResource(ResRef.FromString(bt.stock.atlasPath))
+		bt.stockIcon.image:SetTexturePart(bt.stock.atlasPart)
+		bt.stockIcon.pos:SetSize(bt.stock.iconX, bt.stock.iconY)
+		bt.stockIcon.image:SetTintColor(HDRColor.new({ Red = 0.9, Green = 0.9, Blue = 0.9, Alpha = 1.0 }))
 		bt.stockPrice:SetText(tostring(math.floor(bt.stock:getCurrentPrice() * bt.stock:getPortfolioNum()) .. "E$"))
 
 		local trend = bt.stock:getProfit(-bt.stock:getPortfolioNum()) / bt.stock.exportData.spent

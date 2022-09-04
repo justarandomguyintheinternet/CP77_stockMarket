@@ -19,6 +19,28 @@ function editUI.draw(debug, mod)
             os.rename("data/static/stocks/" .. name .. ".json", "data/static/stocks/" .. stock.name .. ".json")
         end
 
+        stock.atlasPath =  ImGui.InputTextWithHint("Atlas Path", "Path...", stock.atlasPath, 100)
+        stock.atlasPart =  ImGui.InputTextWithHint("Atlas Part", "Part...", stock.atlasPart, 100)
+        stock.iconX = ImGui.InputInt("IconX Size", stock.iconX)
+        stock.iconY = ImGui.InputInt("IconY Size", stock.iconY)
+
+        if ImGui.Button("AutoFit (TM)") then
+            local maxY = 140
+            local maxX = 415
+
+            local xFitY = math.floor(stock.iconX * (maxY / stock.iconY))
+
+            if xFitY > maxX then
+                stock.iconY = math.floor(stock.iconY * (maxX / stock.iconX))
+                stock.iconX = maxX
+            else
+                stock.iconX = xFitY
+                stock.iconY = maxY
+            end
+        end
+
+        ImGui.Separator()
+
         stock.sharesAmount = ImGui.InputInt("Shares Amount", stock.sharesAmount)
         stock.min = ImGui.InputInt("Share Min Price", stock.min)
         stock.max = ImGui.InputInt("Share Max Price", stock.max)

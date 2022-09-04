@@ -1,3 +1,5 @@
+-- Legacy button
+
 local ink = require("modules/ui/inkHelper")
 local Cron = require("modules/external/Cron")
 local utils = require("modules/utils/utils")
@@ -42,7 +44,7 @@ function button:initialize()
     self.fill:Reparent(self.canvas, -1)
     self.fill:SetInteractive(true)
 
-    self.textWidget = ink.text(self.text, 0, 0, self.textSize, self.textColor, nil, nil, 0)
+    self.textWidget = ink.text(self.text, 0, 0, self.textSize, self.textColor)
     self.textWidget:SetAnchorPoint(Vector2.new({X = 0.5, Y = 0.5}))
     self.textWidget:Reparent(self.canvas, -1)
 end

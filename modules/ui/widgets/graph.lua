@@ -21,6 +21,9 @@ function graph:new(x, y, sizeX, sizeY, stepsX, stepsY, labelX, labelY, gridThicc
 
     o.data = {}
 
+    o.useTimeScale = true
+    o.intervall = 30
+
     o.bgColor = bgColor
     o.bgAlpha = bgAlpha
 
@@ -160,12 +163,33 @@ function graph:setLabels()
     end
 
     for i = 0, self.stepsX do
-        local label = 1 + (i * (#self.data - 1) / self.stepsX)
+        local label = math.floor(1 + (i * (#self.data - 1) / self.stepsX))
+        local xAnchor = 0.5
+
+        if self.useTimeScale then
+            local minutesPerStep = (self.intervall / 7.5) * (#self.data / self.stepsX)
+            local totalSub = minutesPerStep * (self.stepsX - i)
+            local subMinutes = totalSub % 60
+            local subHours = math.floor(totalSub / 60)
+
+            local minutes = Game.GetTimeSystem():GetGameTime():Minutes() - subMinutes
+            if minutes < 0 then minutes = 60 + minutes end
+            local hours = Game.GetTimeSystem():GetGameTime():Hours() - subHours
+            if hours < 0 then hours = 24 + hours end
+
+            label = string.format("%02d", hours) .. ":" .. string.format("%02d", minutes)
+
+            if i == 0 then -- Fix time label being off graph
+                xAnchor = 0
+            elseif i == self.stepsX then
+                xAnchor = 1
+            end
+        end
 
         local x = self.gridLines["x"][i]:GetMargin().left
         local y = self.gridLines["x"][i]:GetMargin().top + self.gridLines["x"][i]:GetSize().Y
-        local text = ink.text(tostring(math.floor(label)), x, y + self.labelSize / 2, self.labelSize, color.white)
-        text:SetAnchorPoint(0.5, 0.5)
+        local text = ink.text(tostring(label), x, y + self.labelSize / 1.75, self.labelSize - 5, color.white)
+        text:SetAnchorPoint(xAnchor, 0.5)
         text:Reparent(self.grid, -1)
         table.insert(self.labels, text)
     end

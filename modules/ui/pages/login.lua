@@ -35,8 +35,17 @@ function login:initialize()
 	t:SetAnchorPoint(0.5, 0.5)
 	t:Reparent(self.canvas, -1)
 
-	self.fluff = ink.text("", -1500, 0, 30, color.aqua)
+	local logo = ink.image(-1440, 75, 233, 233, "base\\icon\\stock_logo.inkatlas", "stock")
+    logo.image:SetTintColor(HDRColor.new({ Red = 0.9, Green = 0.9, Blue = 0.9, Alpha = 1.0 }))
+    logo.pos:Reparent(self.canvas, -1)
+
+	self.fluff = ink.text("", -1500, 750, 30, color.aqua)
+	self.fluff:SetOpacity(0.85)
 	self.fluff:Reparent(self.canvas, -1)
+
+	local fluff2 = ink.text("Connection secured by Netwatch. STOCKXC v.1.0", 916, 1200, 32, color.aqua)
+	fluff2:SetOpacity(0.5)
+	fluff2:Reparent(self.canvas, -1)
 
 	self.button = require("modules/ui/widgets/button"):new()
 	self.button.x = 0
@@ -50,10 +59,13 @@ function login:initialize()
 	self.button.bgColor = color.new(0.5, 0.5, 0.5)
 	self.button.textColor = color.white
 	self.button.callback = function()
-		-- if self.pwFilled and self.nameFilled then
-		-- 	self:startFluffSeq()
-		-- end
-		self.controller:switchToPage("home")
+		if self.pwFilled and self.nameFilled then
+			self:startFluffSeq()
+		end
+		--self.controller:switchToPage("home")
+	end
+	self.button.hoverInCallback = function (bt)
+		bt.fill:SetOpacity(0.95)
 	end
 	self.button:initialize()
 	self.button:registerCallbacks(self.eventCatcher)
@@ -69,7 +81,7 @@ function login:startFluffSeq()
 	local fluffText = {"Starting connection request from CLIENT_ID 31280904....",
 						"Checking for valid subnet...",
 						"Preparing for Handshake with main server...",
-						"Trageting server ID-39-NC, Ping=27ms",
+						"Targeting server ID-39-NC, Ping=27ms",
 						"Handshake success, verifying USER_DATA with server...",
 						"Data USERNAME_ valid...",
 						"Data PASSWORD_h valid...",
@@ -126,8 +138,8 @@ function login:updateLogin(type)
 	if type == "pw" then self.pwFilled = true end
 
 	if self.pwFilled and self.nameFilled then
-		self.button.fill:SetTintColor(color.darkred)
-		self.button.bg:SetTintColor(color.darkcyan)
+		self.button.fill:SetTintColor(color.black)
+		self.button.bg:SetTintColor(color.cyan)
 	end
 end
 

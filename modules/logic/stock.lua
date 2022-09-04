@@ -11,6 +11,10 @@ function stock:new(steps, market)
     o.steps = steps
     o.name = ""
     o.info = ""
+    o.atlasPath = ""
+    o.atlasPart = ""
+    o.iconX = 0
+    o.iconY = 0
 
     o.startPrice = 0
     o.sharesAmount = 0
@@ -75,6 +79,10 @@ function stock:loadFromDefinition(data) -- Load from json file
     self.startPrice = self.min + (self.max - self.min) / 2
     self.maxStep = data.maxStepSize
     self.stockInfluence = data.stockInfluence
+    self.atlasPath = data.atlasPath
+    self.atlasPart = data.atlasPart
+    self.iconX = data.iconX
+    self.iconY = data.iconY
 
     self.deltaPower = data.smoothOff
     if self.deltaPower and self.deltaPower % 2 == 0 then

@@ -36,7 +36,8 @@ function stocks:initialize()
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
 
-	self.graph = require("modules/ui/widgets/graph"):new(2110, 720, 1000, 550, 5, 3, "", "", 4, 25, color.darkcyan, 0.3)
+	self.graph = require("modules/ui/widgets/graph"):new(2110, 720, 1000, 550, 5, 3, "", "", 4, 25, color.darkcyan, 0.1)
+	self.graph.intervall = self.mod.intervall
 	self.graph:initialize(self.canvas)
 	self.graph.canvas:SetVisible(false)
 
@@ -57,8 +58,8 @@ function stocks:setupInfo()
 	self.infoName = ink.text("", 0, 0, 120, color.white)
 	self.infoName:Reparent(self.info, -1)
 
-	local line = ink.line(0, 130, 500, 130, color.white, 5)
-	line:Reparent(self.info, -1)
+	self.infoLine = ink.line(0, 130, 500, 130, color.white, 5)
+	self.infoLine:Reparent(self.info, -1)
 
 	self.infoText = ink.text("", 0, 150, 50, color.white)
 	self.infoText:Reparent(self.info, -1)
@@ -94,9 +95,9 @@ function stocks:setStocks()
 
 	for key, button in pairs(self.sortButtons) do
 		if key ~= self.sort then
-			button.bg:SetTintColor(color.darkcyan)
+			button.fg.image:SetTintColor(color.white)
 		else
-			button.bg:SetTintColor(color.cyan)
+			button.fg.image:SetTintColor(HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 }))
 		end
 	end
 end
@@ -105,29 +106,51 @@ function stocks:setupSortButtons()
 	local canvas = ink.canvas(2400, 350, inkEAnchor.Centered)
 	canvas:Reparent(self.canvas, -1)
 
-	self:setupSortButton(canvas, 0, 0, lang.getText(lang.stocks_ascending) .. " ABC", "ascAlpha")
-	self:setupSortButton(canvas, 420, 0, lang.getText(lang.stocks_descending) .. " ABC", "desAlpha")
-	self:setupSortButton(canvas, 0, 110, lang.getText(lang.stocks_ascending) .. " %", "ascPercent")
-	self:setupSortButton(canvas, 420, 110, lang.getText(lang.stocks_descending) .. " %", "desPercent")
-	self:setupSortButton(canvas, 0, 220, lang.getText(lang.stocks_ascending) .. " E$", "ascValue")
-	self:setupSortButton(canvas, 420, 220, lang.getText(lang.stocks_descending) .. " E$", "desValue")
+	self:setupSortButton(canvas, 0, 0, "ABC", "ascAlpha")
+	self:setupSortButton(canvas, 420, 0, "ABC", "desAlpha")
+	self:setupSortButton(canvas, 0, 110, "%", "ascPercent")
+	self:setupSortButton(canvas, 420, 110, "%", "desPercent")
+	self:setupSortButton(canvas, 0, 220, "E$", "ascValue")
+	self:setupSortButton(canvas, 420, 220, "E$", "desValue")
 end
 
 function stocks:setupSortButton(canvas, x, y, name, sort)
 	local xSize = 400
 	local ySize = 100
-	local border = 3
 
-	local sButton = require("modules/ui/widgets/button"):new(x, y, xSize, ySize, border, name, 45, color.darkcyan, color.darkred, color.white, function ()
+	local sButton = require("modules/ui/widgets/button_texture"):new()
+	sButton.x = x
+	sButton.y = y
+	sButton.sizeX = xSize
+	sButton.sizeY = ySize
+	sButton.textSize = 45
+	sButton.text = name
+	sButton.bgPart = "status_cell_bg"
+	sButton.fgPart = "status_cell_fg"
+    sButton.bgColor = color.white
+    sButton.fgColor = color.white
+	sButton.textColor = color.white
+    sButton.useNineSlice = true
+
+	sButton.callback = function ()
 		self.sort = sort
 		self:setStocks()
-	end)
+	end
 	sButton:initialize()
 	sButton:registerCallbacks(self.eventCatcher)
 	sButton.canvas:Reparent(canvas, -1)
 
 	if self.sort == sort then
-		sButton.bg:SetTintColor(color.cyan)
+		sButton.fg.image:SetTintColor(HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 }))
+	end
+
+	local arrowSize = 50
+	if string.match(sort, "asc") then
+		local icon = ink.image((- xSize / 2) + arrowSize, 0, arrowSize, arrowSize, "base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas", "arrow_rect_fg")
+		icon.pos:Reparent(sButton.canvas, -1)
+	else
+		local icon = ink.image((- xSize / 2) + arrowSize, 0, arrowSize, arrowSize, "base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas", "arrow_down_fg")
+		icon.pos:Reparent(sButton.canvas, -1)
 	end
 
 	self.sortButtons[sort] = sButton
@@ -146,8 +169,8 @@ function stocks:setupScrollArea()
 
 	local buttonList = inkVerticalPanel.new()
 	buttonList:SetName('list')
-	buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 20.0, right = 32.0 }))
-	buttonList:SetChildMargin(inkMargin.new({ top = 66.0, bottom = 66.0 }))
+	buttonList:SetPadding(inkMargin.new({ left = 32.0, top = 5.0, right = 32.0, bottom = 15.0 }))
+	buttonList:SetChildMargin(inkMargin.new({ top = 75.0, bottom = 75.0 }))
 	buttonList:SetFitToContent(true)
 	buttonList:Reparent(scrollContent, -1)
 
@@ -168,19 +191,16 @@ function stocks:createPreviewButton(x, y, stock)
 	button.x = x
 	button.y = y
 	button.sizeX = 1000
-	button.sizeY = 170
-	button.textSize = 80
-	button.borderSize = 8
-	button.fillColor = color.darkred
-	button.bgColor = color.darkcyan
+	button.sizeY = 175
 	button.textColor = color.white
+	button.textSize = 80
 	button.stock = stock
 	button:initialize()
 	button:registerCallbacks(self.eventCatcher)
 	table.insert(self.previews, button)
 
 	button.hoverInCallback = function (bt)
-		bt.fill:SetOpacity(0.6)
+		bt.bg.image:SetOpacity(0.15)
 		self.graph.canvas:SetVisible(true)
 		self.graph.data = bt.stock.exportData.data
 		self.graph:showData()
@@ -188,9 +208,13 @@ function stocks:createPreviewButton(x, y, stock)
 		self.infoName:SetText(bt.stock.name)
 		self.infoText:SetText(utils.wrap(lang.getText(bt.stock.info), 30))
 		self.info:SetVisible(true)
+
+		Cron.NextTick(function ()
+			ink.updateLine(self.infoLine, 0, 130, self.infoName:GetDesiredWidth(), 130)
+		end)
 	end
 	button.hoverOutCallback = function (bt)
-		bt.fill:SetOpacity(1)
+		bt.bg.image:SetOpacity(0)
 		self.graph.canvas:SetVisible(false)
 		self.info:SetVisible(false)
 	end

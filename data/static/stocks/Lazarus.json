@@ -1,15 +1,1 @@
-{
-    "max": 300,
-    "name": "Lazarus",
-    "sharesAmount": 70000,
-    "triggers": [],
-    "stockInfluence": [
-        {
-            "name": "Militech",
-            "amount": 0.34999999403954
-        }
-    ],
-    "smoothOff": 5,
-    "min": 175,
-    "maxStepSize": 2.5
-}
+{"max":300,"atlasPart":"stock","sharesAmount":70000,"atlasPath":"base\\icon\\stocks\\lazarus.inkatlas","min":175,"maxStepSize":2.5,"smoothOff":5,"triggers":[],"stockInfluence":[{"name":"Militech","amount":0.34999999403954}],"iconX":415,"name":"Lazarus","iconY":67}

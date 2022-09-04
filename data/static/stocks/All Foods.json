@@ -1,1 +1,1 @@
-{"max":150,"stockInfluence":[{"name":"DTR","amount":0.33300000429153}],"sharesAmount":20000,"triggers":[{"name":"vendingMachine","amount":1},{"name":"foodPurchase","amount":1}],"name":"All Foods","smoothOff":5,"min":75,"maxStepSize":2.5}
+{"max":150,"atlasPart":"stock","sharesAmount":20000,"atlasPath":"base\\icon\\stocks\\all_foods.inkatlas","min":75,"maxStepSize":2.5,"smoothOff":5,"triggers":[{"name":"vendingMachine","amount":1},{"name":"foodPurchase","amount":1}],"iconY":140,"iconX":255,"name":"All Foods","stockInfluence":[{"name":"DTR","amount":0.33300000429153}]}

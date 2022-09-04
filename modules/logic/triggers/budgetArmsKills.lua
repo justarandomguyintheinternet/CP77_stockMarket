@@ -34,10 +34,7 @@ end
 function trigger:registerObservers() -- Gets called once onInit
     ---@param evt gamePotentialDeathEvent
     Observe("NPCPuppet", "OnPotentialDeath", function (this, evt)
-        ---@type GameObject
-        local killer = evt.instigator
-
-        if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "budget") then
+        if string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "budget") then
             self.exportData.value = self.exportData.value + 0.02
         end
 

@@ -1,1 +1,1 @@
-{"max":210,"stockInfluence":[{"name":"Raven","amount":-0.20000000298023}],"sharesAmount":10000,"triggers":[{"name":"cwKills","amount":1},{"name":"qhUsage","amount":1}],"min":90,"smoothOff":5,"name":"QianT","maxStepSize":2}
+{"max":210,"atlasPart":"stock","sharesAmount":10000,"atlasPath":"base\\icon\\stocks\\qiant.inkatlas","min":90,"maxStepSize":2,"smoothOff":5,"triggers":[{"name":"cwKills","amount":1},{"name":"qhUsage","amount":1}],"iconY":126,"iconX":354,"name":"QianT","stockInfluence":[{"name":"Raven","amount":-0.20000000298023}]}

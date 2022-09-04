@@ -33,7 +33,8 @@ function home:initialize()
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
 
-	self.graph = require("modules/ui/widgets/graph"):new(55, 300, 2000, 1000, 10, 5, lang.getText(lang.graph_time), lang.getText(lang.graph_value), 5, 50, color.darkcyan, 0.3)
+	self.graph = require("modules/ui/widgets/graph"):new(55, 300, 2000, 1000, 10, 5, lang.getText(lang.graph_time), lang.getText(lang.graph_value), 5, 50, color.darkcyan, 0.115)
+	self.graph.intervall = self.mod.intervall
 	self.graph:initialize(self.canvas)
 	self.graph.data = self.mod.market.marketStock.exportData.data
 	self.graph:showData()
@@ -45,26 +46,24 @@ function home:initialize()
 	market.sizeY = 170
 	market.textSize = 80
 	market.borderSize = 8
-	market.fillColor = color.darkred
-	market.bgColor = color.yellowgreen
+	market.fgColor = color.red
 	market.textColor = color.white
 	market.stock = self.mod.market.marketStock
 	market:initialize()
 	market:showData()
+
+	market.text = ink.text(lang.getText(lang.pc_stockmarket), -market.sizeX / 4, 0, 75)
+	market.text:SetAnchorPoint(Vector2.new({X = 0.5, Y = 0.5}))
+    market.text:Reparent(market.canvas, -1)
+
 	market.canvas:Reparent(self.canvas, -1)
 	table.insert(self.previews, market)
 
-	local line = ink.line(2080, 510, 3120, 510, color.white, 3)
-	line:Reparent(self.canvas, -1)
+	self.p1 = self:createPreviewButton(2600, 600, nil)
+	self.p2 = self:createPreviewButton(2600, 800, nil)
 
-	self.p1 = self:createPreviewButton(2600, 620, nil)
-	self.p2 = self:createPreviewButton(2600, 820, nil)
-
-	local line = ink.line(2080, 920, 3120, 920, color.white, 3)
-	line:Reparent(self.canvas, -1)
-
-	self.p3 = self:createPreviewButton(2600, 1020, nil)
-	self.p4 = self:createPreviewButton(2600, 1220, nil)
+	self.p3 = self:createPreviewButton(2600, 1000, nil)
+	self.p4 = self:createPreviewButton(2600, 1200, nil)
 
 	self:setStocks()
 	for _, p in pairs(self.previews) do
@@ -77,11 +76,8 @@ function home:createPreviewButton(x, y, stock)
 	button.x = x
 	button.y = y
 	button.sizeX = 1000
-	button.sizeY = 170
+	button.sizeY = 175
 	button.textSize = 80
-	button.borderSize = 8
-	button.fillColor = color.darkred
-	button.bgColor = color.darkcyan
 	button.textColor = color.white
 	button.stock = stock
 	button:initialize()

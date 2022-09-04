@@ -159,22 +159,24 @@ end
 ---@param rot number
 ---@param mirror inkBrushMirrorType
 ---@return {pos: inkCanvas, image: inkImage}
-function ink.image(x, y, sizeX, sizeY, path, part, rot, mirror) -- Create a table with a position controlling canvas, and the image part itself parented to that
+function ink.image(x, y, sizeX, sizeY, path, part, rot, color, mirror) -- Create a table with a position controlling canvas, and the image part itself parented to that
     local r = rot or 0
     local m = mirror or inkBrushMirrorType.NoMirror
+    local c = color or HDRColor.new({ Red = 1, Green = 1, Blue = 1, Alpha = 1.0 })
 
     local t = {pos = nil, image = nil}
     t.pos= ink.canvas(x, y)
+    t.pos:SetSize(sizeX, sizeY)
+    t.pos:SetAnchorPoint(Vector2.new({ X = 0.5, Y = 0.5 }))
 
 	t.image = inkImage.new()
 	t.image:SetAtlasResource(ResRef.FromName(path))
 	t.image:SetTexturePart(part)
 	t.image:SetOpacity(1)
 	t.image:SetAnchor(inkEAnchor.Fill)
-    t.image:SetAnchorPoint(0, 0)
-	t.image:SetMargin(sizeX, sizeY, 0, 0)
 	t.image:SetRotation(r)
 	t.image:SetBrushMirrorType(m)
+    t.image:SetTintColor(c)
     t.image:Reparent(t.pos, -1)
 
 	return t

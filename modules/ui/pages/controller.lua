@@ -1,7 +1,3 @@
-local ink = require("modules/ui/inkHelper")
-local Cron = require("modules/external/Cron")
-local utils = require("modules/utils/utils")
-
 controller = {}
 
 function controller:new(browserController, catcher, mod)
@@ -87,7 +83,7 @@ function controller:getPageAdress()
     elseif self.activePage == "portfolio" then
         return "NETdir://nusa.stockXC.corp/portfolio"
     elseif self.activePage == "stockInfo" then
-        return "NETdir://nusa.stockXC.corp/stocks/" .. self.currentInfoStock.name
+        return "NETdir://nusa.stockXC.corp/stocks/" .. string.gsub(self.currentInfoStock.name, "%s", "_")
     end
 end
 

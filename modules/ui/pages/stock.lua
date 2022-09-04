@@ -37,7 +37,8 @@ function info:initialize(stock)
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
 
-	self.graph = require("modules/ui/widgets/graph"):new(55, 300, 2000, 1000, 10, 5, lang.getText(lang.graph_time), lang.getText(lang.graph_value), 5, 50, color.darkcyan, 0.3)
+	self.graph = require("modules/ui/widgets/graph"):new(55, 300, 2000, 1000, 10, 5, lang.getText(lang.graph_time), lang.getText(lang.graph_value), 5, 50, color.darkcyan, 0.1)
+	self.graph.intervall = self.mod.intervall
 	self.graph:initialize(self.canvas)
 	self.graph.data = self.stock.exportData.data
 	self.graph:showData()
@@ -56,6 +57,10 @@ function info:setupInfo() -- Basic info section
 	self.stockName:Reparent(self.title, -1)
 	self.nameLine = ink.line(0, 135, 450, 135, color.white, 8)
 	self.nameLine:Reparent(self.title, -1)
+
+	Cron.NextTick(function ()
+		ink.updateLine(self.nameLine, 0, 135, self.stockName:GetDesiredWidth(), 135)
+	end)
 
 	self.shortInfo = ink.canvas(2100, 420, inkEAnchor.Centered)
 	self.shortInfo:Reparent(self.canvas, -1)
@@ -104,7 +109,7 @@ function info:showData() -- Update data
 	self.portfolioTrend:SetTintColor(c)
 
 	-- Stock volume buttons text
-	self.middleText:SetText(tostring(self.buySellVolume))
+	self.middle.textWidget:SetText(tostring(self.buySellVolume))
 	-- Account balance / Margin
 	local text = tostring(lang.getText(lang.info_post_portfolio) .. ": " .. (Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) - (self.buySellVolume * self.stock:getCurrentPrice())) .. "E$")
 	if self.buySellVolume <= 0 then
@@ -131,27 +136,18 @@ end
 function info:getBuySellOptions() -- Visual params
 	local xSize = 850
 	local ySize = 140
-	local bgColor = color.darkgray
 	local textSize = 70
 	local borderSize = 3
 	local textColor = color.white
 
-	return xSize, ySize, bgColor, textSize, borderSize, textColor
+	return xSize, ySize, textSize, borderSize, textColor
 end
 
 function info:setupBuySell(x, y) -- Buy sell section
-	local xSize, ySize, bgColor, textSize, _, textColor = self:getBuySellOptions()
+	local xSize, ySize, textSize, _, textColor = self:getBuySellOptions()
 
 	local canvas = ink.canvas(x, y, inkEAnchor.Centered)
 	canvas:Reparent(self.canvas, -1)
-
-	local bg = ink.rect(0, 0, xSize, ySize, bgColor, 0)
-	bg:SetAnchorPoint(0.5, 0.5)
-	bg:Reparent(canvas, -1)
-
-	self.middleText = ink.text(tostring(self.buySellVolume), 0, 0, textSize, textColor)
-	self.middleText:SetAnchorPoint(0.5, 0.5)
-	self.middleText:Reparent(canvas, -1)
 
 	local plusOne = self:setupVolumeButton(xSize / 2 - ySize * 2, 0, 1)
 	plusOne.canvas:Reparent(canvas, -1)
@@ -159,6 +155,14 @@ function info:setupBuySell(x, y) -- Buy sell section
 	plusFive.canvas:Reparent(canvas, -1)
 	local plusTen = self:setupVolumeButton(xSize / 2, 0, 25)
 	plusTen.canvas:Reparent(canvas, -1)
+
+	self.middle = self:setupVolumeButton(0, 0, 0)
+	self.middle.canvas:Reparent(canvas, -1)
+	self.middle.callback = function () end
+	self.middle.hoverInCallback = function () end
+	self.middle.hoverOutCallback = function () end
+	self.middle.bg:SetTintColor(HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 }))
+	self.middle.textWidget:SetText(tostring(self.buySellVolume))
 
 	local minusOne = self:setupVolumeButton(- xSize / 2 + ySize * 2, 0, -1)
 	minusOne.canvas:Reparent(canvas, -1)
@@ -175,20 +179,25 @@ function info:setupBuySell(x, y) -- Buy sell section
 	self.accountText:SetAnchorPoint(0, 0)
 	self.accountText:Reparent(canvas, -1)
 
-	self.mainButton = require("modules/ui/widgets/button"):new(0, 420, 650, 200, 5, lang.getText(lang.info_buy), 80, color.darkred, color.darkcyan, color.white)
+	self.mainButton = require("modules/ui/widgets/button"):new(0, 420, 650, 200, 5, lang.getText(lang.info_buy), 80, color.white, color.black, color.white)
 	self.mainButton.callback = function()
 		if self.buySellVolume == 0 then return end
 		self.stock:performTransaction(self.buySellVolume)
 		self.buySellVolume = 0
 		self:showData()
 	end
+
+	self.mainButton.hoverInCallback = function (bt)
+		bt.fill:SetOpacity(0.9)
+	end
+
 	self.mainButton:initialize()
 	self.mainButton:registerCallbacks(self.eventCatcher)
 	self.mainButton.canvas:Reparent(canvas, -1)
 end
 
 function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amount
-	local _, ySize, _, textSize, borderSize, textColor = self:getBuySellOptions()
+	local _, ySize, textSize, borderSize, textColor = self:getBuySellOptions()
 
 	local button = require("modules/ui/widgets/button"):new()
 	button.x = x
@@ -202,18 +211,21 @@ function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amoun
 	end
 	button.text = text
 	button.borderSize = borderSize
-	button.fillColor = color.darkred
-	button.bgColor = color.darkcyan
+	button.fillColor = color.black
+	button.bgColor = color.white
 	button.textColor = textColor
 	button.callback = function()
 		self.buySellVolume = self.buySellVolume + amount
-		if -self.buySellVolume > self.stock:getPortfolioNum() then
+		if - self.buySellVolume > self.stock:getPortfolioNum() then
 			self.buySellVolume = -self.stock:getPortfolioNum()
 			if self.buySellVolume == -0 then self.buySellVolume = 0 end
 		elseif (Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) - (self.buySellVolume * self.stock:getCurrentPrice())) < 0 then
 			self.buySellVolume = self.buySellVolume - amount
 		end
 		self:showData()
+	end
+	button.hoverInCallback = function (bt)
+		bt.fill:SetOpacity(0.9)
 	end
 	button:initialize()
 	button:registerCallbacks(self.eventCatcher)

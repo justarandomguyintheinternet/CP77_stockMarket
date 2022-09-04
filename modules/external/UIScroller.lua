@@ -12,7 +12,7 @@ local function createWidget()
 	scrollBg:SetName(StringToName('scrollBg'))
 	scrollBg:SetAnchor(inkEAnchor.Fill)
 	scrollBg:SetTintColor(HDRColor.new({ Red = 0.301961, Green = 0.690196, Blue = 0.647059, Alpha = 1.0 }))
-	scrollBg:SetOpacity(0.1)
+	scrollBg:SetOpacity(0.05)
 	scrollBg:Reparent(scrollArea, -1)
 
 	local scrollContent = inkScrollArea.new()
