@@ -132,7 +132,6 @@ function stock:getInfluence() -- Get amount of direct influence
     for _, st in pairs(self.market.stocks) do -- TODO: Buffer all influences on load
         for _, inf in pairs(st.stockInfluence) do
             if inf.name == self.name then
-                if self.name == "Darra Poly" then print(st:getTrend(), inf.amount, (st:getTrend() / 10) * inf.amount) end
                 totalInfluence = totalInfluence + (st:getTrend() / 10) * inf.amount -- TODO: Could buffer getTrend
             end
         end

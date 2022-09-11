@@ -1,0 +1,1 @@
+{"max":500,"atlasPart":"tsunami","sharesAmount":60000,"atlasPath":"base\\gameplay\\gui\\common\\icons\\weapon_manufacturers.inkatlas","min":240,"maxStepSize":3,"smoothOff":5,"triggers":[{"name":"tsunamiAction","amount":1}],"stockInfluence":[{"name":"Raven","amount":0.27500000596046}],"iconX":415,"name":"Tsunami","iconY":60}

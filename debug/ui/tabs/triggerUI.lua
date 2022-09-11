@@ -57,6 +57,7 @@ function triggerUI.draw(mod)
             if ImGui.Button("Add .1") then
                 trigger.exportData.value = trigger.exportData.value + 0.1
             end
+            ImGui.SameLine()
             if ImGui.Button("Sub .1") then
                 trigger.exportData.value = trigger.exportData.value - 0.1
             end

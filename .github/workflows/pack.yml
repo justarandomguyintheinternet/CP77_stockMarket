@@ -1,0 +1,31 @@
+name: pack
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup folders
+        run: |
+          cd ${{ github.workspace }}
+          sudo mkdir -p /stockSystemPacked/bin/x64/plugins/cyber_engine_tweaks/mods/stocks/
+          sudo mkdir -p /stockSystemPacked/archive/pc/mod/
+      - name: Copy files
+        run: |
+          sudo cp -r data /stockSystemPacked/bin/x64/plugins/cyber_engine_tweaks/mods/stocks/
+          sudo cp -r debug /stockSystemPacked/bin/x64/plugins/cyber_engine_tweaks/mods/stocks/
+          sudo cp -r localization /stockSystemPacked/bin/x64/plugins/cyber_engine_tweaks/mods/stocks/
+          sudo cp -r modules /stockSystemPacked/bin/x64/plugins/cyber_engine_tweaks/mods/stocks/
+          sudo cp -r init.lua /stockSystemPacked/bin/x64/plugins/cyber_engine_tweaks/mods/stocks/
+          sudo cp -r stockIcon.archive /stockSystemPacked/archive/pc/mod/
+      - name: Upload zip
+        uses: actions/upload-artifact@v2
+        with:
+            name: stockSystemPacked
+            path: /stockSystemPacked/
