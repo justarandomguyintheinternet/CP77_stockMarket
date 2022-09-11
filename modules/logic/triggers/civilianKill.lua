@@ -41,7 +41,7 @@ function trigger:registerObservers() -- Gets called once onInit
         if faction ~= gamedataAffiliation.Civilian then return end
 
         if killer:IsPlayer() then
-            self.exportData.value = self.exportData.value + 0.03
+            self.exportData.value = self.exportData.value + 0.033
         end
     end)
 end

@@ -10,6 +10,24 @@ browser = {
 function browser.init(mod)
     catcher.init()
 
+    -- DLC
+    Override("DlcDescriptionController", "SetData", function(this, userData, wrapped)
+        if userData.title.value ~= "stocks" then
+            wrapped(userData)
+            return
+        end
+        this.titleRef:SetText(lang.getText(lang.pc_stockmarket))
+        this.descriptionRef:SetText("Adds shit")
+        this.guideRef:SetText("Accessible here")
+        this.imageRef:SetAtlasResource(ResRef.FromString("base\\icon\\dlc.inkatlas"))
+        this.imageRef:SetTexturePart("stock")
+    end)
+
+    ObserveAfter("DlcMenuGameController", "OnInitialize", function (this)
+        this:SpawnDescriptions("stocks", "", "", "")
+    end)
+    -- End DLC
+
     ObserveAfter("ComputerMenuButtonController", "Initialize", function(this, _, data)
         if data.widgetName == "stock" then
             ---@type inkImageWidget

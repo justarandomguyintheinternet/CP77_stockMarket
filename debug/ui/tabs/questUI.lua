@@ -138,6 +138,10 @@ function questUI.draw(debug, mod)
                 if ImGui.Button("Copy Name") then
                     ImGui.SetClipboardText(GetLocalizedText(quest.name))
                 end
+                ImGui.SameLine()
+                if ImGui.Button("Test Quest") then
+                    mod.market.triggerManager.triggers["quest_" .. quest.name].exportData.value = 1
+                end
 
                 quest.amount, changed = ImGui.InputFloat("Amount", quest.amount)
                 if changed then config.saveFile("data/static/quests/quests.json", questUI.quests) end

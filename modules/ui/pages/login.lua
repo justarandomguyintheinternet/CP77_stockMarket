@@ -53,16 +53,16 @@ function login:initialize()
 	self.button.sizeX = 500
 	self.button.sizeY = 220
 	self.button.textSize = 85
-	self.button.text = lang.getText(lang.button_login)
+	self.button.text = lang.getText(lang.login_login)
 	self.button.borderSize = 6
 	self.button.fillColor = color.new(0.2, 0.2, 0.2)
 	self.button.bgColor = color.new(0.5, 0.5, 0.5)
 	self.button.textColor = color.white
 	self.button.callback = function()
-		if self.pwFilled and self.nameFilled then
-			self:startFluffSeq()
-		end
-		--self.controller:switchToPage("home")
+		-- if self.pwFilled and self.nameFilled then
+		-- 	self:startFluffSeq()
+		-- end
+		self.controller:switchToPage("home")
 	end
 	self.button.hoverInCallback = function (bt)
 		bt.fill:SetOpacity(0.95)

@@ -40,7 +40,11 @@ function triggerUI.draw(mod)
                 trigger.exportData.value = trigger.exportData.value + 0.1
             end
             ImGui.SameLine()
-            ImGui.Text("| Gone in: " .. utils.round((mod.intervall * (trigger.exportData.value / trigger.fadeSpeed)) / 60, 1))
+            if ImGui.Button("Sub .1") then
+                trigger.exportData.value = trigger.exportData.value - 0.1
+            end
+            ImGui.SameLine()
+            ImGui.Text("| Gone in: " .. utils.round((30 * (trigger.exportData.value / trigger.fadeSpeed)) / 60, 1))
             ImGui.PopID()
         elseif (locKey and not triggerUI.hideQuests) and not (triggerUI.hideZero and trigger.exportData.value == 0) and GetLocalizedText(locKey):lower():match(triggerUI.filter:lower()) then
             ImGui.PushID(trigger.name)
@@ -53,8 +57,11 @@ function triggerUI.draw(mod)
             if ImGui.Button("Add .1") then
                 trigger.exportData.value = trigger.exportData.value + 0.1
             end
+            if ImGui.Button("Sub .1") then
+                trigger.exportData.value = trigger.exportData.value - 0.1
+            end
             ImGui.SameLine()
-            ImGui.Text("| Gone in: " .. utils.round((mod.intervall * (trigger.exportData.value / trigger.fadeSpeed)) / 60, 1))
+            ImGui.Text("| Gone in: " .. utils.round((30 * (trigger.exportData.value / trigger.fadeSpeed)) / 60, 1))
             ImGui.PopID()
         end
     end

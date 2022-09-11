@@ -50,7 +50,7 @@ function trigger:registerObservers() -- Gets called once onInit
         local veh = GetMountedVehicle(GetPlayer())
         if veh ~= nil then
             if veh:GetRecord():Manufacturer():Type() ~= gamedataVehicleManufacturer.Rayfield then return end
-            self.exportData.value = math.min(1, self.exportData.value + 0.005)
+            self.exportData.value = math.min(1, self.exportData.value + 0.0025)
         end
     end)
 end

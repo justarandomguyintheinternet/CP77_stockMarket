@@ -36,7 +36,7 @@ end
 function trigger:registerObservers() -- Gets called once onInit
     Cron.Every(5, function ()
         local stars = tonumber(EnumInt(Game.GetScriptableSystemsContainer():Get("PreventionSystem"):GetHeatStage()))
-        self.exportData.value = self.exportData.value + 0.0035 * stars
+        self.exportData.value = self.exportData.value + 0.0032 * stars
     end)
 end
 

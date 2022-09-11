@@ -38,7 +38,7 @@ function trigger:registerObservers() -- Gets called once onInit
         ---@type GameObject
         local killer = evt.instigator
         local faction = this:GetRecord():Affiliation():Type()
-        if faction ~= gamedataAffiliation.Civilian then return end
+        if faction ~= gamedataAffiliation.Civilian and faction ~= gamedataAffiliation.NCPD then return end
 
         local district = TweakDBInterface.GetDistrictRecord(Game.GetScriptableSystemsContainer():Get("PreventionSystem").districtManager:GetCurrentDistrict():GetDistrictID())
         local mainDistrict = district:LocalizedName()

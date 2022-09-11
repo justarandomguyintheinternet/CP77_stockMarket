@@ -36,7 +36,7 @@ end
 function trigger:registerObservers() -- Gets called once onInit
     Cron.Every(5, function ()
         if GetMountedVehicle(GetPlayer()) ~= nil then
-            self.exportData.value = math.min(1, self.exportData.value + 0.005)
+            self.exportData.value = math.min(1, self.exportData.value + 0.0025)
         end
     end)
 end

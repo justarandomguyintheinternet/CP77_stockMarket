@@ -36,7 +36,7 @@ function portfolio:initialize()
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
 
-	self.graph = require("modules/ui/widgets/graph"):new(68, 395, 1162, 900, 6, 4, lang.getText(lang.graph_time), lang.getText(lang.portfolio_accountValue), 4, 50, color.darkcyan, 0.1)
+	self.graph = require("modules/ui/widgets/graph"):new(68, 395, 1162, 900, 6, 4, lang.getText(lang.graph_time), lang.getText(lang.portfolio_accountValue), 4, 45, color.darkcyan, 0.1)
 	self.graph.intervall = self.mod.intervall
 	self.graph.data = self.mod.market.portfolioStock.exportData.data
 	self.graph:initialize(self.canvas)

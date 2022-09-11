@@ -29,7 +29,7 @@ function questManager:onInit()
             local state = Game.GetJournalManager():GetEntryState(entry)
             local name = entry:GetTitle(Game.GetJournalManager())
 
-            if state == gameJournalEntryState.Succeeded or state == gameJournalEntryState.Failed then
+            if state == gameJournalEntryState.Succeeded then
                 local questData = self.quests[name]
                 if not questData then return end
 
@@ -39,9 +39,8 @@ function questManager:onInit()
     end)
 
     Observe("JournalNotificationQueue", "OnNCPDJobDoneEvent", function(_, evt)
-        print(evt.levelXPAwarded, evt.streetCredXPAwarded)
-        local ncpdTrigger = self.mod.market.triggerManager.triggers["NCPD_Hustler"]
-        ncpdTrigger.exportData.value = ncpdTrigger.exportData.value + (evt.levelXPAwarded / 6000) + (evt.streetCredXPAwarded / 6000)
+        local ncpdTrigger = self.mod.market.triggerManager.triggers["ncpdHustler"]
+        ncpdTrigger.exportData.value = ncpdTrigger.exportData.value + (evt.levelXPAwarded / 3500) + (evt.streetCredXPAwarded / 3500)
     end)
 end
 

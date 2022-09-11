@@ -56,7 +56,7 @@ function buttons.createMenu(page)
     logout.canvas:Reparent(canvas, -1)
 
     -- Horizontal divider
-	local divider = ink.rect(1, 270, 3137, 5, color.red)
+	local divider = ink.rect(1, 270, 3137, 5, HDRColor.new({ Red = 0.368627, Green = 0.964706, Blue = 1.0, Alpha = 1.0 })) --color.red
 	divider:SetAnchorPoint(0.5, 0.5)
 	divider:Reparent(canvas)
 

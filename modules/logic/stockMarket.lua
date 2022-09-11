@@ -19,7 +19,6 @@ function market:new(intervall, triggerManager, questManager)
         triggers = {}
     }
 
-    o.updateCron = nil
     o.intervall = intervall
     o.time = 0
     o.range = 90
@@ -46,8 +45,11 @@ function market:checkForData()
 end
 
 function market:initialize() -- Generate stock instances from json files
-    self.updateCron = Cron.Every(self.intervall, function ()
+    Cron.Every(self.intervall, function ()
         self:update()
+    end)
+    Cron.Every(30, function () -- Update triggers seperate, as their fadeOff speed is meant for 30s intervalls
+        self.triggerManager:step()
     end)
 
     for _, file in pairs(dir("data/static/stocks/")) do
@@ -174,8 +176,7 @@ function market:setupMarketStock()
     self.marketStock = mStock
 end
 
-function market:update() -- Update loop for Cron intervall
-    self.triggerManager:step()
+function market:update() -- Main market update loop
     for _, stock in pairs(self.stocks) do
         stock:update()
     end
@@ -192,6 +193,9 @@ function market:checkForTimeSkip()
     if diff > 0 and Game.GetTimeSystem():GetGameTime():Minutes() ~= 0 then
         for _ = 0, diff * (7 * (60 / self.intervall)) do
             self:update()
+        end
+        for _ = 0, diff * (14) do -- Fixed 30s time step for triggers
+            self.triggerManager:step()
         end
     end
     self.time = Game.GetTimeSystem():GetGameTime():Hours()

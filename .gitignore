@@ -2,3 +2,4 @@
 .vscode/settings.json
 *.sqlite3
 *.log
+backup.json
