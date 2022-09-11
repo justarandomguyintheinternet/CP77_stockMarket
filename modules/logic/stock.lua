@@ -42,7 +42,7 @@ end
 
 function stock:getTrend()
     if not self.exportData.data then return 0 end
-    local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 5]) / self.exportData.data[#self.exportData.data  - 5]
+    local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 15]) / self.exportData.data[#self.exportData.data  - 15]
     return utils.round(percent, 1)
 end
 
