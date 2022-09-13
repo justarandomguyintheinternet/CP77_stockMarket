@@ -33,18 +33,22 @@ function newsUI.load(mod)
     end
 
     if not newsUI.newsMeta then
-        config.tryCreateConfig("data/static/news/newsQuestDelays.json", {})
-        newsUI.newsMeta = config.loadFile("data/static/news/newsQuestDelays.json")
+        config.tryCreateConfig("data/static/news/newsDelays.json", {})
+        newsUI.newsMeta = config.loadFile("data/static/news/newsDelays.json")
 
         for name, _ in pairs(mod.market.triggerManager.triggers) do
             if not mod.market.stocks[name] and name:match("LocKey") then
                 if not newsUI.newsMeta[name] then
-                    newsUI.newsMeta[name] = 2 -- News delay
+                    newsUI.newsMeta[name] = 36 -- News delay for quest
+                end
+            elseif not mod.market.stocks[name] then
+                if not newsUI.newsMeta[name] then
+                    newsUI.newsMeta[name] = 12 -- News delay for dyn trigger
                 end
             end
         end
 
-        config.saveFile("data/static/news/newsQuestDelays.json", newsUI.newsMeta)
+        config.saveFile("data/static/news/newsDelays.json", newsUI.newsMeta)
     end
 end
 
@@ -144,9 +148,14 @@ function newsUI.draw(_, mod)
                 if changed then config.saveFile("localization/news/" .. language .. ".json", newsUI.news[language]) end
                 ImGui.PopItemWidth()
 
-                ImGui.PushItemWidth(50)
-                newsUI.newsMeta[trigger], changed = ImGui.InputFloat("News message Delay", newsUI.newsMeta[trigger])
-                if changed then config.saveFile("data/static/news/newsQuestDelays.json", newsUI.newsMeta) end
+                ImGui.PushItemWidth(75)
+                local minutes = (newsUI.newsMeta[trigger] * 5) / 60
+                minutes, changed = ImGui.InputFloat("News message delay in minutes", minutes)
+
+                if changed then
+                    newsUI.newsMeta[trigger] = math.floor((minutes * 60) / 5)
+                    config.saveFile("data/static/news/newsDelays.json", newsUI.newsMeta)
+                end
                 ImGui.PopItemWidth()
 
                 ImGui.Unindent(25)

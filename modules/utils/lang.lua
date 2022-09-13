@@ -1,3 +1,5 @@
+local config = require("modules/utils/config")
+
 local lang = {}
 
 lang.pc_stockmarket = "pc_stockmarket"
@@ -23,6 +25,8 @@ lang.portfolio_accountValue = "portfolio_accountValue"
 lang.portfolio_ownedStocks = "portfolio_ownedStocks"
 lang.portfolio_totalMoney = "portfolio_totalMoney"
 lang.portfolio_moneyInStocks = "portfolio_moneyInStocks"
+lang.news_noNews = "news_noNews"
+lang.news_toggleNotification = "news_toggleNotification"
 
 function lang.getLang(key)
     local language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
@@ -45,6 +49,26 @@ function lang.getText(key)
     else
         return text
     end
+end
+
+function lang.getNewsLang(key)
+    local language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
+    local loc = config.loadFile("localization/news/" .. language .. ".json")
+
+    if loc[key]["title"] == "" or loc[key]["msg"] == "" then
+        return "en-us"
+    else
+        return language
+    end
+end
+
+function lang.getNewsText(key)
+    local loc = config.loadFile("localization/news/" .. lang.getNewsLang(key) .. ".json")
+
+    local title = loc[key]["title"]
+    local msg = loc[key]["msg"]
+
+    return title, msg
 end
 
 return lang

@@ -18,19 +18,31 @@ function newsManager:new(mod)
 end
 
 function newsManager:checkForData(data)
-    if data["news"] == {} then
+    if data["news"][1] == nil then
+        self:setupData()
         data["news"] = self.data
     else
         self.data = data["news"]
     end
     self.dataLink = data -- Data doesnt cant get written back to the "data" otherwise
+
+    if data["news"][1] == nil then
+        self:setupData()
+        self.dataLink["news"] = self.data
+    end
+end
+
+function newsManager:setupData()
+    self:addNews("roadRage", 0)
+    self:addNews("purchaseVehicleAny", 0)
+    self:addNews("smartWeaponKills", 0)
 end
 
 function newsManager:onInit()
     self.updateCron = Cron.Every(5.0, function ()
         self:update()
     end)
-    self.questDelays = config.loadFile("data/static/news/newsQuestDelays.json")
+    self.delays = config.loadFile("data/static/news/newsDelays.json")
 end
 
 function newsManager:isNewsActive(triggerName)
@@ -38,6 +50,31 @@ function newsManager:isNewsActive(triggerName)
         if data.name == triggerName then return true end
     end
     return false
+end
+
+function newsManager:getNews() -- Returns list of all active news
+    local news = {}
+    for _, data in pairs(self.data) do
+        if data.delay <= 1 then
+            table.insert(news, data.name)
+        end
+    end
+    return news
+end
+
+function newsManager:addNews(name, delay)
+    local title, msg = lang.getNewsText(name)
+    if title == nil or msg == nil or title == "" or msg == "" then return end -- No news for this trigger
+
+    local shift = {}
+    for key, value in pairs(self.data) do
+        if key < 16 then
+            shift[key + 1] = value
+        end
+    end
+
+    shift[1] = {name = name, delay = delay or self.delays[name]}
+    self.data = shift
 end
 
 function newsManager:update() -- Runs on Cron
@@ -56,15 +93,7 @@ function newsManager:update() -- Runs on Cron
             end
 
             if trigger.exportData.value >= newsThreshold and not self:isNewsActive(name) then
-                local shift = {}
-                for key, value in pairs(self.data) do
-                    if key < 16 then
-                        shift[key + 1] = value
-                    end
-                end
-
-                shift[1] = {name = name, delay = self.questDelays[name] or 18} -- Delay for dyn triggers is 90 secs
-                self.data = shift
+                self:addNews(name)
             end
         end
     end

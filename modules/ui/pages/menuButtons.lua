@@ -14,7 +14,7 @@ function buttons.createMenu(page)
     logo.pos:Reparent(canvas, -1)
 
     -- Home button
-	local home = buttons.createMenuButton(lang.getText(lang.button_home), -320, 170, page.eventCatcher)
+	local home = buttons.createMenuButton(lang.getText(lang.button_home), -475, 170, page.eventCatcher)
     if page.pageName ~= "home" then
         home.callback = function()
             page.controller:switchToPage("home")
@@ -25,7 +25,7 @@ function buttons.createMenu(page)
     home.canvas:Reparent(canvas, -1)
 
     -- Stocks button
-	local stocks = buttons.createMenuButton(lang.getText(lang.button_stocks), 0, 170, page.eventCatcher)
+	local stocks = buttons.createMenuButton(lang.getText(lang.button_stocks), -155, 170, page.eventCatcher)
     if page.pageName ~= "stocks" then
         stocks.callback = function()
             page.controller:switchToPage("stocks")
@@ -35,11 +35,11 @@ function buttons.createMenu(page)
     end
     stocks.canvas:Reparent(canvas, -1)
 
-    -- news button
-	local news = buttons.createMenuButton("News", 320, 170, page.eventCatcher)
+    -- News button
+	local news = buttons.createMenuButton("News", 165, 170, page.eventCatcher)
     if page.pageName ~= "news" then
         news.callback = function()
-            page.controller:switchToPage("portfolio")
+            page.controller:switchToPage("news")
         end
     else
         news.fg.image:SetOpacity(1)
@@ -47,7 +47,7 @@ function buttons.createMenu(page)
     news.canvas:Reparent(canvas, -1)
 
     -- Portfolio button
-	local portfolio = buttons.createMenuButton(lang.getText(lang.button_portfolio), 640, 170, page.eventCatcher)
+	local portfolio = buttons.createMenuButton(lang.getText(lang.button_portfolio), 485, 170, page.eventCatcher)
     if page.pageName ~= "portfolio" then
         portfolio.callback = function()
             page.controller:switchToPage("portfolio")

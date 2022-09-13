@@ -26,6 +26,9 @@ local localization = {
     ["portfolio_totalMoney"] = "Total wealth", -- Portfolio total player money info
     ["portfolio_moneyInStocks"] = "In Stocks", -- Portfolio amount of money invested in stocks info
 
+    ["news_noNews"] = "No news right now", -- News page no news placeholder
+    ["news_toggleNotification"] = "Phone Notifications", -- News page toggle phone news botifications button
+
     -- https://cyberpunk.fandom.com/wiki/Corporations
     ["stockInfo_All Foods"] = "All Foods, Inc. is corporation based in Mexico which focuses on providing its customers with readily available quality food (usually meat based products). The majority of Allfoods products and their sales go to the United States.",
     ["stockInfo_Arasaka"] = "The Arasaka Corporation is a world-wide megacorporation dealing in corporate security, banking, and manufacturing. It is one of the most influential megacorporations in the world. Arasaka-branded weapons and military vehicles are among the most sought after by police and security firms.",

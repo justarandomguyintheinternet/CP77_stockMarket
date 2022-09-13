@@ -121,7 +121,7 @@ local function onWheelScroll(_, evt)
 			end
 		end
 
-		if numVisibleChilds < 6 then return end -- Not enough elements to scroll
+		if numVisibleChilds < 5 then return end -- Not enough elements to scroll
 
 		scrollPosition = scrollPosition - delta * (33 / numVisibleChilds)
 		scrollPosition = math.max(scrollPosition, 0)
