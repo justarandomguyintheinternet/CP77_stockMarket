@@ -5,7 +5,7 @@ local lang = require("modules/utils/lang")
 
 market = {}
 
-function market:new(intervall, triggerManager, questManager)
+function market:new(intervall, triggerManager, questManager, newsManager)
 	local o = {}
 
     o.stocks = {}
@@ -14,9 +14,12 @@ function market:new(intervall, triggerManager, questManager)
 
     o.triggerManager = triggerManager
     o.questManger = questManager
+    o.newsManager = newsManager
+
     o.persistentData = {
         stocks = {},
-        triggers = {}
+        triggers = {},
+        news = {}
     }
 
     o.intervall = intervall
@@ -38,6 +41,7 @@ function market:checkForData()
     end
     self.marketStock:checkForData(self.persistentData)
     self.portfolioStock:checkForData(self.persistentData)
+    self.newsManager:checkForData(self.persistentData)
 
     for _, trigger in pairs(self.triggerManager.triggers) do
         trigger:checkForData(self.persistentData)
@@ -51,6 +55,7 @@ function market:initialize() -- Generate stock instances from json files
     Cron.Every(30, function () -- Update triggers seperate, as their fadeOff speed is meant for 30s intervalls
         self.triggerManager:step()
     end)
+    self.newsManager:onInit()
 
     for _, file in pairs(dir("data/static/stocks/")) do
         if file.name:match("^.+(%..+)$") == ".json" then

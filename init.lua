@@ -29,7 +29,9 @@ function stocks:new()
 
         local triggerManager = require("modules/logic/triggerManager"):new(self, self.intervall)
         local questManager = require("modules/logic/questManager"):new(self)
-        self.market = require("modules/logic/stockMarket"):new(self.intervall, triggerManager, questManager)
+        local newsManager = require("modules/logic/newsManager"):new(self)
+
+        self.market = require("modules/logic/stockMarket"):new(self.intervall, triggerManager, questManager, newsManager)
         self.market.triggerManager:onInit()
         self.market.questManger:onInit()
         self.market:setupPersistency()
@@ -56,10 +58,6 @@ function stocks:new()
         end
 
         self.browser.init(self)
-    end)
-
-    registerForEvent("onShutdown", function()
-
     end)
 
     registerForEvent("onUpdate", function(dt)

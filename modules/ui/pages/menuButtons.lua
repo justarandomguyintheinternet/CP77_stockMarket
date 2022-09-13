@@ -35,8 +35,19 @@ function buttons.createMenu(page)
     end
     stocks.canvas:Reparent(canvas, -1)
 
+    -- news button
+	local news = buttons.createMenuButton("News", 320, 170, page.eventCatcher)
+    if page.pageName ~= "news" then
+        news.callback = function()
+            page.controller:switchToPage("portfolio")
+        end
+    else
+        news.fg.image:SetOpacity(1)
+    end
+    news.canvas:Reparent(canvas, -1)
+
     -- Portfolio button
-	local portfolio = buttons.createMenuButton(lang.getText(lang.button_portfolio), 320, 170, page.eventCatcher)
+	local portfolio = buttons.createMenuButton(lang.getText(lang.button_portfolio), 640, 170, page.eventCatcher)
     if page.pageName ~= "portfolio" then
         portfolio.callback = function()
             page.controller:switchToPage("portfolio")

@@ -8,6 +8,7 @@ function trigger:new()
     -- Default data
     o.name = "qhUsage"
     o.fadeSpeed = 0.0085
+    o.newsThreshold = 0.3
     o.exportData = {
         value = 0
     }
