@@ -10,7 +10,7 @@ browser = {
 function browser.init(mod)
     catcher.init()
 
-    -- DLC
+    --DLC
     Override("DlcDescriptionController", "SetData", function(this, userData, wrapped)
         if userData.title.value ~= "stocks" then
             wrapped(userData)
@@ -23,10 +23,10 @@ function browser.init(mod)
         this.imageRef:SetTexturePart("stock")
     end)
 
-    ObserveAfter("DlcMenuGameController", "OnInitialize", function (this)
+    ObserveAfter("DlcMenuGameController", "OnInitialize", function(this)
         this:SpawnDescriptions("stocks", "", "", "")
     end)
-    -- End DLC
+    --DLC End
 
     ObserveAfter("ComputerMenuButtonController", "Initialize", function(this, _, data)
         if data.widgetName == "stock" then

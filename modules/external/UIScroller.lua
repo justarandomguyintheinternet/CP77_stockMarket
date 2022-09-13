@@ -102,12 +102,28 @@ end
 ---@param _ IScriptable
 ---@param evt inkPointerEvent
 local function onWheelScroll(_, evt)
-	if evt:IsAction('mouse_wheel') and evt:GetAxisData() ~= 0  then
+	local delta = evt:GetAxisData() * 0.06 -- MKB
+	if evt:IsAction("right_stick_y_scroll") then delta = evt:GetAxisData() * 0.0075 end -- Controller
+
+	if delta == 0 then return end
+
+	if evt:IsAction("mouse_wheel") or evt:IsAction("right_stick_y_scroll") then
 		---@type inkCanvasWidget
 		local scrollArea = evt:GetCurrentTarget()
 		local scrollPosition = getScrollPosition(scrollArea)
 
-		scrollPosition = scrollPosition - 0.06 * evt:GetAxisData()
+		local numVisibleChilds = 0
+		local list = scrollArea:GetWidgetByPathName(StringToName('scrollContent')):GetWidgetByPathName(StringToName('list'))
+
+		for i = 0, list:GetNumChildren() - 1 do -- Adjust scroll speed based on num childs
+			if list:GetWidgetByIndex(i):IsVisible() then
+				numVisibleChilds = numVisibleChilds + 1
+			end
+		end
+
+		if numVisibleChilds < 6 then return end -- Not enough elements to scroll
+
+		scrollPosition = scrollPosition - delta * (33 / numVisibleChilds)
 		scrollPosition = math.max(scrollPosition, 0)
 		scrollPosition = math.min(scrollPosition, 1)
 
@@ -118,11 +134,13 @@ end
 ---@param scrollArea inkCompoundWidget
 local function regisrerCallbacks(scrollArea)
 	EventProxy.RegisterCallback(scrollArea, 'OnRelative', onWheelScroll)
+	EventProxy.RegisterCallback(scrollArea, 'OnAxis', onWheelScroll)
 end
 
 ---@param scrollArea inkCompoundWidget
 local function unregisrerCallbacks(scrollArea)
 	EventProxy.UnregisterCallback(scrollArea, 'OnRelative', onWheelScroll)
+	EventProxy.UnregisterCallback(scrollArea, 'OnAxis', onWheelScroll)
 end
 
 ---@class UIScroller

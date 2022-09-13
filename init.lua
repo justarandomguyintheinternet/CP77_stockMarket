@@ -16,7 +16,7 @@ stocks = {
         inGame = false,
         cetOpen = false
     },
-    intervall = 90,
+    intervall = 120,
     config = require("modules/utils/config"),
     browser = require("modules/ui/browser"),
     debug = require("debug/ui/baseUI")
@@ -54,6 +54,7 @@ function stocks:new()
         if self.runtimeData.inGame then
             self.market.time = Game.GetTimeSystem():GetGameTime():Hours()
         end
+
         self.browser.init(self)
     end)
 

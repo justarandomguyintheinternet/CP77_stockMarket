@@ -33,6 +33,7 @@ local knownEvents = {
 	['OnRelative'] = 'inkPointerEvent',
 	['OnEnter'] = 'inkPointerEvent',
 	['OnLeave'] = 'inkPointerEvent',
+	['OnAxis'] = 'inkPointerEvent',
 	['OnHoverOver'] = 'inkPointerEvent',
 	['OnHoverOut'] = 'inkPointerEvent',
 	['OnPreOnPress'] = 'inkPointerEvent',

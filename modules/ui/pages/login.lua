@@ -18,6 +18,7 @@ function login:new(inkPage, controller, eventCatcher)
 	o.nameFilled = false
 	o.pwFilled = false
 	o.loginDone = false
+	o.loginCron = nil
 
 	self.__index = self
    	return setmetatable(o, self)
@@ -59,9 +60,11 @@ function login:initialize()
 	self.button.bgColor = color.new(0.5, 0.5, 0.5)
 	self.button.textColor = color.white
 	self.button.callback = function()
-		if self.pwFilled and self.nameFilled then
-			self:startFluffSeq()
-		end
+		if self.loginCron then return end
+		-- if self.pwFilled and self.nameFilled then
+		-- 	self:startFluffSeq()
+		-- end
+		self.controller:switchToPage("home")
 	end
 	self.button.hoverInCallback = function (bt)
 		bt.fill:SetOpacity(0.95)
@@ -90,12 +93,13 @@ function login:startFluffSeq()
 						"Connection established...",
 						"INFO: Server=ID-39-NC;USER_ID=9323477;SESSION_KEY=c9qc83bhc292"}
 
-	Cron.Every(0.085, { tick = 1 }, function(timer)
+	self.loginCron = Cron.Every(0.085, { tick = 1 }, function(timer)
 		if timer.tick <= #fluffText then
 			self.fluff:SetText(self.fluff:GetText() .. "\n" .. fluffText[timer.tick])
 		else
 			timer:Halt()
 			self.controller:switchToPage("home")
+			self.loginCron = nil
 		end
 		timer.tick = timer.tick + 1
 	end)
