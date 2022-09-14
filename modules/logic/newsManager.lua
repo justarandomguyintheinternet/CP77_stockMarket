@@ -88,7 +88,7 @@ function newsManager:addNews(name, delay) -- Add to the queue
 
     local shift = {}
     for key, value in pairs(self.data) do
-        if key < 16 then -- Max 16 news
+        if key < 11 then -- Max 10 news
             shift[key + 1] = value
         end
     end
