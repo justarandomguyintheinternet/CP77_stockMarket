@@ -28,6 +28,7 @@ local localization = {
     ["portfolio_moneyInStocks"] = "In Aktien", -- Portfolio amount of money invested in stocks info
 
     ["news_toggleNotification"] = "Benachrichtigungen", -- News page toggle phone news botifications button
+    ["news_contactName"] = "", -- News contact name (NN54 Breaking News)
 
     ["stockInfo_All Foods"] = "",
     ["stockInfo_Arasaka"] = "",

@@ -34,7 +34,7 @@ end
 function trigger:registerObservers() -- Gets called once onInit
     ---@param this NPCPuppet
     ---@param evt gamePotentialDeathEvent
-    Observe("NPCPuppet", "OnPotentialDeath", function (this, evt) -- Track Arasaka Forces Deaths / Deaths by Arasaka Weapons
+    Observe("NPCPuppet", "OnPotentialDeath", function (this, evt)
         ---@type GameObject
         local killer = evt.instigator
         local faction = this:GetRecord():Affiliation():Type()

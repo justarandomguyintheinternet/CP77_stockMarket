@@ -6,6 +6,7 @@ baseUI = {
     triggerUI = require("debug/ui/tabs/triggerUI"),
     questUI = require("debug/ui/tabs/questUI"),
     newsUI = require("debug/ui/tabs/newsUI"),
+    newsBufferUI = require("debug/ui/tabs/newsQueueUI"),
     switchToEdit = false,
     switchToLoaded = false
 }
@@ -58,6 +59,11 @@ function baseUI.draw(mod)
 
         if ImGui.BeginTabItem("News") then
             baseUI.newsUI.draw(baseUI, mod)
+            ImGui.EndTabItem()
+        end
+
+        if ImGui.BeginTabItem("News Buffer") then
+            baseUI.newsBufferUI.draw(baseUI, mod)
             ImGui.EndTabItem()
         end
 

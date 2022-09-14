@@ -28,6 +28,7 @@ local localization = {
     ["portfolio_moneyInStocks"] = "In Stocks", -- Portfolio amount of money invested in stocks info
 
     ["news_toggleNotification"] = "Phone Notifications", -- News page toggle phone news botifications button
+    ["news_contactName"] = "N54 Breaking News", -- News contact name (NN54 Breaking News)
 
     -- https://cyberpunk.fandom.com/wiki/Corporations
     ["stockInfo_All Foods"] = "All Foods, Inc. is corporation based in Mexico which focuses on providing its customers with readily available quality food (usually meat based products). The majority of Allfoods products and their sales go to the United States.",

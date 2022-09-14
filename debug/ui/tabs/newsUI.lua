@@ -52,62 +52,6 @@ function newsUI.load(mod)
     end
 end
 
-function newsUI.drawStocks(quest, mod)
-    local stockList = {"--Select stock--"}
-    for _, stock in pairs(mod.market.stocks) do
-        table.insert(stockList, stock.name)
-    end
-    table.sort(stockList, function(a, b)
-        return a < b
-    end)
-
-    if ImGui.Button("Add") and newsUI.currentStockSelect ~= 0 then
-        table.insert(newsUI.stocks[stockList[newsUI.currentStockSelect + 1]].triggers, {
-            name = "quest_" .. quest.name,
-            amount = 0.1
-        })
-
-        config.saveFile("data/static/stocks/".. stockList[newsUI.currentStockSelect + 1] .. ".json", newsUI.stocks[stockList[newsUI.currentStockSelect + 1]])
-    end
-
-    ImGui.SameLine()
-    newsUI.currentStockSelect = ImGui.Combo("Stock to influence", newsUI.currentStockSelect, stockList, #stockList)
-
-    ImGui.Separator()
-
-    for _, stock in pairs(newsUI.stocks) do
-        local hasQuest = false
-        local trigger = nil
-        for _, t in pairs(stock.triggers) do
-            if t.name == "quest_" .. quest.name then
-                hasQuest = true
-                trigger = t
-            end
-        end
-
-        if hasQuest then
-            ImGui.PushID(stock.name)
-
-            ImGui.Text(stock.name)
-            ImGui.SameLine()
-            ImGui.PushItemWidth(50)
-            trigger.amount, changed = ImGui.InputFloat("##amount", trigger.amount)
-            ImGui.PopItemWidth()
-            if changed then config.saveFile("data/static/stocks/".. stock.name .. ".json", stock) end
-            ImGui.SameLine()
-            ImGui.Text("|Total=" .. utils.round(quest.amount * trigger.amount, 2) .. ";Duration=" .. utils.round((((quest.amount * trigger.amount) / quest.fade) * mod.intervall) / 60, 2) .. "min|")
-            ImGui.SameLine()
-            if ImGui.Button("Remove") then
-                utils.removeItem(stock.triggers, trigger)
-                config.saveFile("data/static/stocks/".. stock.name .. ".json", stock)
-            end
-            ImGui.Separator()
-
-            ImGui.PopID()
-        end
-    end
-end
-
 function newsUI.draw(_, mod)
     newsUI.load(mod)
 
@@ -133,7 +77,7 @@ function newsUI.draw(_, mod)
             name = GetLocalizedText(lockey)
         end
 
-        if (name:lower():match(newsUI.filter:lower())) ~= nil then
+        if (tostring(name):lower():match(newsUI.filter:lower())) ~= nil then
             local state = ImGui.CollapsingHeader(name)
             if state then
                 ImGui.PushID(name)

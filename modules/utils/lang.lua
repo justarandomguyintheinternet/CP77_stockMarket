@@ -27,6 +27,7 @@ lang.portfolio_ownedStocks = "portfolio_ownedStocks"
 lang.portfolio_totalMoney = "portfolio_totalMoney"
 lang.portfolio_moneyInStocks = "portfolio_moneyInStocks"
 lang.news_toggleNotification = "news_toggleNotification"
+lang.news_contactName = "news_contactName"
 
 function lang.getLang(key)
     local language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
