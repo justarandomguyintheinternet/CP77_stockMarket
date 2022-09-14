@@ -9,6 +9,7 @@ local localization = {
     ["button_stocks"] = "Stocks", -- Stocks menu button
     ["button_portfolio"] = "Portfolio", -- Portfolio menu button
     ["button_logout"] = "Logout", -- Logout menu button
+    ["button_news"] = "News", -- News menu button
 
     ["graph_time"] = "Time", -- Graph X Axis label
     ["graph_value"] = "Market Value", -- Graph Y Axis label
@@ -26,7 +27,6 @@ local localization = {
     ["portfolio_totalMoney"] = "Total wealth", -- Portfolio total player money info
     ["portfolio_moneyInStocks"] = "In Stocks", -- Portfolio amount of money invested in stocks info
 
-    ["news_noNews"] = "No news right now", -- News page no news placeholder
     ["news_toggleNotification"] = "Phone Notifications", -- News page toggle phone news botifications button
 
     -- https://cyberpunk.fandom.com/wiki/Corporations

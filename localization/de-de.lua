@@ -9,6 +9,7 @@ local localization = {
     ["button_stocks"] = "Aktien", -- Stocks menu button
     ["button_portfolio"] = "Portfolio", -- Portfolio menu button
     ["button_logout"] = "Abmelden", -- Logout menu button
+    ["button_news"] = "News", -- News menu button
 
     ["graph_time"] = "Zeit", -- Graph X Axis label
     ["graph_value"] = "Marktwert", -- Graph Y Axis label
@@ -25,6 +26,8 @@ local localization = {
     ["portfolio_ownedStocks"] = "Aktien im Besitz", -- Portfolio owned stocks list description
     ["portfolio_totalMoney"] = "Vermögen", -- Portfolio total player money info
     ["portfolio_moneyInStocks"] = "In Aktien", -- Portfolio amount of money invested in stocks info
+
+    ["news_toggleNotification"] = "Benachrichtigungen", -- News page toggle phone news botifications button
 
     ["stockInfo_All Foods"] = "",
     ["stockInfo_Arasaka"] = "",

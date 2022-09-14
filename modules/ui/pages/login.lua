@@ -61,10 +61,10 @@ function login:initialize()
 	self.button.textColor = color.white
 	self.button.callback = function()
 		if self.loginCron then return end
-		-- if self.pwFilled and self.nameFilled then
-		-- 	self:startFluffSeq()
-		-- end
-		self.controller:switchToPage("home")
+		if self.pwFilled and self.nameFilled then
+			self:startFluffSeq()
+		end
+		--self.controller:switchToPage("home")
 	end
 	self.button.hoverInCallback = function (bt)
 		bt.fill:SetOpacity(0.95)

@@ -45,27 +45,52 @@ function news:setupNews()
 	self.newsLine = ink.line(0, 130, 500, 130, color.white, 5)
 	self.newsLine:Reparent(self.news, -1)
 
-	self.newsText = ink.text("", 0, 175, 60, color.white)
+	self.newsText = ink.text("", 0, 175, 65, color.white)
 	self.newsText:Reparent(self.news, -1)
+
+	local settingsText = ink.text(lang.getText(lang.news_toggleNotification), 2965, 1275, 65, color.white)
+	settingsText:SetAnchorPoint(Vector2.new({X = 1, Y = 0.5}))
+	settingsText:Reparent(self.canvas, -1)
+
+	self.settingsButton = self:setupSettingsButton()
+	self.settingsButton.canvas:Reparent(self.canvas, -1)
 end
 
-function news:setStocks()
-	if #stocks > 5 then
-		self:toggleSlider(true)
-	else
-		self:toggleSlider(false)
+function news:setupSettingsButton()
+	local button = require("modules/ui/widgets/button_texture"):new()
+	button.x = 3050
+	button.y = 1275
+	button.sizeX = 120
+	button.sizeY = 120
+	button.textColor = color.white
+	button.textSize = 80
+	button.bgPart = "status_cell_bg"
+	button.fgPart = "status_cell_fg"
+    button.bgColor = color.white
+    button.fgColor = color.white
+    button.useNineSlice = true
+
+	button:initialize()
+
+	button.cross = ink.canvas(0, 0, inkEAnchor.Centered)
+	button.cross:Reparent(button.canvas, -1)
+	local rect1 = ink.rect(0, 0, 120, 8, color.white, 45, Vector2.new({X = 0.5, Y = 0.5}))
+	rect1:Reparent(button.cross, -1)
+	local rect2 = ink.rect(0, 0, 120, 8, color.white, -45, Vector2.new({X = 0.5, Y = 0.5}))
+	rect2:Reparent(button.cross, -1)
+
+	if not self.mod.market.newsManager.settings.notifications then
+		button.cross:SetVisible(false)
 	end
 
-	for k, button in pairs(self.previews) do
-		if #stocks ~= 0 then
-			button.stock = stocks[1]
-			button:showData()
-			utils.removeItem(stocks, stocks[1])
-			button.canvas:SetVisible(true)
-		else
-			button.canvas:SetVisible(false)
-		end
+	button:registerCallbacks(self.eventCatcher)
+
+	button.callback = function()
+		self.mod.market.newsManager.settings.notifications = not self.mod.market.newsManager.settings.notifications
+		button.cross:SetVisible(self.mod.market.newsManager.settings.notifications)
 	end
+
+	return button
 end
 
 function news:setupScrollArea()
@@ -148,7 +173,7 @@ function news:createNewsButton(x, y, name)
 
 		if not self.locked then -- Display news info
 			self.newsTitle:SetText(title)
-			self.newsText:SetText(utils.wrap(text, 65))
+			self.newsText:SetText(utils.wrap(text, 55))
 			self.news:SetVisible(true)
 			Cron.NextTick(function ()
 				ink.updateLine(self.newsLine, 0, 130, self.newsTitle:GetDesiredWidth(), 130)

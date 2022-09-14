@@ -19,7 +19,8 @@ function market:new(intervall, triggerManager, questManager, newsManager)
     o.persistentData = {
         stocks = {},
         triggers = {},
-        news = {}
+        news = {},
+        settings = {}
     }
 
     o.intervall = intervall
