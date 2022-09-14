@@ -42,7 +42,7 @@ end
 
 function stock:getTrend()
     if not self.exportData.data then return 0 end
-    local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 12]) / self.exportData.data[#self.exportData.data  - 12]
+    local percent = 100 * (self:getCurrentPrice() - self.exportData.data[#self.exportData.data  - 10]) / self.exportData.data[#self.exportData.data  - 10]
     return utils.round(percent, 1)
 end
 
@@ -132,7 +132,7 @@ function stock:getInfluence() -- Get amount of direct influence
     for _, st in pairs(self.market.stocks) do -- TODO: Buffer all influences on load
         for _, inf in pairs(st.stockInfluence) do
             if inf.name == self.name then
-                totalInfluence = totalInfluence + (st:getTrend() / 10) * inf.amount -- TODO: Could buffer getTrend
+                totalInfluence = totalInfluence + (st:getTrend() / 16) * inf.amount -- TODO: Could buffer getTrend
             end
         end
     end
