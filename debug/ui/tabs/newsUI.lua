@@ -1,4 +1,3 @@
-local utils = require("modules/utils/utils")
 local config = require("modules/utils/config")
 
 newsUI = {
@@ -23,8 +22,11 @@ function newsUI.load(mod)
 
             for name, _ in pairs(mod.market.triggerManager.triggers) do
                 if not mod.market.stocks[name] and locFile[name] == nil then
-                    locFile[name] = {title = "", msg = ""}
+                    locFile[name] = {choice = {title = "", msg = ""}, default = {title = "", msg = ""}}
                 end
+                -- if not mod.market.stocks[name] then
+                --     locFile[name] = {choice = {title = "", msg = ""}, default = {title = locFile[name].title, msg = locFile[name].msg}}
+                -- end
             end
 
             config.saveFile("localization/news/" .. language .. ".json", locFile)
@@ -68,9 +70,9 @@ function newsUI.draw(_, mod)
 
     local language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
 
-    for name, text in pairs(newsUI.news[language]) do
-        local name = name
+    for name, data in pairs(newsUI.news[language]) do
         local trigger = name
+        local name = name
 
         if string.match(name, "LocKey") then
             local lockey = string.gsub(name, "quest_", "")
@@ -86,9 +88,9 @@ function newsUI.draw(_, mod)
 
                 ImGui.PushItemWidth(450)
 
-                text.title, changed = ImGui.InputTextWithHint("##title", "News Title...", text.title, 100000)
+                data.default.title, changed = ImGui.InputTextWithHint("##title", "News Title...", data.default.title, 100000)
                 if changed then config.saveFile("localization/news/" .. language .. ".json", newsUI.news[language]) end
-                text.msg, changed = ImGui.InputTextWithHint("##msg", "News Message...", text.msg, 100000)
+                data.default.msg, changed = ImGui.InputTextWithHint("##msg", "News Message...", data.default.msg, 100000)
                 if changed then config.saveFile("localization/news/" .. language .. ".json", newsUI.news[language]) end
                 ImGui.PopItemWidth()
 
@@ -100,10 +102,23 @@ function newsUI.draw(_, mod)
                     newsUI.newsMeta[trigger] = math.floor((minutes * 60) / 5)
                     config.saveFile("data/static/news/newsDelays.json", newsUI.newsMeta)
                 end
+
+                ImGui.PopItemWidth()
+                ImGui.Separator()
+
+                if string.match(trigger, "quest") and mod.market.triggerManager.triggers[trigger].factCondition ~= "" then
+                    local cond = mod.market.triggerManager.triggers[trigger].factCondition
+                    ImGui.Text("Alternative news will show if this fact is true: " .. cond)
+                end
+
+                ImGui.PushItemWidth(450)
+                data.choice.title, changed = ImGui.InputTextWithHint("##Atitle", "Alternative News Title...", data.choice.title, 100000)
+                if changed then config.saveFile("localization/news/" .. language .. ".json", newsUI.news[language]) end
+                data.choice.msg, changed = ImGui.InputTextWithHint("##Amsg", "Alternative News Message...", data.choice.msg, 100000)
+                if changed then config.saveFile("localization/news/" .. language .. ".json", newsUI.news[language]) end
                 ImGui.PopItemWidth()
 
                 ImGui.Unindent(25)
-
                 ImGui.PopID()
             end
         end

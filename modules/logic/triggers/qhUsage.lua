@@ -8,7 +8,7 @@ function trigger:new()
     -- Default data
     o.name = "qhUsage"
     o.fadeSpeed = 0.0085
-    o.newsThreshold = 0.3
+    o.newsThreshold = 0.18
     o.exportData = {
         value = 0
     }
@@ -46,7 +46,7 @@ function trigger:registerObservers() -- Gets called once onInit
             self.cooldown = false
         end)
 
-        self.exportData.value = self.exportData.value + 0.006
+        self.exportData.value = self.exportData.value + 0.0075
     end)
 end
 

@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "budgetArmsKills"
     o.fadeSpeed = 0.004
+    o.newsThreshold = 0.225
     o.exportData = {
         value = 0
     }
@@ -34,14 +35,15 @@ end
 function trigger:registerObservers() -- Gets called once onInit
     ---@param evt gamePotentialDeathEvent
     Observe("NPCPuppet", "OnPotentialDeath", function (this, evt)
+        local killer = evt.instigator
         if string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "budget") then
-            self.exportData.value = self.exportData.value + 0.02
+            self.exportData.value = self.exportData.value + 0.0225
         end
 
         local weapon = this:GetActiveWeapon()
         if weapon then
             if string.match(weapon:GetWeaponRecord():FriendlyName(), "budget") then
-                self.exportData.value = self.exportData.value - 0.01
+                self.exportData.value = self.exportData.value - 0.0125
             end
         end
     end)

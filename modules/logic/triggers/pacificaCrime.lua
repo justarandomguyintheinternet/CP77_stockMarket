@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "pacificaCrime"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.175
     o.exportData = {
         value = 0
     }
@@ -38,15 +39,17 @@ function trigger:registerObservers() -- Gets called once onInit
         ---@type GameObject
         local killer = evt.instigator
         local faction = this:GetRecord():Affiliation():Type()
-        if faction ~= gamedataAffiliation.Civilian then return end
 
         local district = TweakDBInterface.GetDistrictRecord(Game.GetScriptableSystemsContainer():Get("PreventionSystem").districtManager:GetCurrentDistrict():GetDistrictID())
         local mainDistrict = district:LocalizedName()
 
         local pacifica = mainDistrict == "LocKey#10957" or mainDistrict == "LocKey#10958"
 
-        if killer:IsPlayer() and pacifica then
-            self.exportData.value = self.exportData.value + 0.03
+        if not killer then return end
+        if killer:IsPlayer() and pacifica and (faction ~= gamedataAffiliation.Civilian or faction ~= gamedataAffiliation.Unaffiliated) then
+            self.exportData.value = self.exportData.value + 0.033
+        elseif pacifica then
+            self.exportData.value = self.exportData.value + 0.005
         end
     end)
 end

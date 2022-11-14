@@ -84,7 +84,16 @@ function newsManager:getNews() -- Returns list of all active news (No more delay
 end
 
 function newsManager:addNews(name, delay) -- Add to the queue
-    local title, msg = lang.getNewsText(name)
+    local alternative = self.mod.market.triggerManager.triggers[name].factCondition and self.mod.market.triggerManager.triggers[name].factCondition ~= "" and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1
+    if alternative then
+        local title, _ = lang.getNewsText(name, true)
+        if title == "" then return end
+    else
+        local title, _ = lang.getNewsText(name, false)
+        if title == "" then return end
+    end
+
+    local title, msg = lang.getNewsText(name, self.mod.market.triggerManager.triggers[name].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1)
     if title == nil or msg == nil or title == "" or msg == "" then return end -- No news for this trigger
 
     local shift = {}
@@ -128,7 +137,7 @@ function newsManager:update() -- Runs on Cron
                 newsThreshold = 0.95
             end
 
-            if trigger.exportData.value >= newsThreshold and not self:isNewsActive(name) then
+            if (trigger.exportData.value >= newsThreshold or trigger.exportData.value < -0.95) and not self:isNewsActive(name) then -- Negative for quests with invert condition
                 self:addNews(name)
             end
         end
@@ -196,7 +205,8 @@ function newsManager:registerObservers()
         local news = self:getNews()
         for key, msg in pairs(self.messages) do
             if utils.isSameInstance(entry, msg) then
-                local title, msg = lang.getNewsText(news[#news - key + 1])
+                local name = news[#news - key + 1]
+                local title, msg = lang.getNewsText(name, self.mod.market.triggerManager.triggers[name].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1)
                 this:SetMessageView(title .. ":\n\n" .. msg, MessageViewType.Received, "")
                 return
             end
@@ -249,7 +259,7 @@ end
 function newsManager:sendMessage(name)
     if not self.journalQ then return end
 
-    local title, _ = lang.getNewsText(name)
+    local title, _ = lang.getNewsText(name, self.mod.market.triggerManager.triggers[name].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1)
 
 	local notificationData = gameuiGenericNotificationData.new()
 	local openAction = OpenMessengerNotificationAction.new()

@@ -7,7 +7,8 @@ function trigger:new()
 
     -- Default data
     o.name = "wantedLevel"
-    o.fadeSpeed = 0.006
+    o.fadeSpeed = 0.0075
+    o.newsThreshold = 0.24
     o.exportData = {
         value = 0
     }
@@ -36,7 +37,7 @@ end
 function trigger:registerObservers() -- Gets called once onInit
     Cron.Every(5, function ()
         local stars = tonumber(EnumInt(Game.GetScriptableSystemsContainer():Get("PreventionSystem"):GetHeatStage()))
-        self.exportData.value = self.exportData.value + 0.0032 * stars
+        self.exportData.value = self.exportData.value + 0.005 * stars
     end)
 end
 

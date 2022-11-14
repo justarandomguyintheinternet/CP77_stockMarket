@@ -203,6 +203,9 @@ function market:checkForTimeSkip()
         for _ = 0, diff * (14) do -- Fixed 30s time step for triggers
             self.triggerManager:step()
         end
+        for _ = 0, diff * (85) do -- Fixed 30s time step for triggers
+            self.newsManager:update()
+        end
     end
     self.time = Game.GetTimeSystem():GetGameTime():Hours()
 end

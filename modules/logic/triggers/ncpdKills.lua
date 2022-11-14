@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "ncpdKills"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.225
     o.exportData = {
         value = 0
     }
@@ -39,7 +40,7 @@ function trigger:registerObservers() -- Gets called once onInit
         local killer = evt.instigator
         local faction = this:GetRecord():Affiliation():Type()
         if faction == gamedataAffiliation.NCPD then
-            self.exportData.value = self.exportData.value - 0.025
+            self.exportData.value = self.exportData.value - 0.03
         end
         pcall(function()
             local type = killer:GetRecord():Affiliation():Type()

@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "richDistrictCrime"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.22
     o.exportData = {
         value = 0
     }
@@ -45,8 +46,11 @@ function trigger:registerObservers() -- Gets called once onInit
 
         local richDistrict = mainDistrict == "LocKey#10950" or mainDistrict == "LocKey#10967" or mainDistrict == "LocKey#10965"
 
-        if killer:IsPlayer() and richDistrict then
-            self.exportData.value = self.exportData.value + 0.05
+        if not killer then return end
+        if killer:IsPlayer() and richDistrict and (faction ~= gamedataAffiliation.Civilian or faction ~= gamedataAffiliation.Unaffiliated) then
+            self.exportData.value = self.exportData.value + 0.055
+        elseif richDistrict then
+            self.exportData.value = self.exportData.value + 0.0033
         end
     end)
 end

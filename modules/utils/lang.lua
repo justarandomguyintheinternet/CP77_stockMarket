@@ -56,18 +56,20 @@ function lang.getNewsLang(key)
     local language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
     local loc = config.loadFile("localization/news/" .. language .. ".json")
 
-    if loc[key]["title"] == "" or loc[key]["msg"] == "" then
+    if loc[key]["default"]["title"] == "" or loc[key]["default"]["msg"] == "" then
         return "en-us"
     else
         return language
     end
 end
 
-function lang.getNewsText(key)
+function lang.getNewsText(key, condition)
     local loc = config.loadFile("localization/news/" .. lang.getNewsLang(key) .. ".json")
 
-    local title = loc[key]["title"]
-    local msg = loc[key]["msg"]
+    local subNews = "default"
+    if condition then subNews = "choice" end
+    local title = loc[key][subNews]["title"]
+    local msg = loc[key][subNews]["msg"]
 
     return title, msg
 end

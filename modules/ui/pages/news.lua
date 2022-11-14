@@ -164,7 +164,7 @@ function news:createNewsButton(x, y, name)
 	button:registerCallbacks(self.eventCatcher)
 	table.insert(self.newsButtons, button)
 
-	local title, text = lang.getNewsText(name)
+	local title, text = lang.getNewsText(name, self.mod.market.triggerManager.triggers[name].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1)
 
 	button.textWidget:SetText(title)
 

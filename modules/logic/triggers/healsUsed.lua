@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "healsUsed"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.22
     o.exportData = {
         value = 0
     }
@@ -35,7 +36,7 @@ function trigger:registerObservers() -- Gets called once onInit
     ---@param itemID gameItemID
     Observe("ItemActionsHelper", "ConsumeItem;GameObjectItemIDBool", function (_, itemID)
         if TweakDBInterface.GetConsumableItemRecord(itemID:GetTDBID()):ConsumableType() then
-            self.exportData.value = self.exportData.value + 0.02
+            self.exportData.value = self.exportData.value + 0.0225
         end
     end)
 end

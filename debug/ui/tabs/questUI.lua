@@ -147,6 +147,8 @@ function questUI.draw(debug, mod)
                 if changed then config.saveFile("data/static/quests/quests.json", questUI.quests) end
                 quest.fade, changed = ImGui.InputFloat("Fade speed", quest.fade, 0, 5,  "%.5f")
                 if changed then config.saveFile("data/static/quests/quests.json", questUI.quests) end
+                quest.factCondition, changed = ImGui.InputTextWithHint("QuestFact Condition For Invertion", "Fact Name...", quest.factCondition, 50)
+                if changed then config.saveFile("data/static/quests/quests.json", questUI.quests) end
 
                 local state = ImGui.CollapsingHeader("Stocks")
                 if state then

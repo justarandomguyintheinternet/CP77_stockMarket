@@ -5,7 +5,8 @@ function trigger:new()
 
     -- Default data
     o.name = "ncpdHustler"
-    o.fadeSpeed = 0.004
+    o.fadeSpeed = 0.009
+    o.newsThreshold = 0.35
     o.exportData = {
         value = 0
     }

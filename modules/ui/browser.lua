@@ -17,8 +17,8 @@ function browser.init(mod)
             return
         end
         this.titleRef:SetText(lang.getText(lang.pc_stockmarket))
-        this.descriptionRef:SetText("Adds a fully useable Stock Market that reacts to quests and player actions in the open world")
-        this.guideRef:SetText("Can be accessed from any computer")
+        this.descriptionRef:SetText("Adds a fully useable Stock Market that reacts to quests and player actions in the open world. Also includes 66 News Messages reacting to your actions.")
+        this.guideRef:SetText("Can be accessed from any computer. News Feed can also be accessed using the \"N54 Breaking News\" Contact.")
         this.imageRef:SetAtlasResource(ResRef.FromString("base\\icon\\dlc.inkatlas"))
         this.imageRef:SetTexturePart("stock")
     end)

@@ -7,7 +7,8 @@ function trigger:new()
 
     -- Default data
     o.name = "stealCarAny"
-    o.fadeSpeed = 0.005
+    o.fadeSpeed = 0.008
+    o.newsThreshold = 0.3
     o.exportData = {
         value = 0
     }
@@ -42,7 +43,7 @@ function trigger:registerObservers() -- Gets called once onInit
         Cron.After(1, function ()
             self.cooldown = false
         end)
-        self.exportData.value = self.exportData.value + 0.12
+        self.exportData.value = self.exportData.value + 0.1
     end)
 end
 

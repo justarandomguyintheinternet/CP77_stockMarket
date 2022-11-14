@@ -8,6 +8,7 @@ function trigger:new()
     -- Default data
     o.name = "thortonAction"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.35
     o.exportData = {
         value = 0
     }
@@ -43,14 +44,14 @@ function trigger:registerObservers() -- Gets called once onInit
         Cron.After(1, function ()
             self.cooldown = false
         end)
-        self.exportData.value = self.exportData.value - 0.1
+        self.exportData.value = self.exportData.value - 0.11
     end)
 
     Cron.Every(5, function ()
         local veh = GetMountedVehicle(GetPlayer())
         if veh ~= nil then
             if veh:GetRecord():Manufacturer():Type() ~= gamedataVehicleManufacturer.Thorton then return end
-            self.exportData.value = math.min(1, self.exportData.value + 0.0025)
+            self.exportData.value = math.min(1, self.exportData.value + 0.0026)
         end
     end)
 end

@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "vendingMachine"
     o.fadeSpeed = 0.01
+    o.newsThreshold = 0.32
     o.exportData = {
         value = 0
     }
@@ -37,7 +38,7 @@ function trigger:registerObservers() -- Gets called once onInit
         local pMoney = Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money())
         if pMoney < price then return end
 
-        self.exportData.value = self.exportData.value + price * 0.0009
+        self.exportData.value = self.exportData.value + price * 0.0006
     end)
 end
 

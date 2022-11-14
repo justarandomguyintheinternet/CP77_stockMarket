@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "stockInvest"
     o.fadeSpeed = 0.02
+    o.newsThreshold = 0.2
     o.exportData = {
         value = 0
     }
@@ -32,7 +33,7 @@ function trigger:decreaseValue() -- Runs every intervall
 end
 
 function trigger:transaction(stock, amount)
-    self.exportData.value = self.exportData.value + (stock:getCurrentPrice() * amount) / 250000
+    self.exportData.value = self.exportData.value + (stock:getCurrentPrice() * amount) / 270000
 end
 
 function trigger:registerObservers()end

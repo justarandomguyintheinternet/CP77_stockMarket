@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "moneySpent"
     o.fadeSpeed = 0.0025
+    o.newsThreshold = 0.25
     o.exportData = {
         value = 0
     }
@@ -37,7 +38,7 @@ end
 function trigger:registerObservers()
     Observe("CurrencyNotification", "UpdateData", function(this)
         if this.currencyData.diff < 0 then
-            self.exportData.value = self.exportData.value + (-this.currencyData.diff / 1000000)
+            self.exportData.value = self.exportData.value + (-this.currencyData.diff / 500000)
         end
     end)
 end

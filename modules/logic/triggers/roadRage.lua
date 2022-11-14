@@ -7,7 +7,8 @@ function trigger:new()
 
     -- Default data
     o.name = "roadRage"
-    o.fadeSpeed = 0.005
+    o.fadeSpeed = 0.01
+    o.newsThreshold = 0.2
     o.exportData = {
         value = 0
     }
@@ -39,10 +40,10 @@ function trigger:registerObservers() -- Gets called once onInit
     Observe("VehicleComponent", "OnGridDestruction", function()
         if self.cooldown then return end
         self.cooldown = true
-        Cron.After(4, function ()
+        Cron.After(2, function ()
             self.cooldown = false
         end)
-        self.exportData.value = self.exportData.value + 0.01
+        self.exportData.value = self.exportData.value + 0.017
     end)
 end
 

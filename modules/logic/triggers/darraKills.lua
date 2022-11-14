@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "darraKills"
     o.fadeSpeed = 0.004
+    o.newsThreshold = 0.22
     o.exportData = {
         value = 0
     }
@@ -38,7 +39,7 @@ function trigger:registerObservers() -- Gets called once onInit
         local killer = evt.instigator
 
         if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "darra") then
-            self.exportData.value = self.exportData.value + 0.02
+            self.exportData.value = self.exportData.value + 0.025
         end
 
         local weapon = this:GetActiveWeapon()

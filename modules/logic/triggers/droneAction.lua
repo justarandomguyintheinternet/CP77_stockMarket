@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "droneAction"
     o.fadeSpeed = 0.0075
+    o.newsThreshold = 0.22
     o.exportData = {
         value = 0
     }
@@ -42,10 +43,10 @@ function trigger:registerObservers() -- Gets called once onInit
         local selfType = this:GetRecord():CharacterType():Type()
 
         if selfType == gamedataNPCType.Android or selfType == gamedataNPCType.Drone or selfType == gamedataNPCType.Mech then
-            self.exportData.value = self.exportData.value - 0.05
+            self.exportData.value = self.exportData.value - 0.06
         end
         if killerType == gamedataNPCType.Android or killerType == gamedataNPCType.Drone or killerType == gamedataNPCType.Mech then
-            self.exportData.value = self.exportData.value + 0.075
+            self.exportData.value = self.exportData.value + 0.08
         end
     end)
 end

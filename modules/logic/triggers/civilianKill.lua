@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "civilianKill"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.24
     o.exportData = {
         value = 0
     }
@@ -38,10 +39,11 @@ function trigger:registerObservers() -- Gets called once onInit
         ---@type GameObject
         local killer = evt.instigator
         local faction = this:GetRecord():Affiliation():Type()
-        if faction ~= gamedataAffiliation.Civilian then return end
+        if faction ~= gamedataAffiliation.Civilian and faction ~= gamedataAffiliation.Unaffiliated then return end
 
+        if not killer then return end
         if killer:IsPlayer() then
-            self.exportData.value = self.exportData.value + 0.033
+            self.exportData.value = self.exportData.value + 0.03
         end
     end)
 end

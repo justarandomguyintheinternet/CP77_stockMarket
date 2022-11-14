@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "militechAction"
     o.fadeSpeed = 0.01
+    o.newsThreshold = 0.2
     o.exportData = {
         value = 0
     }
@@ -40,17 +41,19 @@ function trigger:registerObservers() -- Gets called once onInit
         local faction = this:GetRecord():Affiliation():Type()
 
         if faction == gamedataAffiliation.Militech then -- Militech death
-            self.exportData.value = self.exportData.value - 0.02
+            self.exportData.value = self.exportData.value - 0.025
         else
             local weapon = this:GetActiveWeapon()
             if weapon then
                 if string.match(weapon:GetWeaponRecord():FriendlyName(), "militech") then
-                    self.exportData.value = self.exportData.value - 0.01
+                    self.exportData.value = self.exportData.value - 0.0125
                 end
             end
         end
+
+        if not killer then return end
         if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "militech") then -- Kill with Militech weapon
-            self.exportData.value = self.exportData.value + 0.015
+            self.exportData.value = self.exportData.value + 0.02
         end
     end)
 end

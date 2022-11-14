@@ -33,7 +33,11 @@ function questManager:onInit()
                 local questData = self.quests[name]
                 if not questData then return end
 
-                self.mod.market.triggerManager.triggers["quest_" .. questData.name].exportData.value = questData.amount
+                local condition = 1
+                if Game.GetQuestsSystem():GetFactStr(questData.factCondition) == 1 then
+                    condition = -1
+                end
+                self.mod.market.triggerManager.triggers["quest_" .. questData.name].exportData.value = questData.amount * condition
             end
         end
     end)

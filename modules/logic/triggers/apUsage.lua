@@ -8,6 +8,7 @@ function trigger:new()
     -- Default data
     o.name = "apUsage"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.375
     o.exportData = {
         value = 0
     }
@@ -43,7 +44,7 @@ function trigger:registerObservers() -- Gets called once onInit
             self.cooldown = false
         end)
 
-        self.exportData.value = self.exportData.value + 0.05
+        self.exportData.value = self.exportData.value + 0.06
     end)
 end
 

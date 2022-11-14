@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "tsunamiAction"
     o.fadeSpeed = 0.0075
+    o.newsThreshold = 0.25
     o.exportData = {
         value = 0
     }
@@ -38,7 +39,7 @@ function trigger:registerObservers() -- Gets called once onInit
         local killer = evt.instigator
 
         if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "tsunami") then
-            self.exportData.value = self.exportData.value + 0.015
+            self.exportData.value = self.exportData.value + 0.02
         end
 
         local weapon = this:GetActiveWeapon()

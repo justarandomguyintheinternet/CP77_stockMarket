@@ -7,7 +7,8 @@ function trigger:new()
 
     -- Default data
     o.name = "vehicleUsage"
-    o.fadeSpeed = 0.004
+    o.fadeSpeed = 0.0065
+    o.newsThreshold = 0.32
     o.exportData = {
         value = 0
     }
@@ -36,7 +37,7 @@ end
 function trigger:registerObservers() -- Gets called once onInit
     Cron.Every(5, function ()
         if GetMountedVehicle(GetPlayer()) ~= nil then
-            self.exportData.value = math.min(1, self.exportData.value + 0.0025)
+            self.exportData.value = math.min(1, self.exportData.value + 0.00235)
         end
     end)
 end

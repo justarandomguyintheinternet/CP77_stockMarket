@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "smartWeaponKills"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.2
     o.exportData = {
         value = 0
     }
@@ -36,8 +37,9 @@ function trigger:registerObservers() -- Gets called once onInit
         ---@type GameObject
         local killer = evt.instigator
 
+        if not killer then return end
         if killer:IsPuppet() and TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):Evolution():Type() == gamedataWeaponEvolution.Smart then
-            self.exportData.value = self.exportData.value + 0.02
+            self.exportData.value = self.exportData.value + 0.024
         end
     end)
 end

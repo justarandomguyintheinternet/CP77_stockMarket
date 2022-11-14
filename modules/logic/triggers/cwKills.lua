@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "cwKills"
     o.fadeSpeed = 0.004
+    o.newsThreshold = 0.225
     o.exportData = {
         value = 0
     }
@@ -40,8 +41,9 @@ function trigger:registerObservers() -- Gets called once onInit
         local wType = TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):ItemType():Type()
         local isCW = wType == gamedataItemType.Cyb_Launcher or wType == gamedataItemType.Cyb_MantisBlades or wType == gamedataItemType.Cyb_NanoWires or wType == gamedataItemType.Cyb_StrongArms
 
+        if not killer then return end
         if killer:IsPuppet() and isCW then
-            self.exportData.value = self.exportData.value + 0.02
+            self.exportData.value = self.exportData.value + 0.021
         end
     end)
 end

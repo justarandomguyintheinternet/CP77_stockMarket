@@ -6,6 +6,7 @@ function trigger:new()
     -- Default data
     o.name = "purchaseVehicleAny"
     o.fadeSpeed = 0.005
+    o.newsThreshold = 0.39
     o.exportData = {
         value = 0
     }
