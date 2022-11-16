@@ -118,15 +118,16 @@ function login:createFillButton(x, y, sX, text, type)
 	button.bgColor = color.new(0.5, 0.5, 0.5)
 	button.textColor = color.white
 	button.callback = function()
-		if button.textWidget:GetText() == text then return end
+		if button.textWidget:GetText() == text or button.fillCron then return end
 
-		Cron.Every(0.075, { tick = 1 }, function(timer)
+		button.fillCron = Cron.Every(0.075, { tick = 1 }, function(timer)
 			local c = text:sub(timer.tick, timer.tick)
 			if timer.tick <= #text then
 				button.textWidget:SetText(button.textWidget:GetText() .. c)
 			else
 				timer:Halt()
 				self:updateLogin(type)
+				button.fillCron = nil
 			end
 			timer.tick = timer.tick + 1
 		end)
