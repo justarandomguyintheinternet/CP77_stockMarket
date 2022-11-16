@@ -9,6 +9,7 @@
 
 local GameUI = require("modules/external/GameUI")
 local Cron = require("modules/external/Cron")
+local debug = false
 
 stocks = {
     runtimeData = {
@@ -69,7 +70,7 @@ function stocks:new()
     end)
 
     registerForEvent("onDraw", function()
-        if not self.runtimeData.cetOpen then return end
+        if not self.runtimeData.cetOpen or not debug then return end
         self.debug.draw(self)
     end)
 

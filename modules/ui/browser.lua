@@ -56,6 +56,11 @@ function browser.init(mod)
 
     Override("ComputerInkGameController", "ShowMenuByName", function (this, adress, wrapped)
         if adress == "stock" then
+            for _, c in pairs(browser.controllers) do -- Avoid refresh if the page is already open
+                if utils.isSameInstance(this:GetOwner(), c.pc) then
+                    return
+                end
+            end
             browser.openedCustom = true
             this:ShowInternet()
             this:GetMainLayoutController():MarkManuButtonAsSelected("stock")

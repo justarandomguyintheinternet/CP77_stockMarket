@@ -5,7 +5,7 @@ function trigger:new()
 
     -- Default data
     o.name = "stockInvest"
-    o.fadeSpeed = 0.02
+    o.fadeSpeed = 0.0075
     o.newsThreshold = 0.2
     o.exportData = {
         value = 0

@@ -13,6 +13,10 @@ function triggerUI.draw(mod)
     triggerUI.hideStocks = ImGui.Checkbox("Hide stock triggers", triggerUI.hideStocks)
     ImGui.SameLine()
     triggerUI.hideZero = ImGui.Checkbox("Hide zero triggers", triggerUI.hideZero)
+    ImGui.SameLine()
+    if ImGui.Button("Skip 3H") then
+        mod.market.time = mod.market.time - 3
+    end
     ImGui.Separator()
 
     triggerUI.filter = ImGui.InputTextWithHint('##Filter', 'Search for trigger...', triggerUI.filter, 25)

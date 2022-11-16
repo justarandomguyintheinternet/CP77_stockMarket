@@ -40,12 +40,12 @@ function trigger:registerObservers() -- Gets called once onInit
         local killer = evt.instigator
         local faction = this:GetRecord():Affiliation():Type()
         if faction == gamedataAffiliation.NCPD then
-            self.exportData.value = self.exportData.value - 0.03
+            self.exportData.value = self.exportData.value - 0.033
         end
         pcall(function()
             local type = killer:GetRecord():Affiliation():Type()
             if type == gamedataAffiliation.NCPD then
-            self.exportData.value = self.exportData.value + 0.075
+            self.exportData.value = self.exportData.value + 0.085
             end
         end)
     end)

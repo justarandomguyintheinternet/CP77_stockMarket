@@ -25,6 +25,7 @@ function trigger:onTransaction(stock, amount)
     local price = stock:getCurrentPrice()
     local totalValue = price * stock.sharesAmount
     local percent = (math.abs(amount) * price) / totalValue
+
     if amount > 0 then
         self.exportData.value = self.exportData.value + percent
     else
@@ -33,11 +34,15 @@ function trigger:onTransaction(stock, amount)
 end
 
 function trigger:decreaseValue()
-    if self.exportData.value == 0 then return end
-    if self.exportData.value > 0 then
-        self.exportData.value = self.exportData.value - self.fadeSpeed
-    elseif self.exportData.value < 0 then
-        self.exportData.value = self.exportData.value + self.fadeSpeed
+    local delta = self.fadeSpeed
+    if self.exportData.value < 0 then delta = - delta end
+    self.exportData.value = self.exportData.value - delta
+
+    if self.exportData.value < 0 and self.exportData.value + delta > 0 then
+        self.exportData.value = 0
+    end
+    if self.exportData.value > 0 and self.exportData.value + delta < 0 then
+        self.exportData.value = 0
     end
 end
 

@@ -34,6 +34,8 @@ function graph:new(x, y, sizeX, sizeY, stepsX, stepsY, labelX, labelY, gridThicc
     o.graphLines = {}
     o.labels = {}
 
+    o.relativeScaling = false
+
 	self.__index = self
    	return setmetatable(o, self)
 end
@@ -54,6 +56,11 @@ end
 function graph:getMinMaxY()
     local maxY = math.max(unpack(self.data))
     local minY = math.min(unpack(self.data))
+
+    if self.relativeScaling then
+        minY = math.max(self.data[#self.data] - self.data[#self.data] * 0.1, minY)
+        maxY = math.min(self.data[#self.data] + self.data[#self.data] * 0.1, maxY)
+    end
 
     return minY, maxY
 end
@@ -101,6 +108,7 @@ function graph:showData()
     for x, y in pairs(self.data) do -- Generate list of remaped positions
         local x = utils.remap(x, 1, #self.data, leftPosition, leftPosition + xSize)
         local y = utils.remap(y, minY, maxY, 0, ySize)
+        y = math.max(math.min(y, ySize), 0)
         table.insert(points, {x = x, y = (topPosition + ySize) - y})
     end
 

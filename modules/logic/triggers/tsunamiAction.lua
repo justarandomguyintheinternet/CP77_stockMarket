@@ -39,13 +39,13 @@ function trigger:registerObservers() -- Gets called once onInit
         local killer = evt.instigator
 
         if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "tsunami") then
-            self.exportData.value = self.exportData.value + 0.02
+            self.exportData.value = self.exportData.value + 0.0225
         end
 
         local weapon = this:GetActiveWeapon()
         if weapon then
             if string.match(weapon:GetWeaponRecord():FriendlyName(), "tsunami") then
-                self.exportData.value = self.exportData.value - 0.01
+                self.exportData.value = self.exportData.value - 0.012
             end
         end
     end)
