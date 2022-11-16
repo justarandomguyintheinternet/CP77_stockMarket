@@ -19,7 +19,7 @@ function triggerManager:onInit()
     for _, file in pairs(dir("modules/logic/triggers/")) do
         if file.name:match("^.+(%..+)$") == ".lua" then
             local name = file.name:match("(.+)%..+$")
-            print("Loading trigger: " .. file.name)
+            --print("Loading trigger: " .. file.name)
             local trigger = require("modules/logic/triggers/" .. name):new(self.mod)
             trigger:registerObservers()
             self.triggers[trigger.name] = trigger
