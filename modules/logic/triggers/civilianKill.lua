@@ -5,7 +5,7 @@ function trigger:new()
 
     -- Default data
     o.name = "civilianKill"
-    o.fadeSpeed = 0.005
+    o.fadeSpeed = 0.004
     o.newsThreshold = 0.24
     o.exportData = {
         value = 0
@@ -43,7 +43,7 @@ function trigger:registerObservers() -- Gets called once onInit
 
         if not killer then return end
         if killer:IsPlayer() then
-            self.exportData.value = self.exportData.value + 0.03
+            self.exportData.value = self.exportData.value + 0.04
         end
     end)
 end

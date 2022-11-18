@@ -30,14 +30,13 @@ end
 
 function trigger:decreaseValue()
     if self.exportData.value == 0 then return end
-    local delta = (self.fadeSpeed * 0.75) -- Dirty hard coded rebalance
+    local delta = (self.fadeSpeed * 0.5) -- Dirty hard coded rebalance
     if self.exportData.value < 0 then delta = - delta end
     self.exportData.value = self.exportData.value - delta
 
-    if self.exportData.value < 0 and self.exportData.value + delta > 0 then
+    if self.exportData.value < 0 and self.exportData.value + delta >= 0 then
         self.exportData.value = 0
-    end
-    if self.exportData.value > 0 and self.exportData.value + delta < 0 then
+    elseif self.exportData.value > 0 and self.exportData.value + delta <= 0 then
         self.exportData.value = 0
     end
 end

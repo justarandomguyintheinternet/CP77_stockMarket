@@ -7,7 +7,7 @@ function trigger:new()
 
     -- Default data
     o.name = "roadRage"
-    o.fadeSpeed = 0.01
+    o.fadeSpeed = 0.008
     o.newsThreshold = 0.2
     o.exportData = {
         value = 0

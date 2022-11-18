@@ -36,7 +36,7 @@ function buttons.createMenu(page)
     stocks.canvas:Reparent(canvas, -1)
 
     -- News button
-	local news = buttons.createMenuButton("News", 165, 170, page.eventCatcher)
+	local news = buttons.createMenuButton(lang.getText(lang.button_news), 165, 170, page.eventCatcher)
     if page.pageName ~= "news" then
         news.callback = function()
             page.controller:switchToPage("news")

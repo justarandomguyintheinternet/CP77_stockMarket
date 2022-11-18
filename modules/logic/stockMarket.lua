@@ -190,6 +190,18 @@ function market:update() -- Main market update loop
     self.portfolioStock:update()
 end
 
+function market:overflowReset() -- Well, shit
+    print("[StockMarket] OverflowReset initiated")
+    for _, stock in pairs(self.stocks) do
+        local owned = stock.exportData.owned
+        local spent = stock.exportData.spent
+        stock:loadDefault()
+        stock.exportData.owned = owned
+        stock.exportData.spent = spent
+    end
+    self.marketStock:loadDefault()
+end
+
 function market:checkForTimeSkip()
     local diff = Game.GetTimeSystem():GetGameTime():Hours() - self.time
     if Game.GetTimeSystem():GetGameTime():Hours() < self.time then

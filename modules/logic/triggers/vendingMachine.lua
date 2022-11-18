@@ -5,7 +5,7 @@ function trigger:new()
 
     -- Default data
     o.name = "vendingMachine"
-    o.fadeSpeed = 0.01
+    o.fadeSpeed = 0.008
     o.newsThreshold = 0.32
     o.exportData = {
         value = 0

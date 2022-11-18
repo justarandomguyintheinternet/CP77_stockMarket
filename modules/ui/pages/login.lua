@@ -28,12 +28,12 @@ function login:initialize()
 	self.canvas = ink.canvas(0, 100, inkEAnchor.TopCenter)
 	self.canvas:Reparent(self.inkPage, -1)
 
-	local t = ink.text(tostring(lang.getText(lang.login_name) .. ":         "), 0, 350, 150, color.white)
-	t:SetAnchorPoint(0.5, 0.5)
+	local t = ink.text(tostring(lang.getText(lang.login_name) .. ":         "), 360, 350, 150, color.white)
+	t:SetAnchorPoint(1, 0.5)
 	t:Reparent(self.canvas, -1)
 
-	local t = ink.text(lang.getText(lang.login_password) .. ":               ", 0, 550, 150, color.white)
-	t:SetAnchorPoint(0.5, 0.5)
+	local t = ink.text(lang.getText(lang.login_password) .. ":               ", 585, 550, 150, color.white)
+	t:SetAnchorPoint(1, 0.5)
 	t:Reparent(self.canvas, -1)
 
 	local logo = ink.image(-1440, 75, 233, 233, "base\\icon\\stock_logo.inkatlas", "stock")

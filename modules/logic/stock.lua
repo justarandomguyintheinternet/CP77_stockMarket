@@ -159,6 +159,10 @@ function stock:update() -- Runs every intervall
     local value = shift[#shift] + self:getStep() -- Calc new value
     shift[#shift + 1] = value
     self.exportData.data = shift
+
+    if self.exportData.data[#self.exportData.data] < self.min - self.min * 0.5 or self.exportData.data[#self.exportData.data] > self.max + self.max + 0.5 then
+        self.market:overflowReset()
+    end
 end
 
 return stock

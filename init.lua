@@ -27,6 +27,7 @@ function stocks:new()
     registerForEvent("onInit", function()
         math.randomseed(os.clock()) -- Prevent predictable random() behavior
         CName.add("stocks")
+        CName.add("stock")
 
         local triggerManager = require("modules/logic/triggerManager"):new(self, self.intervall)
         local questManager = require("modules/logic/questManager"):new(self)

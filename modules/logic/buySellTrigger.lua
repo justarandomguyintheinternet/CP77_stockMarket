@@ -34,6 +34,7 @@ function trigger:onTransaction(stock, amount)
 end
 
 function trigger:decreaseValue()
+    if self.exportData.value == 0 then return end
     local delta = self.fadeSpeed
     if self.exportData.value < 0 then delta = - delta end
     self.exportData.value = self.exportData.value - delta
