@@ -195,11 +195,13 @@ function market:overflowReset() -- Well, shit
     for _, stock in pairs(self.stocks) do
         local owned = stock.exportData.owned
         local spent = stock.exportData.spent
-        stock:loadDefault()
+        self.persistentData.stocks[stock.name] = nil
+        stock:checkForData(self.persistentData)
         stock.exportData.owned = owned
         stock.exportData.spent = spent
     end
-    self.marketStock:loadDefault()
+    self.persistentData.stocks["stock_market"] = nil
+    self.marketStock:checkForData(self.persistentData)
 end
 
 function market:checkForTimeSkip()

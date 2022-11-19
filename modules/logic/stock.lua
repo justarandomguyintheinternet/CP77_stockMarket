@@ -36,7 +36,9 @@ function stock:new(steps, market)
 end
 
 function stock:getCurrentPrice()
-    if self.exportData.data == nil or #self.exportData.data == 0 then return self.startPrice end
+    if self.exportData.data == nil or #self.exportData.data == 0 then
+        return self.startPrice
+    end
     return utils.round(self.exportData.data[#self.exportData.data], 1)
 end
 
@@ -106,15 +108,17 @@ function stock:checkForData(data)
         points[k] = v
     end
     self.exportData.data = points
+    self:checkForOverFlow()
 end
 
 function stock:loadDefault()
-    self.exportData = self.default
-
+    self.exportData.owned = 0
+    self.exportData.spent = 0
+    self.exportData.data = {}
     -- Generate some initial data
     local currentValue = self.startPrice
 	for i = 1, self.steps do
-		currentValue = currentValue + self:getStep()
+		currentValue = currentValue + self:getStep(true)
 		self.exportData.data[i] = currentValue
 	end
 end
@@ -139,10 +143,15 @@ function stock:getInfluence() -- Get amount of direct influence
     return totalInfluence
 end
 
-function stock:getStep() -- Size of random step
+function stock:getStep(default) -- Size of random step
     local rand = (math.random() * 2) - 1 -- Base random -1 -> 1
 
     rand = rand - self:getMinMaxAdjustment() -- Keep in bounds
+    if default then
+        rand = rand * self.maxStep
+        return utils.round(rand, 2)
+    end
+
     rand = rand + self.market.triggerManager:getStockDelta(self) -- Get triggers
     rand = rand + self:getInfluence() -- Direct influence
 
@@ -160,7 +169,11 @@ function stock:update() -- Runs every intervall
     shift[#shift + 1] = value
     self.exportData.data = shift
 
-    if self.exportData.data[#self.exportData.data] < self.min - self.min * 0.5 or self.exportData.data[#self.exportData.data] > self.max + self.max + 0.5 then
+    self:checkForOverFlow()
+end
+
+function stock:checkForOverFlow()
+    if self:getCurrentPrice() < self.min - self.min * 0.5 or self:getCurrentPrice() > self.max + self.max + 0.5 or self:getCurrentPrice() < 0 then
         self.market:overflowReset()
     end
 end
