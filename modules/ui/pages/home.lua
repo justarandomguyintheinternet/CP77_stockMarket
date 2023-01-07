@@ -50,11 +50,8 @@ function home:initialize()
 	market.textColor = color.white
 	market.stock = self.mod.market.marketStock
 	market:initialize()
+	market:registerCallbacks(self.eventCatcher)
 	market:showData()
-
-	market.text = ink.text(lang.getText(lang.pc_stockmarket), -market.sizeX / 4, 0, 75)
-	market.text:SetAnchorPoint(Vector2.new({X = 0.5, Y = 0.5}))
-    market.text:Reparent(market.canvas, -1)
 
 	market.canvas:Reparent(self.canvas, -1)
 	table.insert(self.previews, market)
@@ -89,55 +86,12 @@ function home:createPreviewButton(x, y, stock)
 end
 
 function home:setStocks()
-	local keys = {}
-	for k, _ in pairs(self.mod.market.stocks) do
-		table.insert(keys, k)
-	end
+	local topStocks = self.mod.market:getTopStocks()
 
-	local top1 = {k = "", n = -100}
-	for _, key in pairs(keys) do
-		local trend = self.mod.market.stocks[key]:getTrend()
-		if trend > top1.n then
-			top1.n = trend
-			top1.k = key
-		end
-	end
-	utils.removeItem(keys, top1.k)
-
-	local top2 = {k = "", n = -100}
-	for _, key in pairs(keys) do
-		local trend = self.mod.market.stocks[key]:getTrend()
-		if trend > top2.n then
-			top2.n = trend
-			top2.k = key
-		end
-	end
-	utils.removeItem(keys, top2.k)
-
-	local low1 = {k = "", n = 100}
-	for _, key in pairs(keys) do
-		local trend = self.mod.market.stocks[key]:getTrend()
-		if trend < low1.n then
-			low1.n = trend
-			low1.k = key
-		end
-	end
-	utils.removeItem(keys, low1.k)
-
-	local low2 = {k = "", n = 100}
-	for _, key in pairs(keys) do
-		local trend = self.mod.market.stocks[key]:getTrend()
-		if trend < low2.n then
-			low2.n = trend
-			low2.k = key
-		end
-	end
-	utils.removeItem(keys, low2.k)
-
-	self.p1.stock = self.mod.market.stocks[top1.k]
-	self.p2.stock = self.mod.market.stocks[top2.k]
-	self.p3.stock = self.mod.market.stocks[low1.k]
-	self.p4.stock = self.mod.market.stocks[low2.k]
+	self.p1.stock = topStocks.top1
+	self.p2.stock = topStocks.top2
+	self.p3.stock = topStocks.low1
+	self.p4.stock = topStocks.low2
 end
 
 function home:refresh()

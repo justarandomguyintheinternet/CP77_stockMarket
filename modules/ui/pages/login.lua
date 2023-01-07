@@ -44,7 +44,7 @@ function login:initialize()
 	self.fluff:SetOpacity(0.85)
 	self.fluff:Reparent(self.canvas, -1)
 
-	local fluff2 = ink.text("Connection secured by Netwatch. STOCKXC v.1.0", 916, 1200, 32, color.aqua)
+	local fluff2 = ink.text("Connection secured by Netwatch. STOCKXC v.1.2", 916, 1200, 32, color.aqua)
 	fluff2:SetOpacity(0.5)
 	fluff2:Reparent(self.canvas, -1)
 

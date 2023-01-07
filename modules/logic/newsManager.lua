@@ -21,6 +21,8 @@ function newsManager:new(mod)
     o.isContactSelected = false
     o.bufferSize = 10
 
+    o.lang = lang
+
 	self.__index = self
    	return setmetatable(o, self)
 end

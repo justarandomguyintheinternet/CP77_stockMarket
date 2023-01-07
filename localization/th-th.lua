@@ -41,6 +41,7 @@ local localization = {
     ["stockInfo_DMS"] = "",
     ["stockInfo_DTR"] = "",
     ["stockInfo_Dynalar"] = "",
+    ["stockInfo_NC ETF"] = "",
     ["stockInfo_EZHomes"] = "",
     ["stockInfo_Kang Tao"] = "",
     ["stockInfo_Kaukaz"] = "",

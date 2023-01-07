@@ -54,7 +54,9 @@ function triggerManager:getStockDelta(stock) -- Apply triggers
 end
 
 function triggerManager:onTransaction(stock, amount)
-    self.triggers[stock.name]:onTransaction(stock, amount)
+    if self.triggers[stock.name] then
+        self.triggers[stock.name]:onTransaction(stock, amount)
+    end
     if amount > 0 then
         self.triggers["stockInvest"]:transaction(stock, amount)
     end

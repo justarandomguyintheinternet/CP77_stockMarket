@@ -89,7 +89,7 @@ function portfolio:refreshInfo()
 	local total = Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money())
 	local shares = 0
 	local sharesV = 0
-	for _, stock in pairs(self.mod.market.stocks) do
+	for _, stock in pairs({table.unpack(self.mod.market.stocks), self.mod.market.marketStock}) do
 		total = total + stock:getPortfolioNum() * stock:getCurrentPrice()
 		shares = shares + stock:getPortfolioNum()
 		sharesV = sharesV + stock:getPortfolioNum() * stock:getCurrentPrice()
@@ -106,6 +106,10 @@ function portfolio:setStocks()
 		if stock:getPortfolioNum() > 0 then
 			table.insert(stocks, stock)
 		end
+	end
+
+	if self.mod.market.marketStock:getPortfolioNum() > 0 then
+		table.insert(stocks, self.mod.market.marketStock)
 	end
 
 	local sortFunc = nil
@@ -229,7 +233,7 @@ function portfolio:setupScrollArea()
 
 	local basePos = {x = 482, y = 50}
 
-	for i = 0, self.mod.market:getNumberStocks() - 1 do
+	for i = 0, self.mod.market:getNumberStocks() do
 		local preview = self:createPreviewButton(basePos.x, basePos.y)
 		preview.canvas:SetAffectsLayoutWhenHidden(false)
 		preview.canvas:Reparent(self.buttonList, -1)

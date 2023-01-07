@@ -33,7 +33,7 @@ function lang.getLang(key)
     local language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
     local loc = require("localization/" .. language)
 
-    if loc[key] == "" then
+    if loc[key] == "" or not loc[key] then
         return "en-us"
     else
         return language
@@ -45,7 +45,7 @@ function lang.getText(key)
     local loc = require("localization/" .. language)
     local text = loc[key]
 
-    if text == "" then
+    if text == "" or not text then
         return "Not Localized"
     else
         return text
@@ -56,7 +56,7 @@ function lang.getNewsLang(key)
     local language = Game.GetSettingsSystem():GetVar("/language", "OnScreen"):GetValue().value
     local loc = config.loadFile("localization/news/" .. language .. ".json")
 
-    if loc[key]["default"]["title"] == "" or loc[key]["default"]["msg"] == "" then
+    if (loc[key]["default"]["title"] == "" or loc[key]["default"]["msg"] == "") and (loc[key]["choice"]["title"] == "" or loc[key]["choice"]["msg"] == "") then
         return "en-us"
     else
         return language

@@ -20,7 +20,8 @@ stocks = {
     intervall = 120,
     config = require("modules/utils/config"),
     browser = require("modules/ui/browser"),
-    debug = require("debug/ui/baseUI")
+    debug = require("debug/ui/baseUI"),
+    version = 1.2
 }
 
 function stocks:new()

@@ -71,6 +71,8 @@ function stocks:setStocks()
 		table.insert(stocks, stock)
 	end
 
+	table.insert(stocks, self.mod.market.marketStock)
+
 	local sortFunc = nil
 	if self.sort == "ascAlpha" then
 		sortFunc = function(a, b) return a.name < b.name end
@@ -180,7 +182,7 @@ function stocks:setupScrollArea()
 
 	local basePos = {x = 500, y = 50}
 
-	for i = 0, self.mod.market:getNumberStocks() - 1 do
+	for i = 0, self.mod.market:getNumberStocks() do
 		local preview = self:createPreviewButton(basePos.x, basePos.y)
 		preview.canvas:Reparent(buttonList, -1)
 	end

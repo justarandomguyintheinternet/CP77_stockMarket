@@ -128,7 +128,7 @@ end
 
 function market:setupMarketStock()
     local mStock = require("modules/logic/stock"):new(self.range, self)
-    mStock:loadFromDefinition({name = lang.getText(lang.pc_stockmarket), min = 0, max = 0})
+    mStock:loadFromDefinition({name = "NC ETF", info = "stockInfo_etf", min = 0, max = 0, atlasPath = "base\\icon\\stocks\\etf.inkatlas", atlasPart = "stock", iconX = 415, iconY = 94})
 
     mStock.loadDefault = function(st)
         local nStocks = self:getNumberStocks()
@@ -159,6 +159,11 @@ function market:setupMarketStock()
             points[k] = v
         end
         st.exportData.data = points
+
+        if not st.exportData.owned or not st.exportData.owned then
+            st.exportData.owned = 0
+            st.exportData.spent = 0
+        end
     end
 
     mStock.update = function(st)
@@ -180,6 +185,55 @@ function market:setupMarketStock()
     end
 
     self.marketStock = mStock
+end
+
+function market:getTopStocks()
+    local keys = {}
+	for k, _ in pairs(self.stocks) do
+		table.insert(keys, k)
+	end
+
+	local top1 = {k = "", n = -100}
+	for _, key in pairs(keys) do
+		local trend = self.stocks[key]:getTrend()
+		if trend > top1.n then
+			top1.n = trend
+			top1.k = key
+		end
+	end
+	utils.removeItem(keys, top1.k)
+
+	local top2 = {k = "", n = -100}
+	for _, key in pairs(keys) do
+		local trend = self.stocks[key]:getTrend()
+		if trend > top2.n then
+			top2.n = trend
+			top2.k = key
+		end
+	end
+	utils.removeItem(keys, top2.k)
+
+	local low1 = {k = "", n = 100}
+	for _, key in pairs(keys) do
+		local trend = self.stocks[key]:getTrend()
+		if trend < low1.n then
+			low1.n = trend
+			low1.k = key
+		end
+	end
+	utils.removeItem(keys, low1.k)
+
+	local low2 = {k = "", n = 100}
+	for _, key in pairs(keys) do
+		local trend = self.stocks[key]:getTrend()
+		if trend < low2.n then
+			low2.n = trend
+			low2.k = key
+		end
+	end
+	utils.removeItem(keys, low2.k)
+
+    return {top1 = self.stocks[top1.k], top2 = self.stocks[top2.k], low1 = self.stocks[low1.k], low2 = self.stocks[low2.k]}
 end
 
 function market:update() -- Main market update loop

@@ -196,8 +196,28 @@ function info:setupBuySell(x, y) -- Buy sell section
 	self.mainButton.canvas:Reparent(canvas, -1)
 end
 
+function info:calculateBuySellAmount(baseAmount) -- Adjust base amount for stock price and player money
+	if math.abs(baseAmount) == 1 then return baseAmount end
+
+	local factor = 200 -- Higher means higher amounts
+
+	if baseAmount < 0 and self.stock:getPortfolioNum() ~= 0 then
+		amount = self.stock:getPortfolioNum() / (factor / baseAmount)
+	else
+		amount = Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money()) / self.stock:getCurrentPrice() / (factor / baseAmount)
+	end
+
+	if baseAmount < 0 then
+		return math.min(math.floor((amount / 5) + 0.5) * 5, baseAmount)
+	end
+
+	return math.max(math.floor((amount / 5) + 0.5) * 5, baseAmount)
+end
+
 function info:setupVolumeButton(x, y, amount) -- Button to change buy/sell amount
 	local _, ySize, textSize, borderSize, textColor = self:getBuySellOptions()
+
+	amount = self:calculateBuySellAmount(amount)
 
 	local button = require("modules/ui/widgets/button"):new()
 	button.x = x
