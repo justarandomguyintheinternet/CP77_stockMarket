@@ -128,7 +128,7 @@ local function isPreGame()
 end
 
 local function refreshCurrentState()
-    local player = Game.GetPlayer()
+    local player = GetPlayer()
     local blackboardDefs = Game.GetAllBlackboardDefs()
     local blackboardUI = Game.GetBlackboardSystem():Get(blackboardDefs.UI_System)
     local blackboardPM = Game.GetBlackboardSystem():Get(blackboardDefs.PhotoMode)
@@ -571,7 +571,7 @@ local function initialize(event)
         Observe('QuestTrackerGameController', 'OnUninitialize', function()
             --spdlog.error(('QuestTrackerGameController::OnUninitialize()'))
 
-            if Game.GetPlayer() == nil then
+            if GetPlayer() == nil then
                 if updateLoaded(false) then
                     updatePaused(true)
                     updateBlurred(false)

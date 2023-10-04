@@ -38,7 +38,9 @@ function trigger:registerObservers() -- Gets called once onInit
         local killer = evt.instigator
 
         if not killer then return end
-        if killer:IsPuppet() and TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):Evolution():Type() == gamedataWeaponEvolution.Smart then
+
+        local weapon = killer:GetActiveWeapon()
+        if killer:IsPuppet() and weapon and weapon:GetWeaponRecord():Evolution():Type() == gamedataWeaponEvolution.Smart then
             self.exportData.value = self.exportData.value + 0.024
         end
     end)

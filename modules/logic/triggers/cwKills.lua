@@ -37,11 +37,14 @@ function trigger:registerObservers() -- Gets called once onInit
     Observe("NPCPuppet", "OnPotentialDeath", function (_, evt)
         ---@type GameObject
         local killer = evt.instigator
+        if not killer then return end
 
-        local wType = TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):ItemType():Type()
+        local weapon = killer:GetActiveWeapon()
+        if not weapon then return end
+
+        local wType = weapon:GetWeaponRecord():ItemType():Type()
         local isCW = wType == gamedataItemType.Cyb_Launcher or wType == gamedataItemType.Cyb_MantisBlades or wType == gamedataItemType.Cyb_NanoWires or wType == gamedataItemType.Cyb_StrongArms
 
-        if not killer then return end
         if killer:IsPuppet() and isCW then
             self.exportData.value = self.exportData.value + 0.021
         end

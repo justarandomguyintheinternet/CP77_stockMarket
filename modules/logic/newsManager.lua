@@ -163,20 +163,79 @@ function newsManager:registerObservers()
         self.journalQ = this
     end)
 
-    Override("MessengerDialogViewController", "UpdateData", function (this, opt, wrapped) -- Insert custom messages / replies
-		if self.isContactSelected or (this.parentEntry and this.parentEntry.avatarID == TweakDBID.new("news")) then -- Is our custom contact (Either selected in journal, or from notification)
+	Override("MessengerUtils", "GetSimpleContactDataArray;JournalManagerBoolBoolBoolMessengerContactSyncData", function (journal, includeUnknown, skipEmpty, includeWithNoUnread, activeDataSync, wrapped)
+		local contacts = wrapped(journal, includeUnknown, skipEmpty, includeWithNoUnread, activeDataSync)
+
+        local contact = ContactData.new()
+        contact.hash = self.contactHash
+        contact.localizedName = lang.getText(lang.news_contactName)
+        contact.id = "stock"
+        contact.contactId = "stock"
+        contact.isCallable = false
+        contact.type = MessengerContactType.SingleThread
+        contact.avatarID = TweakDBID.new("PhoneAvatars.Avatar_Unknown")
+
+        local news = self:getNews()
+        local name = news[1]
+        local title, _ = lang.getNewsText(name, self.mod.market.triggerManager.triggers[name].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1)
+
+        contact.localizedPreview  = title
+        contact.hasValidTitle = true
+        contact.timeStamp = GameTime.MakeGameTime(self.settings.lastNews.d, self.settings.lastNews.h, self.settings.lastNews.m, 0)
+        table.insert(contacts, contact)
+
+		return contacts
+	end)
+
+    Override("MessangerItemRenderer", "OnJournalEntryUpdated", function (this, entry, extra, wrapped) -- Insert messages text
+		wrapped(entry, extra)
+
+        if not self.mod.market.triggerManager.triggers[entry.id] then return end
+
+        local title, msg = lang.getNewsText(entry.id, self.mod.market.triggerManager.triggers[entry.id].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[entry.id].factCondition) == 1)
+
+		if title then
+            local text = title .. ":\n" .. msg
+			this:SetMessageView(text, MessageViewType.Received, lang.getText(lang.news_contactName));
+		end
+	end)
+
+    Override("PhoneMessagePopupGameController", "OnInitialize", function (this, wrapped)
+		wrapped()
+		if lang.getText(lang.news_contactName) == this.data.contactNameLocKey.value then
+			this.data.journalEntry = JournalContact.new()
+			this.data.journalEntry.id = "stock"
+			this:SetupData()
+		end
+	end)
+
+	Override("PhoneMessagePopupGameController", "OnRefresh", function (this, event, wrapped)
+		if lang.getText(lang.news_contactName) == event.data.contactNameLocKey.value then
+			this.data = event.data
+			this.data.journalEntry = JournalContact.new()
+			this.data.journalEntry.id = "stock"
+			this:SetupData()
+		else
+			wrapped(event)
+		end
+	end)
+
+    ObserveAfter("MessengerDialogViewController", "UpdateData;BoolBool", function (this, a, _, _) -- Insert custom messages / replies
+        if this.parentEntry and this.parentEntry.id == "stock" then -- Is our custom contact
 			local countMessages
 			local lastMessageWidget
 
             -- Insert emtpy custom messages
-            self.messages = {}
-            for _ = 1, #self:getNews() do
-                table.insert(self.messages, JournalPhoneMessage.new())
-            end
-			this.messages = self.messages
+            local messages = {}
+            local news = self:getNews()
 
-            -- Vanilla stuff:
-			inkWidgetRef.SetVisible(this.replayFluff, #this.replyOptions > 0)
+            for i = #news, 1, -1 do
+                table.insert(messages, JournalPhoneMessage.new({id = news[i]}))
+            end
+
+            this.messages = messages
+
+			inkWidgetRef.SetVisible(this.replayFluff, #this.replyOptions > 0) -- Vanilla stuff
 			this:SetVisited(this.messages)
 			this.messagesListController:Clear()
 			this.messagesListController:PushEntries(this.messages)
@@ -188,73 +247,16 @@ function newsManager:registerObservers()
 			end
 			if IsDefined(this.newMessageAninmProxy) then
 				this.newMessageAninmProxy:Stop()
-				this.newMessageAninmProxy = nil
 			end
 			countMessages = this.messagesListController:Size()
-			if opt and countMessages > 0 then
+			if a and countMessages > 0 then
 				lastMessageWidget = this.messagesListController:GetItemAt(countMessages - 1)
 			end
 			if IsDefined(lastMessageWidget) then
 				this.newMessageAninmProxy = this:PlayLibraryAnimationOnAutoSelectedTargets("new_message", lastMessageWidget)
 			end
 			this.scrollController:SetScrollPosition(1.00)
-		else
-			wrapped(opt)
 		end
-	end)
-
-    Override("MessangerItemRenderer", "OnJournalEntryUpdated", function (this, entry, extra, wrapped) -- Insert messages text
-        local news = self:getNews()
-        for key, msg in pairs(self.messages) do
-            if utils.isSameInstance(entry, msg) then
-                local name = news[#news - key + 1]
-                local title, msg = lang.getNewsText(name, self.mod.market.triggerManager.triggers[name].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1)
-                this:SetMessageView(title .. ":\n\n" .. msg, MessageViewType.Received, "")
-                return
-            end
-        end
-        wrapped(entry, extra)
-	end)
-
-    Override("MessengerUtils", "GetContactDataArray;JournalManagerBoolBoolMessengerContactSyncData", function (journal, includeUnknown, skipEmpty, activeDataSync, wrapped) -- Insert contact
-		local data = wrapped(journal, includeUnknown, skipEmpty, activeDataSync)
-
-		local contactData = ContactData.new()
-		contactData.hash = self.contactHash
-		contactData.localizedName = lang.getText(lang.news_contactName)
-		contactData.timeStamp = GameTime.MakeGameTime(self.settings.lastNews.d, self.settings.lastNews.h, self.settings.lastNews.m, 0)
-
-		local contactVirtualListData = VirutalNestedListData.new()
-		contactVirtualListData.level = self.contactHash
-		contactVirtualListData.widgetType = 0
-		contactVirtualListData.isHeader = true
-		contactVirtualListData.data = contactData
-
-		table.insert(data, 1, contactVirtualListData)
-
-		return data
-	end)
-
-    Observe("MessengerContactItemVirtualController", "OnToggledOn", function (this) -- Keep track of currently selected contact (Hub menu)
-		if this.contactData.localizedName == lang.getText(lang.news_contactName) then
-			self.isContactSelected = true
-		else
-			self.messages = {}
-			self.isContactSelected = false
-		end
-	end)
-
-    ObserveAfter("MessengerContactItemVirtualController", "UpdateState", function (this) -- Make custom contact appear selected
-		if this.contactData.localizedName == lang.getText(lang.news_contactName) then
-			if self.isContactSelected then
-				this:GetRootWidget():SetState("Active")
-			end
-		end
-	end)
-
-    ObserveAfter("MessengerGameController", "OnUninitialize", function () -- Clean up
-		self.isContactSelected = false
-        self.messages = {}
 	end)
 end
 
@@ -264,11 +266,11 @@ function newsManager:sendMessage(name)
     local title, _ = lang.getNewsText(name, self.mod.market.triggerManager.triggers[name].factCondition and Game.GetQuestsSystem():GetFactStr(self.mod.market.triggerManager.triggers[name].factCondition) == 1)
 
 	local notificationData = gameuiGenericNotificationData.new()
-	local openAction = OpenMessengerNotificationAction.new()
-	openAction.eventDispatcher = self.journalQ
+	local openAction = OpenPhoneMessageAction.new()
+	openAction.phoneSystem = Game.GetScriptableSystemsContainer():Get("PhoneSystem")
 
 	local contact = JournalContact.new()
-	contact.avatarID = TweakDBID.new("news") -- Needed to identify this contact inside the dialog popup
+	contact.id = "stock"
 	openAction.journalEntry = contact
 
 	local userData = PhoneMessageNotificationViewData.new()

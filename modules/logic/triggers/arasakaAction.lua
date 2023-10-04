@@ -52,7 +52,8 @@ function trigger:registerObservers() -- Gets called once onInit
         end
 
         if not killer then return end
-        if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "arasaka") then -- Kill with arasaka weapon
+        local weapon = killer:GetActiveWeapon()
+        if killer:IsPuppet() and weapon and string.match(weapon:GetWeaponRecord():FriendlyName(), "arasaka") then -- Kill with arasaka weapon
             self.exportData.value = self.exportData.value + 0.019
         end
     end)

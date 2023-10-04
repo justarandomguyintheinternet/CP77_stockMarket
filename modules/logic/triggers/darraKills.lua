@@ -38,7 +38,8 @@ function trigger:registerObservers() -- Gets called once onInit
         ---@type GameObject
         local killer = evt.instigator
 
-        if killer:IsPuppet() and string.match(TweakDBInterface.GetWeaponItemRecord(killer:GetActiveWeapon():GetItemID():GetTDBID()):FriendlyName(), "darra") then
+        local weapon = killer:GetActiveWeapon()
+        if killer:IsPuppet() and weapon and string.match(weapon:GetWeaponRecord():FriendlyName(), "darra") then
             self.exportData.value = self.exportData.value + 0.025
         end
 

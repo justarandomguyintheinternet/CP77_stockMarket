@@ -1,32 +1,16 @@
 local catcher = require("modules/ui/eventCatcher")
 local lang = require("modules/utils/lang")
 local utils = require("modules/utils/utils")
+local Cron = require("modules/external/Cron")
 
 browser = {
     openedCustom = false,
-    controllers = {}
+    controllers = {},
+    internetFromStock = false
 }
 
 function browser.init(mod)
     catcher.init()
-
-    --DLC
-    Override("DlcDescriptionController", "SetData", function(this, userData, wrapped)
-        if userData.title.value ~= "stocks" then
-            wrapped(userData)
-            return
-        end
-        this.titleRef:SetText(lang.getText(lang.pc_stockmarket))
-        this.descriptionRef:SetText("Adds a fully useable Stock Market that reacts to quests and player actions in the open world. Also includes 66 News Messages reacting to your actions.")
-        this.guideRef:SetText("Can be accessed from any computer. News Feed can also be accessed using the \"N54 Breaking News\" Contact.")
-        this.imageRef:SetAtlasResource(ResRef.FromString("base\\icon\\dlc.inkatlas"))
-        this.imageRef:SetTexturePart("stock")
-    end)
-
-    ObserveAfter("DlcMenuGameController", "OnInitialize", function(this)
-        this:SpawnDescriptions("stocks", "", "", "")
-    end)
-    --DLC End
 
     ObserveAfter("ComputerMenuButtonController", "Initialize", function(this, _, data)
         if data.widgetName == "stock" then
@@ -91,7 +75,8 @@ function browser.init(mod)
     end)
 
     ObserveAfter("BrowserController", "OnPageSpawned", function (this)
-        if this.addressText:GetText() == "custom" then
+        if browser.internetFromStock then
+            browser.internetFromStock = false
             this.currentPage:RemoveAllChildren()
 
             for key, c in pairs(browser.controllers) do
@@ -106,9 +91,12 @@ function browser.init(mod)
         end
     end)
 
-    ObserveAfter("BrowserController", "LoadWebPage", function (this, adress)
+    Override("BrowserController", "LoadWebPage", function (this, adress, wrapped)
         if adress == "stocks" then
-            inkTextRef.SetText(this.addressText, "custom")
+            this:LoadWebPage("NETdir://ncity.pub") -- Ensure that the currentPage is a valid inkWidget
+            browser.internetFromStock = true
+        else
+            wrapped(adress)
         end
     end)
 end

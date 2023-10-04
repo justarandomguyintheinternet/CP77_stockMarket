@@ -48,7 +48,7 @@ function trigger:registerObservers() -- Gets called once onInit
     end)
 
     Cron.Every(5, function ()
-        local veh = GetMountedVehicle(GetPlayer())
+        local veh = GetPlayer():GetMountedVehicle()
         if veh ~= nil then
             if veh:GetRecord():Manufacturer():Type() ~= gamedataVehicleManufacturer.Kaukaz then return end
             self.exportData.value = math.min(1, self.exportData.value + 0.0035)
