@@ -66,7 +66,8 @@ function stock:performTransaction(amount)
         utils.spendMoney(amount * self:getCurrentPrice())
         self.exportData.spent = self.exportData.spent + amount * self:getCurrentPrice()
     else
-        Game.AddToInventory("Items.money", math.abs(amount * self:getCurrentPrice()))
+        local totalPrice = math.abs(amount * self:getCurrentPrice())
+        Game.AddToInventory("Items.money", math.floor(totalPrice))
         amount = math.abs(amount)
         self.exportData.spent = self.exportData.spent - (amount * (self.exportData.spent / (amount + self.exportData.owned)))
     end

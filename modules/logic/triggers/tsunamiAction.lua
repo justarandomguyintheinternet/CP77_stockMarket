@@ -37,6 +37,7 @@ function trigger:registerObservers() -- Gets called once onInit
     Observe("NPCPuppet", "OnPotentialDeath", function (this, evt)
         ---@type GameObject
         local killer = evt.instigator
+        if not killer then return end
 
         local weapon = killer:GetActiveWeapon()
         if killer:IsPuppet() and weapon and string.match(weapon:GetWeaponRecord():FriendlyName(), "tsunami") then
