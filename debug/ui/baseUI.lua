@@ -7,6 +7,7 @@ baseUI = {
     questUI = require("debug/ui/tabs/questUI"),
     newsUI = require("debug/ui/tabs/newsUI"),
     newsBufferUI = require("debug/ui/tabs/newsQueueUI"),
+    toolsUI = require("debug/ui/tabs/toolsUI"),
     switchToEdit = false,
     switchToLoaded = false
 }
@@ -64,6 +65,11 @@ function baseUI.draw(mod)
 
         if ImGui.BeginTabItem("News Buffer") then
             baseUI.newsBufferUI.draw(baseUI, mod)
+            ImGui.EndTabItem()
+        end
+
+        if ImGui.BeginTabItem("Tools") then
+            baseUI.toolsUI.draw(baseUI, mod)
             ImGui.EndTabItem()
         end
 

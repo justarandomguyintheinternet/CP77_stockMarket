@@ -28,7 +28,7 @@ function home:initialize()
 		self:refresh()
 	end)
 
-	self.canvas = ink.canvas(0, 0, inkEAnchor.TopLeft)
+	self.canvas = ink.canvas(0, -70, inkEAnchor.TopLeft)
 	self.canvas:Reparent(self.inkPage, -1)
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)

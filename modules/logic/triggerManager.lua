@@ -63,9 +63,10 @@ function triggerManager:onTransaction(stock, amount)
 end
 
 function triggerManager:update()
-    for _, trigger in pairs(self.triggers) do
-        trigger:update()
-    end
+    -- Not used by any trigger currently
+    -- for _, trigger in pairs(self.triggers) do
+    --     trigger:update()
+    -- end
 end
 
 return triggerManager

@@ -5,7 +5,7 @@ local ink = require("modules/ui/inkHelper")
 local buttons = {}
 
 function buttons.createMenu(page)
-    local canvas = ink.canvas(0, 0, inkEAnchor.TopCenter)
+    local canvas = ink.canvas(0, -80, inkEAnchor.TopCenter)
 	canvas:Reparent(page.inkPage, -1)
 
     -- Logo

@@ -31,7 +31,7 @@ function portfolio:initialize()
 		self:refresh()
 	end)
 
-	self.canvas = ink.canvas(0, 0, inkEAnchor.TopLeft)
+	self.canvas = ink.canvas(0, -70, inkEAnchor.TopLeft)
 	self.canvas:Reparent(self.inkPage, -1)
 
 	self.buttons = require("modules/ui/pages/menuButtons").createMenu(self)
@@ -89,7 +89,8 @@ function portfolio:refreshInfo()
 	local total = Game.GetTransactionSystem():GetItemQuantity(GetPlayer(), MarketSystem.Money())
 	local shares = 0
 	local sharesV = 0
-	for _, stock in pairs({table.unpack(self.mod.market.stocks), self.mod.market.marketStock}) do
+
+	for _, stock in pairs(self.mod.market:getAllStocks()) do
 		total = total + stock:getPortfolioNum() * stock:getCurrentPrice()
 		shares = shares + stock:getPortfolioNum()
 		sharesV = sharesV + stock:getPortfolioNum() * stock:getCurrentPrice()

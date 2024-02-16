@@ -174,7 +174,7 @@ function stock:update() -- Runs every intervall
 end
 
 function stock:checkForOverFlow()
-    if self:getCurrentPrice() < self.min - self.min * 0.5 or self:getCurrentPrice() > self.max + self.max + 0.5 or self:getCurrentPrice() < 0 then
+    if self:getCurrentPrice() < self.min - self.min * 0.5 or self:getCurrentPrice() > self.max + self.max * 0.5 or self:getCurrentPrice() < 0 then
         self.market:overflowReset()
     end
 end

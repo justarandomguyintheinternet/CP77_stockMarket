@@ -3,3 +3,4 @@
 *.sqlite3
 *.log
 backup.json
+data/persistent

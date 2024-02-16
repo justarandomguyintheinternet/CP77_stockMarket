@@ -25,7 +25,7 @@ function login:new(inkPage, controller, eventCatcher)
 end
 
 function login:initialize()
-	self.canvas = ink.canvas(0, 100, inkEAnchor.TopCenter)
+	self.canvas = ink.canvas(0, 20, inkEAnchor.TopCenter)
 	self.canvas:Reparent(self.inkPage, -1)
 
 	local t = ink.text(tostring(lang.getText(lang.login_name) .. ":         "), 360, 350, 150, color.white)
@@ -64,7 +64,7 @@ function login:initialize()
 		if self.pwFilled and self.nameFilled then
 			self:startFluffSeq()
 		end
-		--self.controller:switchToPage("home")
+		-- self.controller:switchToPage("home")
 	end
 	self.button.hoverInCallback = function (bt)
 		bt.fill:SetOpacity(0.95)

@@ -79,6 +79,19 @@ function market:getNumberStocks() -- Get number of stocks, stock market excluded
     return nStocks
 end
 
+function market:getAllStocks() -- Returns table containing all stocks, including market stock
+    local stocks = {}
+
+    -- Cant use unpack(), due do non-numeric indexing of stocks list
+    for _, stock in pairs(self.stocks) do
+        table.insert(stocks, stock)
+    end
+
+    table.insert(stocks, self.marketStock)
+
+    return stocks
+end
+
 function market:setupPortfolioStock()
     local pStock = require("modules/logic/stock"):new(self.range, self)
 
@@ -245,7 +258,7 @@ function market:update() -- Main market update loop
 end
 
 function market:overflowReset() -- Well, shit
-    print("[StockMarket] OverflowReset initiated")
+    print("[StockMarket] OverflowReset initiated: If you want to help debug this, pause the game, then take the newest file from the \"Cyberpunk 2077\\bin\\x64\\plugins\\cyber_engine_tweaks\\mods\\stocksdata\\persistent\" and send it to me on Nexus (Ideally a direct message)")
     for _, stock in pairs(self.stocks) do
         local owned = stock.exportData.owned
         local spent = stock.exportData.spent
