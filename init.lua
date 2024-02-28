@@ -15,7 +15,9 @@ stocks = {
     runtimeData = {
         inMenu = false,
         inGame = false,
-        cetOpen = false
+        cetOpen = false,
+        popupManager = nil,
+        errorPopupToken = nil
     },
     intervall = 120,
     config = require("modules/utils/config"),
@@ -45,6 +47,10 @@ function stocks:new()
             self.runtimeData.inMenu = isInMenu
         end)
 
+        Observe("PopupsManager", "OnMenuUpdate", function (this)
+            self.runtimeData.popupManager = this
+        end)
+
         GameUI.OnSessionStart(function()
             self.runtimeData.inGame = true
             self.market.time = Game.GetTimeSystem():GetGameTime():Hours()
@@ -55,9 +61,30 @@ function stocks:new()
             self.runtimeData.inGame = false
         end)
 
+        self.listener = NewProxy({
+            OnClose = {
+                args = {'handle:inkGameNotificationData'},
+                callback = function(_)
+                    self.runtimeData.errorPopupToken = nil
+                    collectgarbage()
+                end
+            }
+        })
+
         self.runtimeData.inGame = not GameUI.IsDetached() -- Required to check if ingame after reloading all mods
         if self.runtimeData.inGame then
             self.market.time = Game.GetTimeSystem():GetGameTime():Hours()
+
+            if debug then return end
+
+            -- Force function call, to allow for getting a new ref to the PopupsManager
+            Game.GetBlackboardSystem():Get(GetAllBlackboardDefs().UI_System):SetBool(GetAllBlackboardDefs().UI_System.IsInMenu, true)
+            Game.GetBlackboardSystem():Get(GetAllBlackboardDefs().UI_System):SetBool(GetAllBlackboardDefs().UI_System.IsInMenu, false)
+
+            Cron.After(1, function ()
+                self.runtimeData.errorPopupToken = GenericMessageNotification.Show(self.runtimeData.popupManager, "Stock Market Error", "Why am i seeing this?\n- You reloaded all mods, using CETs [Reload all mods] button, while in-game.\n\nWhat does this mean?\n- This means the stock market mods saved data (Such as bought stocks) for this session have been lost.\n\nWhat can i do to fix it?\n- Reload the last save.", GenericMessageNotificationType.OK);
+                self.runtimeData.errorPopupToken:RegisterListener(self.listener:Target(), self.listener:Function("OnClose"))
+            end)
         end
 
         self.browser.init(self)
